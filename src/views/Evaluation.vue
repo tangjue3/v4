@@ -17,6 +17,8 @@ import {
   Zap,
 } from 'lucide-vue-next'
 import { fetchEvaluation } from '@/lib/api'
+import KnowledgeTree from '@/components/knowledge-tree/KnowledgeTree.vue'
+import type { TreeBranch } from '@/components/knowledge-tree/KnowledgeTree.vue'
 
 type SuggestionType = 'weakness' | 'strength' | 'positive' | 'action'
 
@@ -41,29 +43,29 @@ const showReportModal = ref(false)
 const reportDate = ref('2026-05-12')
 
 const defaultStats: StatItem[] = [
-  { label: '学习时长', value: '128h', change: '+12h', icon: Clock, color: '#00d4ff' },
-  { label: '完成课时', value: '47', change: '+5', icon: PenTool, color: '#7c3aed' },
-  { label: '平均正确率', value: '82%', change: '+3%', icon: Target, color: '#06d6a0' },
-  { label: '知识掌握度', value: '68%', change: '+8%', icon: TrendingUp, color: '#f59e0b' },
+  { label: '学习时长', value: '86h', change: '+8h', icon: Clock, color: '#00d4ff' },
+  { label: '编程练习', value: '42', change: '+5', icon: PenTool, color: '#7c3aed' },
+  { label: '模型正确率', value: '79%', change: '+4%', icon: Target, color: '#06d6a0' },
+  { label: '知识掌握度', value: '65%', change: '+8%', icon: TrendingUp, color: '#f59e0b' },
 ]
 
 const defaultSuggestions: SuggestionItem[] = [
-  { text: '概率论与数理统计是当前短板，建议安排 2 小时专项复习。', type: 'weakness', icon: AlertTriangle },
-  { text: '机器学习基础掌握较稳，可以逐步加入项目实战。', type: 'strength', icon: Sparkles },
-  { text: '本周学习时长较上周提升 15%，可以继续保持当前节奏。', type: 'positive', icon: ArrowUp },
-  { text: '建议增加编程实战时间，理论与实践比例可以调整到 1:1。', type: 'action', icon: ArrowRight },
+  { text: '正则化(Ridge/Lasso)是当前短板，建议安排 2 小时专项复习。', type: 'weakness', icon: AlertTriangle },
+  { text: '线性回归掌握较扎实，可以逐步加入分类算法实战。', type: 'strength', icon: Sparkles },
+  { text: '本周 Scikit-learn 编程练习较上周提升 15%，继续保持。', type: 'positive', icon: ArrowUp },
+  { text: '建议增加 SVM 核函数的编程练习，理论与实践比例调整到 1:1。', type: 'action', icon: ArrowRight },
 ]
 
 const stats = ref(defaultStats)
 const suggestions = ref(defaultSuggestions)
 
 const subjects = [
-  { name: '机器学习基础', mastery: 88, color: '#00d4ff' },
-  { name: '监督学习算法', mastery: 72, color: '#3b82f6' },
-  { name: '深度学习', mastery: 58, color: '#7c3aed' },
-  { name: '自然语言处理', mastery: 45, color: '#06d6a0' },
-  { name: '大模型应用', mastery: 35, color: '#f59e0b' },
-  { name: '数学与编程基础', mastery: 82, color: '#f43f5e' },
+  { name: 'Python数据科学基础', mastery: 88, color: '#00d4ff' },
+  { name: '线性回归', mastery: 82, color: '#3b82f6' },
+  { name: '分类算法', mastery: 68, color: '#7c3aed' },
+  { name: '集成学习', mastery: 55, color: '#06d6a0' },
+  { name: '无监督学习', mastery: 45, color: '#f59e0b' },
+  { name: '神经网络入门', mastery: 35, color: '#f43f5e' },
 ]
 
 const weeklyTrend = [
@@ -109,6 +111,73 @@ const averageMastery = computed(() => {
   const sum = subjects.reduce((total, item) => total + item.mastery, 0)
   return Math.round(sum / subjects.length)
 })
+
+const treeBranches = computed<TreeBranch[]>(() => {
+  const branchTopicMap: Record<string, { id: string; label: string; mastery: number }[]> = {
+    'Python数据科学基础': [
+      { id: 'ch1-1', label: 'NumPy', mastery: 90 },
+      { id: 'ch1-2', label: 'Pandas', mastery: 85 },
+      { id: 'ch1-3', label: 'Matplotlib', mastery: 88 },
+      { id: 'ch1-4', label: '数据清洗', mastery: 82 },
+    ],
+    '线性回归': [
+      { id: 'ch2-1', label: '损失函数', mastery: 80 },
+      { id: 'ch2-2', label: '梯度下降', mastery: 68 },
+      { id: 'ch2-3', label: '正则化', mastery: 55 },
+      { id: 'ch2-4', label: '特征缩放', mastery: 72 },
+    ],
+    '分类算法': [
+      { id: 'ch3-1', label: '逻辑回归', mastery: 70 },
+      { id: 'ch3-2', label: '决策树', mastery: 65 },
+      { id: 'ch3-3', label: 'SVM', mastery: 52 },
+      { id: 'ch3-4', label: '核函数', mastery: 45 },
+    ],
+    '集成学习': [
+      { id: 'ch4-1', label: '随机森林', mastery: 60 },
+      { id: 'ch4-2', label: 'GBDT', mastery: 50 },
+      { id: 'ch4-3', label: 'XGBoost', mastery: 42 },
+      { id: 'ch4-4', label: '模型融合', mastery: 38 },
+    ],
+    '无监督学习': [
+      { id: 'ch5-1', label: 'K-Means', mastery: 55 },
+      { id: 'ch5-2', label: 'PCA', mastery: 48 },
+      { id: 'ch5-3', label: '异常检测', mastery: 35 },
+      { id: 'ch5-4', label: '轮廓系数', mastery: 40 },
+    ],
+    '神经网络入门': [
+      { id: 'ch6-1', label: '感知机', mastery: 45 },
+      { id: 'ch6-2', label: '反向传播', mastery: 38 },
+      { id: 'ch6-3', label: 'PyTorch', mastery: 32 },
+      { id: 'ch6-4', label: 'Dropout', mastery: 28 },
+    ],
+  }
+
+  return subjects.map((subject, idx) => ({
+    id: `branch-${idx}`,
+    label: subject.name,
+    mastery: subject.mastery,
+    topics: branchTopicMap[subject.name] || [
+      { id: `${subject.name}-1`, label: '基础概念', mastery: Math.min(subject.mastery + 5, 100) },
+      { id: `${subject.name}-2`, label: '核心方法', mastery: subject.mastery },
+      { id: `${subject.name}-3`, label: '进阶应用', mastery: Math.max(subject.mastery - 15, 0) },
+    ],
+  }))
+})
+
+function handleTreeNodeClick(branchId: string, topicId: string) {
+  const branch = treeBranches.value.find(b => b.id === branchId)
+  const topic = branch?.topics.find(t => t.id === topicId)
+  if (topic) {
+    router.push({ path: '/tutoring', query: { q: `讲解一下${topic.label}` } })
+  }
+}
+
+function handleTreeBranchClick(branchId: string) {
+  const branch = treeBranches.value.find(b => b.id === branchId)
+  if (branch) {
+    router.push({ path: '/tutoring', query: { q: `${branch.label}学习路径` } })
+  }
+}
 
 function suggestIconColor(type: SuggestionType) {
   const colors: Record<SuggestionType, string> = {
@@ -204,6 +273,13 @@ onMounted(() => {
         <span>生成评估报告</span>
       </button>
     </div>
+
+    <KnowledgeTree
+      :branches="treeBranches"
+      :overall-mastery="averageMastery"
+      @node-click="handleTreeNodeClick"
+      @branch-click="handleTreeBranchClick"
+    />
 
     <div class="stats-grid">
       <div v-for="item in stats" :key="item.label" class="stat-card" :style="{ '--s-color': item.color }">
