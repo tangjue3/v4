@@ -11,18 +11,36 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@lucide/vue": "^1.16.0",
+    "@pixi/app": "^6.5.10",
+    "@pixi/constants": "^6.5.10",
+    "@pixi/core": "^6.5.10",
+    "@pixi/display": "^6.5.10",
+    "@pixi/extensions": "^6.5.10",
+    "@pixi/interaction": "^6.5.10",
+    "@pixi/loaders": "^6.5.10",
+    "@pixi/math": "^6.5.10",
+    "@pixi/runner": "^6.5.10",
+    "@pixi/settings": "^6.5.10",
+    "@pixi/sprite": "^6.5.10",
+    "@pixi/ticker": "^6.5.10",
+    "@pixi/utils": "^6.5.10",
     "gsap": "^3.15.0",
     "lucide-vue-next": "^1.0.0",
     "pinia": "^2.1.7",
+    "pixi-live2d-display": "^0.4.0",
     "three": "^0.184.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@types/three": "^0.184.1",
-    "@vitejs/plugin-vue": "^5.0.4",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^3.4.19",
     "typescript": "^5.4.2",
-    "vite": "^5.1.6",
-    "vue-tsc": "^2.0.6"
+    "vite": "^6.4.2",
+    "vue-tsc": "^2.2.12"
   }
 }
