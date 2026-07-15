@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { useAppStore } from '@/store'
 
+const appStore = useAppStore()
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 
 interface InkDrop {
@@ -163,21 +165,55 @@ function draw() {
   rafId = requestAnimationFrame(draw)
 }
 
-onMounted(() => {
-  resize()
+function bindListeners() {
   window.addEventListener('resize', resize)
   window.addEventListener('mousemove', onMouseMove, { passive: true })
   window.addEventListener('touchmove', onTouchMove, { passive: true })
   window.addEventListener('mouseleave', onLeave)
-  rafId = requestAnimationFrame(draw)
-})
+}
 
-onUnmounted(() => {
+function unbindListeners() {
   window.removeEventListener('resize', resize)
   window.removeEventListener('mousemove', onMouseMove)
   window.removeEventListener('touchmove', onTouchMove)
   window.removeEventListener('mouseleave', onLeave)
+}
+
+function clearCanvas() {
+  if (ctx) ctx.clearRect(0, 0, width, height)
+  drops = []
   cancelAnimationFrame(rafId)
+  rafId = 0
+}
+
+function startRendering() {
+  resize()
+  bindListeners()
+  rafId = requestAnimationFrame(draw)
+}
+
+function stopRendering() {
+  unbindListeners()
+  clearCanvas()
+}
+
+onMounted(() => {
+  if (appStore.inkMouseEnabled) {
+    startRendering()
+  }
+})
+
+onUnmounted(() => {
+  stopRendering()
+})
+
+// 响应设置页"鼠标拖尾背景"开关
+watch(() => appStore.inkMouseEnabled, (enabled) => {
+  if (enabled) {
+    startRendering()
+  } else {
+    stopRendering()
+  }
 })
 </script>
 

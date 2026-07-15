@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EduMind 技术架构图</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #02060d; font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif; }
+    .stage { width: 1920px; height: 1080px; overflow: hidden; position: relative; background: #030915; color: #eaffff; }
+    .stage::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(0, 212, 255, .24), transparent 27%), radial-gradient(ellipse at 20% 51%, rgba(20, 104, 193, .18), transparent 25%), radial-gradient(ellipse at 82% 51%, rgba(20, 104, 193, .18), transparent 25%), linear-gradient(180deg, #030811 0%, #071426 52%, #030a15 100%); }
+    .stage::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(2,7,17,.75), transparent 16%, transparent 84%, rgba(2,7,17,.75)), linear-gradient(180deg, rgba(1,5,13,.12), transparent 16%, transparent 81%, rgba(1,5,13,.82)); pointer-events: none; }
+    svg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    .title { position: absolute; left: 302px; top: 142px; width: 1316px; height: 128px; display: grid; place-items: center; z-index: 2; border: 1.6px solid #3fdfff; border-radius: 14px; background: linear-gradient(180deg, rgba(14,38,68,.88), rgba(4,17,34,.76)); box-shadow: 0 0 18px rgba(0,217,255,.64), inset 0 0 34px rgba(0,196,255,.17); }
+    .title::before { content: ""; position: absolute; left: 20%; right: 20%; top: -2px; height: 4px; background: #b4f8ff; box-shadow: 0 0 24px 7px #20cfff; }
+    h1 { margin: 0; text-align: center; font-size: 39px; letter-spacing: 0; color: #eaffff; text-shadow: 0 0 14px #43e7ff; }
+    .subtitle { margin-top: 8px; text-align: center; font-size: 27px; font-weight: 700; color: #c7faff; text-shadow: 0 0 12px #15cefa; }
+    .nav-title, .agent-title, .plate-title, .core-title, .storage-title { fill: #f5ffff; font-weight: 800; text-anchor: middle; paint-order: stroke; stroke: rgba(0, 177, 229, .35); stroke-width: 3px; }
+    .nav-title { font-size: 24px; } .nav-sub { fill: #a9efff; font-size: 13px; text-anchor: middle; }
+    .agent-title { font-size: 25px; } .agent-sub { fill: #cdfbff; font-size: 14px; text-anchor: middle; }
+    .plate-title { font-size: 23px; } .plate-sub { fill: #b4f6ff; font-size: 14px; text-anchor: middle; }
+    .core-title { font-size: 29px; } .core-sub { fill: #d2fbff; font-size: 14px; text-anchor: middle; }
+    .storage-title { font-size: 23px; } .storage-sub { fill: #a9efff; font-size: 13px; text-anchor: middle; }
+  </style>
+</head>
+<body>
+  <main class="stage" aria-label="EduMind 多智能体技术架构图">
+    <div class="title"><div><h1>AgentRegistry + AgentCatalog + AgentOrchestrator</h1><div class="subtitle">EduMind 多智能体学习服务协同架构</div></div></div>
+    <svg viewBox="0 0 1920 1080" role="img" aria-label="EduMind 技术架构图">
+      <defs>
+        <filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="hotGlow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="12" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#0f426c" stop-opacity=".9"/><stop offset=".52" stop-color="#072a4d" stop-opacity=".84"/><stop offset="1" stop-color="#031426" stop-opacity=".9"/></linearGradient>
+        <linearGradient id="dome" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d7feff" stop-opacity=".62"/><stop offset=".38" stop-color="#3cdcff" stop-opacity=".35"/><stop offset="1" stop-color="#061c37" stop-opacity=".9"/></linearGradient>
+        <linearGradient id="leftCore" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#134d74"/><stop offset="1" stop-color="#062440"/></linearGradient>
+        <linearGradient id="rightCore" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#17577f"/><stop offset="1" stop-color="#092946"/></linearGradient>
+        <linearGradient id="topCore" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d1ffff"/><stop offset=".5" stop-color="#43ddff"/><stop offset="1" stop-color="#1b5fc8"/></linearGradient>
+        <radialGradient id="halo"><stop stop-color="#abfaff" stop-opacity=".62"/><stop offset=".34" stop-color="#1ccffc" stop-opacity=".25"/><stop offset="1" stop-color="#00b7ed" stop-opacity="0"/></radialGradient>
+        <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#1b9bcc" stroke-opacity=".25" stroke-width="1"/></pattern>
+        <marker id="cyanArrow" markerWidth="12" markerHeight="9" refX="10" refY="4.5" orient="auto"><path d="M0,0 L12,4.5 L0,9Z" fill="#71f6ff"/></marker>
+        <marker id="amberArrow" markerWidth="12" markerHeight="9" refX="10" refY="4.5" orient="auto"><path d="M0,0 L12,4.5 L0,9Z" fill="#ffd36b"/></marker>
+      </defs>
+
+      <!-- perspective command plane -->
+      <path d="M132 888 L1788 888 L1515 322 L405 322 Z" fill="url(#grid)" opacity=".9"/>
+      <g stroke="#2acff4" stroke-opacity=".27" fill="none"><path d="M153 888 L438 322"/><path d="M348 888 L528 322"/><path d="M543 888 L618 322"/><path d="M738 888 L708 322"/><path d="M933 888 L798 322"/><path d="M1128 888 L888 322"/><path d="M1323 888 L978 322"/><path d="M1518 888 L1068 322"/><path d="M1713 888 L1158 322"/></g>
+      <g stroke="#36d8fc" stroke-opacity=".25"><path d="M175 408H1745"/><path d="M200 490H1720"/><path d="M227 580H1693"/><path d="M258 680H1662"/><path d="M292 785H1628"/></g>
+      <ellipse cx="960" cy="535" rx="470" ry="330" fill="url(#halo)" opacity=".65"/>
+
+      <!-- decorative interface traces -->
+      <g fill="none" stroke="#45dbff" stroke-width="2" stroke-opacity=".72" filter="url(#softGlow)"><path d="M0 82H212L258 36H420"/><path d="M1920 82H1708L1662 36H1500"/><path d="M0 315H186L229 275"/><path d="M1920 315H1734L1691 275"/><path d="M0 760H212L248 724"/><path d="M1920 760H1708L1672 724"/></g>
+      <g fill="#6df4ff" filter="url(#glow)"><circle cx="212" cy="82" r="9"/><circle cx="1708" cy="82" r="9"/><circle cx="186" cy="315" r="7"/><circle cx="1734" cy="315" r="7"/><circle cx="212" cy="760" r="8"/><circle cx="1708" cy="760" r="8"/></g>
+
+      <!-- top product entries -->
+      <g filter="url(#softGlow)">
+        <path d="M246 18h188l23 23v70H246z" fill="url(#glass)" stroke="#36dfff" stroke-width="1.7"/><text class="nav-title" x="351" y="69">ChatAgent</text><text class="nav-sub" x="351" y="94">智能答疑</text>
+        <path d="M473 18h188l23 23v70H473z" fill="url(#glass)" stroke="#36dfff" stroke-width="1.7"/><text class="nav-title" x="578" y="69">Profile</text><text class="nav-sub" x="578" y="94">学习画像</text>
+        <path d="M700 18h188l23 23v70H700z" fill="url(#glass)" stroke="#36dfff" stroke-width="1.7"/><text class="nav-title" x="805" y="69">Resources</text><text class="nav-sub" x="805" y="94">课程资源</text>
+        <path d="M927 18h235l23 23v70H927z" fill="url(#glass)" stroke="#36dfff" stroke-width="1.7"/><text class="nav-title" x="1045" y="69">Paths / Courses</text><text class="nav-sub" x="1045" y="94">路径与课程</text>
+        <path d="M1201 18h246l23 23v70H1201z" fill="url(#glass)" stroke="#36dfff" stroke-width="1.7"/><text class="nav-title" x="1324" y="69">LearningLoopAdmin</text><text class="nav-sub" x="1324" y="94">证据链与管理</text>
+        <path d="M1486 18h188l23 23v70H1486z" fill="url(#glass)" stroke="#36dfff" stroke-width="1.7"/><text class="nav-title" x="1591" y="69">Knowledge</text><text class="nav-sub" x="1591" y="94">知识库</text>
+      </g>
+
+      <!-- luminous data flows, drawn behind modules -->
+      <g fill="none" filter="url(#glow)">
+        <path d="M453 433 C610 412 725 430 835 498" stroke="#62f4ff" stroke-width="6" marker-end="url(#cyanArrow)"/>
+        <path d="M1467 433 C1310 412 1195 430 1085 498" stroke="#62f4ff" stroke-width="6" marker-end="url(#cyanArrow)"/>
+        <path d="M690 642 C754 612 796 582 850 553" stroke="#62f4ff" stroke-width="6" marker-end="url(#cyanArrow)"/>
+        <path d="M1230 642 C1166 612 1124 582 1070 553" stroke="#62f4ff" stroke-width="6" marker-end="url(#cyanArrow)"/>
+        <path d="M913 634 C858 750 714 809 495 895" stroke="#ffd36b" stroke-width="5" marker-end="url(#amberArrow)"/>
+        <path d="M946 643 C892 760 777 826 747 895" stroke="#ffd36b" stroke-width="5" marker-end="url(#amberArrow)"/>
+        <path d="M1007 643 C1066 760 1140 826 1173 895" stroke="#ffd36b" stroke-width="5" marker-end="url(#amberArrow)"/>
+        <path d="M1040 634 C1180 750 1315 809 1427 895" stroke="#ffd36b" stroke-width="5" marker-end="url(#amberArrow)"/>
+        <path d="M960 635V793" stroke="#65f5ff" stroke-width="7" marker-end="url(#cyanArrow)"/>
+      </g>
+      <g fill="none" stroke="#b0faff" stroke-opacity=".85" stroke-width="1.5"><path d="M447 453C620 443 724 458 824 510"/><path d="M1473 453C1300 443 1196 458 1096 510"/><path d="M704 659C777 630 811 605 852 575"/><path d="M1216 659C1143 630 1109 605 1068 575"/></g>
+
+      <!-- central multi-layer core -->
+      <ellipse cx="960" cy="607" rx="184" ry="69" fill="#0c5d87" fill-opacity=".2" stroke="#3ef0ff" stroke-width="3" filter="url(#hotGlow)"/>
+      <ellipse cx="960" cy="607" rx="151" ry="48" fill="#061b36" stroke="#54ecff" stroke-width="4"/>
+      <path d="M804 557L960 649L1116 557V592L960 684L804 592Z" fill="#0c80a6" fill-opacity=".65" stroke="#59edff" stroke-width="3" filter="url(#glow)"/>
+      <path d="M804 525L960 617L1116 525V557L960 649L804 557Z" fill="#0d5e86" stroke="#53e9ff" stroke-width="3"/>
+      <path d="M960 276L1105 360V526L960 610L815 526V360Z" fill="#071c36" fill-opacity=".96" stroke="#72f5ff" stroke-width="4" filter="url(#hotGlow)"/>
+      <path d="M960 276L1105 360L960 444L815 360Z" fill="url(#topCore)" stroke="#b9ffff" stroke-width="3"/>
+      <path d="M815 360L960 444V610L815 526Z" fill="url(#leftCore)" stroke="#47e4ff" stroke-width="3"/>
+      <path d="M1105 360L960 444V610L1105 526Z" fill="url(#rightCore)" stroke="#47e4ff" stroke-width="3"/>
+      <path d="M960 328L1027 367L960 406L893 367Z" fill="#d3ffff" filter="url(#hotGlow)"/>
+      <text class="core-title" x="960" y="522">Orchestrator</text><text class="core-sub" x="960" y="548">任务编排 · 路由 · Trace · Fallback</text>
+
+      <!-- agent capsules -->
+      <g filter="url(#softGlow)">
+        <ellipse cx="405" cy="468" rx="138" ry="37" fill="#06223d" stroke="#43e8ff" stroke-width="3"/><path d="M286 463A119 103 0 0 1 524 463Z" fill="url(#dome)" stroke="#9cfaff" stroke-width="3"/><circle cx="405" cy="382" r="30" fill="#0b4f75" stroke="#b6ffff" stroke-width="2"/><path d="M383 377h44v14h-44zM389 394h32" fill="none" stroke="#baffff" stroke-width="3"/><text class="agent-title" x="405" y="435">ProfileAgent</text><text class="agent-sub" x="405" y="459">学习画像 · 薄弱点识别</text>
+        <ellipse cx="1515" cy="468" rx="138" ry="37" fill="#06223d" stroke="#43e8ff" stroke-width="3"/><path d="M1396 463A119 103 0 0 1 1634 463Z" fill="url(#dome)" stroke="#9cfaff" stroke-width="3"/><circle cx="1515" cy="382" r="30" fill="#0b4f75" stroke="#b6ffff" stroke-width="2"/><path d="M1498 371h34v25h-34zM1505 378h20M1505 386h20" fill="none" stroke="#baffff" stroke-width="3"/><text class="agent-title" x="1515" y="435">TutorAgent</text><text class="agent-sub" x="1515" y="459">智能答疑 · 代码讲解</text>
+        <ellipse cx="665" cy="693" rx="138" ry="37" fill="#06223d" stroke="#43e8ff" stroke-width="3"/><path d="M546 688A119 103 0 0 1 784 688Z" fill="url(#dome)" stroke="#9cfaff" stroke-width="3"/><circle cx="665" cy="607" r="30" fill="#0b4f75" stroke="#b6ffff" stroke-width="2"/><path d="M647 602h36v20h-36zM654 596h22" fill="none" stroke="#baffff" stroke-width="3"/><text class="agent-title" x="665" y="660">ResourceAgent</text><text class="agent-sub" x="665" y="684">资源检索 · 个性化生成</text>
+        <ellipse cx="1255" cy="693" rx="138" ry="37" fill="#06223d" stroke="#43e8ff" stroke-width="3"/><path d="M1136 688A119 103 0 0 1 1374 688Z" fill="url(#dome)" stroke="#9cfaff" stroke-width="3"/><circle cx="1255" cy="607" r="30" fill="#0b4f75" stroke="#b6ffff" stroke-width="2"/><path d="M1238 601h34v22h-34zM1244 595h22" fill="none" stroke="#baffff" stroke-width="3"/><text class="agent-title" x="1255" y="660">PathAgent</text><text class="agent-sub" x="1255" y="684">路径规划 · 动态重排</text>
+      </g>
+
+      <!-- capability plates -->
+      <g filter="url(#softGlow)">
+        <path d="M250 535h294l-23 78H227z" fill="url(#glass)" stroke="#45e6ff" stroke-width="2"/><text class="plate-title" x="385" y="574">EvaluationAgent</text><text class="plate-sub" x="385" y="599">效果评估 · 错因分析</text>
+        <path d="M1376 535h294l23 78h-294z" fill="url(#glass)" stroke="#45e6ff" stroke-width="2"/><text class="plate-title" x="1535" y="574">ReflectionAgent</text><text class="plate-sub" x="1535" y="599">反馈回写 · 学习闭环</text>
+        <path d="M755 780h410l27 78H728z" fill="url(#glass)" stroke="#45e6ff" stroke-width="2.5"/><text class="plate-title" x="960" y="819">KnowledgePathAgent</text><text class="plate-sub" x="960" y="844">知识图谱路径生成 · 重新规划</text>
+      </g>
+
+      <!-- product capability strip -->
+      <g filter="url(#softGlow)">
+        <path d="M183 729h204l-22 67H161z" fill="#0b3154" fill-opacity=".92" stroke="#37defc" stroke-width="2"/><text class="plate-title" x="274" y="770">智能答疑</text>
+        <path d="M408 729h204l-22 67H386z" fill="#0b3154" fill-opacity=".92" stroke="#37defc" stroke-width="2"/><text class="plate-title" x="499" y="770">数字学生</text>
+        <path d="M1308 729h204l22 67h-204z" fill="#0b3154" fill-opacity=".92" stroke="#37defc" stroke-width="2"/><text class="plate-title" x="1421" y="770">知识检索</text>
+        <path d="M1533 729h204l22 67h-204z" fill="#0b3154" fill-opacity=".92" stroke="#37defc" stroke-width="2"/><text class="plate-title" x="1646" y="770">效果评估</text>
+      </g>
+
+      <!-- data and integration foundation -->
+      <g filter="url(#softGlow)">
+        <path d="M125 900h245l20 20v63H125z" fill="url(#glass)" stroke="#45e8ff" stroke-width="2"/><text class="storage-title" x="252" y="940">Vue 3 前端</text><text class="storage-sub" x="252" y="965">Vite · TypeScript · Pinia</text>
+        <path d="M420 900h245l20 20v63H420z" fill="url(#glass)" stroke="#45e8ff" stroke-width="2"/><text class="storage-title" x="547" y="940">Node.js 服务</text><text class="storage-sub" x="547" y="965">REST API · Agent Runtime</text>
+        <path d="M715 900h220l20 20v63H715z" fill="#2c245c" fill-opacity=".95" stroke="#c0a7ff" stroke-width="2.4"/><text class="storage-title" x="825" y="940">MySQL</text><text class="storage-sub" x="825" y="965">用户 · 画像 · 路径 · 测评</text>
+        <path d="M985 900h220l20 20v63H985z" fill="#45300c" fill-opacity=".95" stroke="#ffd36b" stroke-width="2.4"/><text class="storage-title" x="1095" y="940">MinIO</text><text class="storage-sub" x="1095" y="965">图片 · PPT · 课程文件</text>
+        <path d="M1255 900h220l20 20v63H1255z" fill="url(#glass)" stroke="#45e8ff" stroke-width="2"/><text class="storage-title" x="1365" y="940">知识库</text><text class="storage-sub" x="1365" y="965">JSON · 向量检索上下文</text>
+        <path d="M1525 900h245l20 20v63H1525z" fill="url(#glass)" stroke="#45e8ff" stroke-width="2"/><text class="storage-title" x="1652" y="940">LLM API</text><text class="storage-sub" x="1652" y="965">生成 · 推理 · 总结</text>
+      </g>
+
+      <!-- particles -->
+      <g fill="#a4faff" filter="url(#softGlow)" opacity=".9"><circle cx="290" cy="342" r="2"/><circle cx="321" cy="362" r="3"/><circle cx="347" cy="328" r="1.5"/><circle cx="366" cy="389" r="2"/><circle cx="535" cy="382" r="2"/><circle cx="570" cy="405" r="3"/><circle cx="610" cy="430" r="2"/><circle cx="677" cy="448" r="2"/><circle cx="722" cy="464" r="3"/><circle cx="1243" cy="464" r="3"/><circle cx="1298" cy="442" r="2"/><circle cx="1353" cy="417" r="3"/><circle cx="1385" cy="386" r="2"/><circle cx="1554" cy="348" r="3"/><circle cx="1588" cy="369" r="2"/><circle cx="1622" cy="334" r="2"/><circle cx="1730" cy="353" r="2"/><circle cx="754" cy="720" r="2"/><circle cx="785" cy="742" r="3"/><circle cx="815" cy="705" r="2"/><circle cx="1105" cy="725" r="2"/><circle cx="1145" cy="742" r="3"/><circle cx="1190" cy="706" r="2"/><circle cx="959" cy="726" r="5"/><circle cx="960" cy="760" r="4"/></g>
+      <text x="960" y="1031" text-anchor="middle" fill="#a8f3ff" font-size="15" font-weight="700">EduMind · 多智能体个性化学习平台 · Vue 3 + Node.js + MySQL + MinIO</text>
+    </svg>
+  </main>
+</body>
+</html>

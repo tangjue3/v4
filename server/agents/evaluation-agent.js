@@ -1,30 +1,32 @@
 import { callLlm, safeParseJson } from '../llm/provider.js'
 import { createAgentResult, AGENT_NAMES } from '../schemas.js'
-import { searchKnowledgeBase } from '../knowledge-base/vector-store.js'
+import { retrieveKnowledgeContext, summarizeKnowledgeForPrompt, buildKnowledgeEvidence } from '../knowledge-base/retrieval.js'
 
 const SYSTEM_PROMPT = `你是一个学习效果评估专家。根据用户的学习数据、练习结果和画像变化，评估学习效果并给出反馈。
 请以 JSON 格式返回，包含：mastery(各知识点掌握度)、suggestions(建议列表)、profileUpdates(画像更新建议)。`
 
 export async function runEvaluationAgent({ profile, learningData, exerciseResults, knowledgeContext }) {
   const start = Date.now()
-  const resolvedKnowledgeContext = knowledgeContext || searchKnowledgeBase({
+  const resolvedKnowledgeContext = knowledgeContext || retrieveKnowledgeContext({
+    agentName: AGENT_NAMES.EVALUATION,
+    query: 'learning evaluation weakness diagnosis profile update path replan',
     profile,
     learningData,
     exerciseResults,
-    query: 'learning evaluation weakness diagnosis profile update path replan',
+    domain: 'pedagogy',
+    limit: 4,
   })
   const input = { profile, learningData, exerciseResults, knowledgeContext: resolvedKnowledgeContext }
 
   const userPrompt = `用户画像: ${JSON.stringify(profile?.dimensions || [])}
 学习数据: ${JSON.stringify(learningData || {})}
 练习结果: ${JSON.stringify(exerciseResults || {})}
+知识参考:
+${summarizeKnowledgeForPrompt(resolvedKnowledgeContext.matches)}
 
-请评估学习效果并给出反馈。`
+请评估学习效果并给出反馈。如果知识参考里有"错因诊断三步法"或"主动回忆补救"策略，请体现在 suggestions 中。`
 
-  const llmResult = await callLlm(
-    SYSTEM_PROMPT,
-    `${userPrompt}\nKnowledge context: ${JSON.stringify(resolvedKnowledgeContext.matches || [])}`,
-  )
+  const llmResult = await callLlm(SYSTEM_PROMPT, userPrompt)
   let output
   let fallbackUsed = false
   const evidence = ['本地知识库 + embedding 向量检索已注入 EvaluationAgent']
@@ -54,20 +56,18 @@ export async function runEvaluationAgent({ profile, learningData, exerciseResult
     },
   }
 
-  if (resolvedKnowledgeContext.matches?.length) {
-    evidence.push(`知识库命中 ${resolvedKnowledgeContext.matches.length} 条: ${resolvedKnowledgeContext.matches.map(item => item.title).join(', ')}`)
-  }
+  evidence.push(...buildKnowledgeEvidence(resolvedKnowledgeContext, { summary: '评估知识库' }))
 
   const durationMs = Date.now() - start
   return {
     ...createAgentResult({
-    agentName: AGENT_NAMES.EVALUATION,
-    input,
-    output,
-    confidence: fallbackUsed ? 0.65 : 0.85,
-    evidence,
-    durationMs,
-    fallbackUsed,
+      agentName: AGENT_NAMES.EVALUATION,
+      input,
+      output,
+      confidence: fallbackUsed ? 0.65 : 0.85,
+      evidence,
+      durationMs,
+      fallbackUsed,
     }),
     output,
   }
@@ -76,6 +76,8 @@ export async function runEvaluationAgent({ profile, learningData, exerciseResult
 function fallbackEvaluation({ profile, exerciseResults, knowledgeContext }) {
   const score = profile?.totalScore || 50
   const weakTags = (profile?.weaknesses || [])
+    .map(item => typeof item === 'string' ? item : item?.tag || item?.label || item?.name)
+    .filter(Boolean)
   const correctRate = exerciseResults?.correctRate ?? (score > 60 ? 0.75 : 0.55)
   const knowledgeMatches = knowledgeContext?.matches || []
 

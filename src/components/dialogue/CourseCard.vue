@@ -1,7 +1,11 @@
 <template>
   <div
-    class="bg-[#0a0d18]/25 backdrop-blur-md rounded-2xl border border-slate-900/45 overflow-hidden transition-all duration-300 group"
-    :class="expanded ? 'border-blue-500/25' : 'hover:border-blue-500/15 hover:bg-[#0c1224]/30'"
+    class="backdrop-blur-md rounded-2xl overflow-hidden transition-all duration-300 group"
+    style="background: rgba(59, 130, 246, 0.08); border: 1px solid var(--border-card);"
+    :class="expanded ? 'border-blue-500/25' : 'hover:border-blue-500/20'"
+    :style="expanded ? { background: 'rgba(59, 130, 246, 0.12)', borderColor: 'rgba(59, 130, 246, 0.25)' } : { background: 'rgba(59, 130, 246, 0.08)' }"
+    @mouseenter="cardHover = true"
+    @mouseleave="cardHover = false"
   >
     <!-- Header -->
     <div class="p-4 flex items-start gap-4 cursor-pointer select-none" @click="expanded = !expanded">
@@ -37,13 +41,14 @@
     </div>
 
     <!-- Expanded Content -->
-    <div v-if="expanded" class="px-4 pb-4 space-y-4 border-t border-slate-900/40 pt-3 animate-fade-in">
+    <div v-if="expanded" class="px-4 pb-4 space-y-4 pt-3 animate-fade-in" style="border-top: 1px solid var(--border-card);">
       <!-- Knowledge Points -->
       <div>
         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">📚 核心知识点</h4>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <div v-for="kp in course.knowledgePoints" :key="kp.concept"
-            class="bg-slate-950/40 rounded-xl p-3 border border-slate-900/60"
+            class="rounded-xl p-3 backdrop-blur-sm"
+            style="background: rgba(59, 130, 246, 0.06); border: 1px solid var(--border-subtle);"
           >
             <div class="flex items-center justify-between gap-2">
               <span class="text-sm font-bold text-slate-200">{{ kp.concept }}</span>
@@ -69,11 +74,11 @@
         </div>
         <div v-if="showCode" class="relative">
           <div class="absolute top-2 right-2 z-10">
-            <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 font-mono font-bold">
+            <span class="text-[10px] px-2 py-0.5 rounded font-mono font-bold" style="background: rgba(59, 130, 246, 0.15); color: rgba(148, 163, 184, 0.9);">
               {{ course.codeExample.lang }}
             </span>
           </div>
-          <pre class="bg-slate-950/80 border border-slate-800/60 rounded-xl p-3.5 overflow-x-auto text-sm leading-relaxed font-mono text-slate-300 max-h-[300px] overflow-y-auto"><code>{{ course.codeExample.code }}</code></pre>
+          <pre class="rounded-xl p-3.5 overflow-x-auto text-sm leading-relaxed font-mono text-slate-300 max-h-[300px] overflow-y-auto" style="background: rgba(59, 130, 246, 0.08); border: 1px solid var(--border-card); backdrop-filter: blur(8px);"><code>{{ course.codeExample.code }}</code></pre>
         </div>
       </div>
 
@@ -111,6 +116,7 @@ const emit = defineEmits<{
 
 const expanded = ref(false)
 const showCode = ref(false)
+const cardHover = ref(false)
 
 function handleConsult() {
   emit('consult', props.course)

@@ -1,16 +1,19 @@
 <template>
-  <div class="bg-transparent backdrop-blur-md border-r border-slate-900/20 flex flex-col h-full overflow-y-auto shrink-0 transition-all duration-300"
+  <div class="bg-transparent backdrop-blur-md flex flex-col h-full overflow-y-auto shrink-0 transition-all duration-300" style="border-right: 1px solid var(--border-subtle) !important"
     :class="isMetricCollapsed ? 'w-[64px] p-2 bg-transparent' : 'w-full md:w-[400px] p-5 space-y-5'">
     <!-- Collapsed State -->
     <template v-if="isMetricCollapsed">
       <div class="flex flex-col items-center py-2 h-full w-full space-y-6">
-        <button @click="isMetricCollapsed = false" class="p-1.5 rounded-lg hover:bg-slate-900 border border-slate-900 bg-transparent text-slate-300 hover:text-cyan-400 shadow-sm transition-colors cursor-pointer" title="展开采集指标">
+        <button @click="isMetricCollapsed = false" class="p-1.5 rounded-lg transition-colors cursor-pointer" style="background: rgba(59, 130, 246, 0.08); border: 1px solid var(--border-subtle); color: rgb(203 213 225);" title="展开采集指标"
+          @mouseenter="hoverCollapseBtn = true"
+          @mouseleave="hoverCollapseBtn = false"
+          :style="hoverCollapseBtn ? { background: 'rgba(59, 130, 246, 0.15)', color: '#22d3ee' } : {}">
           <ChevronLeft class="w-4 h-4" />
         </button>
         <div class="flex-1 flex flex-col items-center justify-center space-y-3.5 w-full">
           <span class="text-xs font-bold text-slate-400 uppercase tracking-wider select-none text-center" style="writing-mode: vertical-lr">学习画像进度</span>
           <span class="text-sm font-black text-cyan-400 font-mono">{{ Math.round((collectedCount / 9) * 100) }}%</span>
-          <div class="w-2.5 h-44 bg-transparent rounded-full relative overflow-hidden flex flex-col justify-end border border-slate-800 shadow-inner">
+          <div class="w-2.5 h-44 rounded-full relative overflow-hidden flex flex-col justify-end shadow-inner" style="background: rgba(59, 130, 246, 0.1); border: 1px solid var(--border-subtle);">
             <div class="bg-gradient-to-t from-blue-500 to-cyan-400 rounded-full transition-all duration-1000 ease-out" :style="{ height: `${(collectedCount / 9) * 100}%` }" />
           </div>
           <span class="text-xs font-bold text-slate-400 font-mono">{{ collectedCount }}/9</span>
@@ -19,7 +22,8 @@
           @click="triggerReport"
           :disabled="!canUnlockReport"
           class="p-2.5 rounded-xl transition-all cursor-pointer flex items-center justify-center shrink-0"
-          :class="canUnlockReport ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-900/50 animate-pulse' : 'bg-transparent text-slate-500 cursor-not-allowed border border-slate-900'"
+          :class="canUnlockReport ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-900/50 animate-pulse' : 'cursor-not-allowed'"
+          :style="!canUnlockReport ? { background: 'transparent', color: 'rgb(100 116 139)', border: '1px solid var(--border-subtle)' } : {}"
           title="可以生成学习画像报告了！"
         >
           <Sparkles class="w-4 h-4" />
@@ -30,10 +34,13 @@
     <!-- Expanded State -->
     <template v-else>
       <!-- Progress Panel -->
-      <div class="bg-transparent rounded-2xl border border-slate-900/30 backdrop-blur-md p-4 shrink-0 space-y-4">
+      <div class="rounded-2xl backdrop-blur-md p-4 shrink-0 space-y-4" style="background: rgba(59, 130, 246, 0.06); border: 1px solid var(--border-subtle);">
         <div class="flex items-center justify-between">
           <h2 class="text-sm font-bold text-slate-200 tracking-wider uppercase">采集进度</h2>
-          <button @click="isMetricCollapsed = true" class="p-1 rounded-lg hover:bg-slate-900 text-slate-500 hover:text-slate-300 transition-colors cursor-pointer" title="折叠指标日志">
+          <button @click="isMetricCollapsed = true" class="p-1 rounded-lg transition-colors cursor-pointer" title="折叠指标日志" style="color: rgb(100 116 139);"
+            @mouseenter="hoverChevronRight = true"
+            @mouseleave="hoverChevronRight = false"
+            :style="hoverChevronRight ? { background: 'rgba(59, 130, 246, 0.1)', color: 'rgb(203 213 225)' } : {}">
             <ChevronRight class="w-4 h-4" />
           </button>
         </div>
@@ -41,7 +48,7 @@
         <!-- Circular Progress -->
         <div class="flex flex-col items-center justify-center py-2 relative">
           <svg class="w-24 h-24 transform -rotate-90 overflow-visible">
-            <circle cx="48" cy="48" r="38" stroke="rgba(15, 23, 42, 0.82)" stroke-width="8" fill="transparent" />
+            <circle cx="48" cy="48" r="38" stroke="rgba(59, 130, 246, 0.15)" stroke-width="8" fill="transparent" />
             <circle cx="48" cy="48" r="38" stroke="#06b6d4" stroke-width="8" fill="transparent"
               :stroke-dasharray="2 * Math.PI * 38"
               :stroke-dashoffset="2 * Math.PI * 38 * (1 - collectedCount / 9)"
@@ -74,8 +81,11 @@
             @click="selectNodeDetail(row.label.split(' ')[1])"
             class="flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer"
             :class="row.isChecked
-              ? 'bg-[#0b1022]/85 border-slate-900 text-slate-100'
-              : 'bg-transparent border-dashed border-slate-900 text-slate-500'"
+              ? 'text-slate-100'
+              : 'text-slate-500'"
+            :style="row.isChecked
+              ? { background: 'rgba(59, 130, 246, 0.1)', borderColor: 'var(--border-card)' }
+              : { background: 'transparent', borderColor: 'var(--border-subtle)', borderStyle: 'dashed' }"
           >
             <span class="font-semibold text-sm">{{ row.label }}</span>
             <div class="flex items-center gap-2">
@@ -83,43 +93,47 @@
                 {{ row.display }}
               </span>
               <Check v-if="row.isChecked" class="w-4 h-4 text-emerald-400 stroke-[3]" />
-              <div v-else class="w-1.5 h-1.5 rounded-full bg-slate-800" />
+              <div v-else class="w-1.5 h-1.5 rounded-full" style="background: rgba(59, 130, 246, 0.2);" />
             </div>
           </div>
         </div>
       </div>
 
       <!-- Actions -->
-      <div class="space-y-2 shrink-0 pt-3 border-t border-slate-900">
+      <div class="space-y-2 shrink-0 pt-3" style="border-top: 1px solid var(--border-subtle);">
         <button
           @click="triggerReport"
           :disabled="!canUnlockReport"
           class="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
-          :class="canUnlockReport ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-900/50' : 'bg-[#030611]/80 text-slate-500 border border-slate-900 cursor-not-allowed'"
+          :class="canUnlockReport ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-900/50' : 'cursor-not-allowed'"
+          :style="!canUnlockReport ? { background: 'rgba(59, 130, 246, 0.04)', color: 'rgb(100 116 139)', border: '1px solid var(--border-subtle)' } : {}"
         >
           <Sparkles class="w-4 h-4" />
           <span>开始学习画像</span>
         </button>
 
-        <button @click="resetConversation" class="w-full py-2.5 bg-slate-950/40 hover:bg-rose-950/25 border border-rose-900/50 hover:border-rose-850/50 text-rose-400 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+        <button @click="resetConversation" class="w-full py-2.5 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer" style="background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(244, 63, 94, 0.2); color: #f87171;"
+          @mouseenter="hoverReset = true"
+          @mouseleave="hoverReset = false"
+          :style="hoverReset ? { background: 'rgba(244, 63, 94, 0.1)', borderColor: 'rgba(244, 63, 94, 0.3)' } : {}">
           <RefreshCw class="w-4 h-4" />
           <span>重置对话</span>
         </button>
       </div>
 
       <!-- Scoring Panel -->
-      <div class="p-3 bg-[#0b0f1a]/15 backdrop-blur-sm border border-slate-900/30 rounded-2xl shrink-0 space-y-2">
+      <div class="p-3 rounded-2xl backdrop-blur-sm shrink-0 space-y-2" style="background: rgba(59, 130, 246, 0.05); border: 1px solid var(--border-subtle);">
         <div class="flex items-center justify-between text-sm text-white font-bold">
           <span>画像评分 (示例)</span>
           <span class="text-cyan-400 font-black">87</span>
         </div>
         <div class="flex gap-0.5">
-          <Sparkles v-for="i in 5" :key="'star-' + i" class="w-3.5 h-3.5" :class="i < 4 ? 'text-blue-400 fill-blue-400' : 'text-slate-800'" />
+          <Sparkles v-for="i in 5" :key="'star-' + i" class="w-3.5 h-3.5" :class="i < 4 ? 'text-blue-400 fill-blue-400' : ''" :style="i >= 4 ? { color: 'rgba(59, 130, 246, 0.2)' } : {}" />
         </div>
         <div class="space-y-1 text-xs text-slate-400">
           <div v-for="(score, label) in sampleScores" :key="label" class="flex justify-between items-center gap-2">
             <span class="shrink-0">{{ label }}</span>
-            <div class="flex-1 bg-slate-950 h-2 rounded-full overflow-hidden">
+            <div class="flex-1 h-2 rounded-full overflow-hidden" style="background: rgba(59, 130, 246, 0.1);">
               <div class="bg-cyan-500 h-full rounded-full" :style="{ width: `${score}%` }" />
             </div>
             <span class="text-xs text-cyan-400 font-bold w-8 text-right">{{ score }}</span>
@@ -129,7 +143,8 @@
           @click="triggerReport"
           :disabled="!canUnlockReport"
           class="w-full py-2 mt-1 rounded-lg text-sm font-bold text-center transition-all cursor-pointer"
-          :class="canUnlockReport ? 'bg-cyan-950/40 text-cyan-400 border border-cyan-900/50 hover:bg-cyan-950/60' : 'bg-slate-950 text-slate-600 cursor-not-allowed border border-slate-900'"
+          :class="canUnlockReport ? 'bg-cyan-950/40 text-cyan-400 border border-cyan-900/50 hover:bg-cyan-950/60' : 'cursor-not-allowed'"
+          :style="!canUnlockReport ? { background: 'rgba(59, 130, 246, 0.05)', color: 'rgb(71 85 105)', border: '1px solid var(--border-subtle)' } : {}"
         >查看完整画像</button>
       </div>
     </template>
@@ -137,7 +152,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { Sparkles, ChevronLeft, ChevronRight, Check, RefreshCw } from 'lucide-vue-next'
 import {
   isMetricCollapsed, dimensions, collectedCount, canUnlockReport,
@@ -166,4 +181,8 @@ const dimensionRows = computed(() =>
 )
 
 const sampleScores = { '知识基础': 85, '学习速度': 90, '逻辑思维': 88, '创造力': 82 }
+
+const hoverCollapseBtn = ref(false)
+const hoverChevronRight = ref(false)
+const hoverReset = ref(false)
 </script>

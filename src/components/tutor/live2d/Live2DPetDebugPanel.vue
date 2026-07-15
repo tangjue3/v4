@@ -30,7 +30,7 @@ const motionIndexInput = ref('0')
 const isTestingMotion = ref(false)
 const testResult = ref<string | null>(null)
 
-let refreshTimer: ReturnType<typeof setInterval> | null = null
+let refreshTimer: number | null = null
 
 const capabilityGroups = computed(() => capability.value?.groupNames.map((groupName: string) => ({
   groupName,

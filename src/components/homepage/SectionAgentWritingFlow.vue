@@ -587,8 +587,8 @@ onUnmounted(() => {
 }
 
 @keyframes breathe {
-  0%, 100% { box-shadow: 0 0 12px color-mix(in srgb, var(--agent-color) 20%, transparent); }
-  50% { box-shadow: 0 0 28px color-mix(in srgb, var(--agent-color) 64%, transparent); }
+  0%, 100% { box-shadow: 0 0 4px color-mix(in srgb, var(--agent-color) 12%, transparent); }
+  50% { box-shadow: 0 0 10px color-mix(in srgb, var(--agent-color) 22%, transparent); }
 }
 
 @keyframes spin {

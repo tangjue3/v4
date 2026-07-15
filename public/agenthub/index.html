@@ -4,12 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>多智能体编排枢纽 · 交互 3D</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@500;600&family=Noto+Sans+SC:wght@300;400;500&display=swap" />
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  html,body{height:100%;background:#04060d;overflow:hidden;font-family:'Outfit','PingFang SC','Noto Sans SC',sans-serif;color:#eef3fb}
+  html,body{height:100%;background:#04060d;overflow:hidden;font-family:Segoe UI,'PingFang SC',system-ui,sans-serif;color:#eef3fb}
   #c{display:block;cursor:grab} #c:active{cursor:grabbing}
   .vig{position:fixed;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse 50% 54% at 50% 48%,transparent 32%,rgba(1,4,10,.46) 70%,rgba(0,2,6,.92) 100%)}
 
@@ -67,14 +64,11 @@
   #modal.open{display:flex}
   #modal .scrim{position:absolute;inset:0;background:rgba(2,5,12,.6);backdrop-filter:blur(3px);opacity:0;transition:opacity .3s}
   #modal.open .scrim{opacity:1}
-  #card{position:relative;width:520px;max-width:88%;border-radius:18px;padding:28px 30px;transform:translateY(14px) scale(.97);opacity:0;transition:all .34s cubic-bezier(.2,.7,.2,1);
+  #card{position:relative;width:440px;max-width:88%;border-radius:16px;padding:26px 28px;transform:translateY(14px) scale(.97);opacity:0;transition:all .34s cubic-bezier(.2,.7,.2,1);
     background:linear-gradient(155deg,rgba(14,20,36,.95),rgba(8,12,24,.97));border:1px solid rgba(120,160,220,.22);box-shadow:0 40px 110px rgba(0,0,0,.6)}
   #modal.open #card{transform:translateY(0) scale(1);opacity:1}
-  #card .c-no{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.1em}
-  #card h2{font-size:27px;color:#fff;margin:5px 0 3px}
-  #card .c-en{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.22em;color:#93a6c6;text-transform:uppercase}
-  #card .c-desc{font-size:14.5px;line-height:1.7;color:#c3d0e6;margin:16px 0}
-  #card .c-ag{display:flex;gap:10px;margin-top:14px}
+  #card .c-desc{font-size:15px;line-height:1.8;color:#d6e0f2}
+  #card .c-ag{display:flex;gap:10px;margin-top:16px}
   #card .c-ag span{flex:1;text-align:center;font-size:13px;padding:9px;border-radius:9px;background:rgba(255,255,255,.04)}
   #card .c-x{position:absolute;top:16px;right:18px;width:32px;height:32px;border-radius:8px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);color:#cdd9ee;font-size:15px;cursor:pointer}
   #card .c-x:hover{background:rgba(255,255,255,.1)}
@@ -97,18 +91,25 @@
 <div id="corelab"><div class="ck">06 · CORE</div><div class="cn">编排中枢</div><div class="cs">中央调度核心</div></div>
 <div id="hint">拖拽旋转 · 滚轮缩放 · 点击节点查看详情</div>
 <div id="modal"><div class="scrim"></div>
-  <div id="card"><button class="c-x">✕</button><div class="c-no"></div><div class="c-en"></div><h2></h2><div class="c-desc"></div><div class="c-ag"></div></div>
+  <div id="card"><button class="c-x">✕</button><div class="c-desc"></div><div class="c-ag"></div></div>
 </div>
 <div id="load"><div class="ring"></div><div class="txt" id="ltxt">LOADING MODEL…</div></div>
 
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
 <script type="module">
-import * as THREE from 'https://esm.sh/three@0.160.0';
-import { GLTFLoader } from 'https://esm.sh/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
-import { OrbitControls } from 'https://esm.sh/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-import { RoomEnvironment } from 'https://esm.sh/three@0.160.0/examples/jsm/environments/RoomEnvironment.js';
-import { EffectComposer } from 'https://esm.sh/three@0.160.0/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'https://esm.sh/three@0.160.0/examples/jsm/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'https://esm.sh/three@0.160.0/examples/jsm/postprocessing/UnrealBloomPass.js';
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/environments/RoomEnvironment.js';
+import { EffectComposer } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 const STATIONS = [
   { key:'profile',  no:'01', name:'画像诊断', en:'DIAGNOSE', c:'#8b7ff5', ui:'radar',   stat:'掌握度', val:'32%', agents:['画像采集','薄弱诊断'], desc:'采集学习行为与作答数据，构建多维学情画像，定位知识薄弱点与风险标签，为后续编排提供诊断依据。' },
@@ -342,6 +343,202 @@ const refs = { packets:[], rings:[], coreEmis:[], beacons:[], stationAnchors:{},
 const v = new THREE.Vector3();
 const ltxt = document.getElementById('ltxt');
 
+function buildFallbackHub() {
+  const root = new THREE.Group();
+  scene.add(root); refs.root = root;
+
+  const hubRadius = 12;
+  const stationY = 3.2;
+
+  // Core base platform
+  const coreBaseGeo = new THREE.CylinderGeometry(4.2, 5, 0.6, 48);
+  const coreBaseMat = new THREE.MeshStandardMaterial({
+    color: 0x0a1a2e,
+    metalness: 0.8,
+    roughness: 0.25,
+    emissive: 0x0044aa,
+    emissiveIntensity: 0.15
+  });
+  const coreBase = new THREE.Mesh(coreBaseGeo, coreBaseMat);
+  coreBase.position.y = 0.3;
+  root.add(coreBase);
+
+  // Core upper sphere
+  const coreSphereGeo = new THREE.IcosahedronGeometry(1.8, 2);
+  const coreSphereMat = new THREE.MeshStandardMaterial({
+    color: 0x1e40af,
+    metalness: 0.6,
+    roughness: 0.3,
+    emissive: 0x3b82f6,
+    emissiveIntensity: 0.8
+  });
+  const coreSphere = new THREE.Mesh(coreSphereGeo, coreSphereMat);
+  coreSphere.position.y = 3;
+  root.add(coreSphere);
+  refs.coreSignal = coreSphere;
+  refs.coreEmis.push({ m: coreSphereMat, base: 0.8 });
+
+  // Core inner glow
+  const coreGlowGeo = new THREE.SphereGeometry(2.4, 32, 32);
+  const coreGlowMat = new THREE.MeshBasicMaterial({
+    color: 0x60a5fa,
+    transparent: true,
+    opacity: 0.15,
+    blending: THREE.AdditiveBlending
+  });
+  const coreGlow = new THREE.Mesh(coreGlowGeo, coreGlowMat);
+  coreGlow.position.y = 3;
+  root.add(coreGlow);
+
+  // Core data rings
+  const ringRadii = [3.2, 4.4, 5.6];
+  ringRadii.forEach((r, i) => {
+    const ringGeo = new THREE.TorusGeometry(r, 0.06, 8, 80);
+    ringGeo.rotateX(Math.PI / 2);
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: i % 2 ? 0x38bdf8 : 0x60a5fa,
+      transparent: true,
+      opacity: 0.5,
+      blending: THREE.AdditiveBlending
+    });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.position.y = 1.8 + i * 0.4;
+    root.add(ring);
+    refs.rings.push({ mesh: ring, dir: i % 2 ? -1 : 1 });
+  });
+
+  // Orbit ring
+  const orbitGeo = new THREE.TorusGeometry(hubRadius, 0.04, 8, 128);
+  orbitGeo.rotateX(Math.PI / 2);
+  const orbitMat = new THREE.MeshBasicMaterial({
+    color: 0x3b82f6,
+    transparent: true,
+    opacity: 0.2
+  });
+  const orbit = new THREE.Mesh(orbitGeo, orbitMat);
+  orbit.position.y = stationY;
+  root.add(orbit);
+
+  // 6 station nodes
+  STATIONS.forEach((s, i) => {
+    const angle = (i / STATIONS.length) * Math.PI * 2 - Math.PI / 2;
+    const x = Math.cos(angle) * hubRadius;
+    const z = Math.sin(angle) * hubRadius;
+
+    // Station pillar
+    const pillarGeo = new THREE.CylinderGeometry(0.15, 0.25, stationY - 0.3, 12);
+    const pillarMat = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(s.c),
+      metalness: 0.7,
+      roughness: 0.3,
+      emissive: new THREE.Color(s.c),
+      emissiveIntensity: 0.3
+    });
+    const pillar = new THREE.Mesh(pillarGeo, pillarMat);
+    pillar.position.set(x, (stationY - 0.3) / 2, z);
+    root.add(pillar);
+
+    // Station platform
+    const platGeo = new THREE.CylinderGeometry(1.4, 1.6, 0.3, 24);
+    const platMat = new THREE.MeshStandardMaterial({
+      color: 0x0a1525,
+      metalness: 0.75,
+      roughness: 0.25,
+      emissive: new THREE.Color(s.c),
+      emissiveIntensity: 0.2
+    });
+    const plat = new THREE.Mesh(platGeo, platMat);
+    plat.position.set(x, stationY, z);
+    root.add(plat);
+
+    // Station beacon crystal
+    const beaconGeo = new THREE.OctahedronGeometry(0.8, 0);
+    const beaconMat = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(s.c),
+      metalness: 0.5,
+      roughness: 0.2,
+      emissive: new THREE.Color(s.c),
+      emissiveIntensity: 1.0
+    });
+    const beacon = new THREE.Mesh(beaconGeo, beaconMat);
+    beacon.position.set(x, stationY + 1.2, z);
+    root.add(beacon);
+    refs.beacons.push({ m: beaconMat, base: 1.0, ph: Math.random() * 6.28 });
+
+    // Station glow
+    const beaconGlowGeo = new THREE.SphereGeometry(1.4, 16, 16);
+    const beaconGlowMat = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(s.c),
+      transparent: true,
+      opacity: 0.12,
+      blending: THREE.AdditiveBlending
+    });
+    const beaconGlow = new THREE.Mesh(beaconGlowGeo, beaconGlowMat);
+    beaconGlow.position.set(x, stationY + 1.2, z);
+    root.add(beaconGlow);
+
+    // Set station anchor for HTML labels
+    refs.stationAnchors[s.key] = new THREE.Vector3(x, stationY + 1.2, z);
+  });
+
+  // Data packets orbiting
+  for (let i = 0; i < 8; i++) {
+    const angle = (i / 8) * Math.PI * 2;
+    const packetGeo = new THREE.SphereGeometry(0.25, 12, 12);
+    const packetMat = new THREE.MeshBasicMaterial({
+      color: i % 2 ? 0x38bdf8 : 0xa78bfa,
+      transparent: true,
+      opacity: 0.9,
+      blending: THREE.AdditiveBlending
+    });
+    const packet = new THREE.Mesh(packetGeo, packetMat);
+    packet.position.set(
+      Math.cos(angle) * hubRadius,
+      stationY,
+      Math.sin(angle) * hubRadius
+    );
+    root.add(packet);
+    refs.packets.push({
+      mesh: packet,
+      angle: angle,
+      r: hubRadius,
+      y: stationY
+    });
+  }
+
+  // Connection lines from core to stations
+  STATIONS.forEach((s, i) => {
+    const angle = (i / STATIONS.length) * Math.PI * 2 - Math.PI / 2;
+    const points = [
+      new THREE.Vector3(0, 3, 0),
+      new THREE.Vector3(Math.cos(angle) * hubRadius, stationY + 1.2, Math.sin(angle) * hubRadius)
+    ];
+    const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+    const lineMat = new THREE.LineBasicMaterial({
+      color: new THREE.Color(s.c),
+      transparent: true,
+      opacity: 0.25
+    });
+    const line = new THREE.Line(lineGeo, lineMat);
+    root.add(line);
+  });
+
+  // Setup camera
+  controls.target.set(0, 3, 0);
+  const d = hubRadius * 2.2;
+  camera.position.set(d * 0.65, d * 0.55, d * 0.8);
+  camera.near = 0.1; camera.far = 200; camera.updateProjectionMatrix();
+  controls.minDistance = hubRadius * 1.2;
+  controls.maxDistance = hubRadius * 4;
+  controls.maxPolarAngle = Math.PI / 2.05;
+  controls.update();
+
+  buildLabels();
+  setActiveStation(activeStationKey);
+  document.getElementById('load').classList.add('hide');
+}
+
+// Try loading GLB model, fallback to procedural hub on error
 new GLTFLoader().load('models/agent_hub_concept_refined_final.glb', (gltf) => {
   const root = gltf.scene; scene.add(root); refs.root = root;
 
@@ -384,7 +581,7 @@ new GLTFLoader().load('models/agent_hub_concept_refined_final.glb', (gltf) => {
   setActiveStation(activeStationKey);
   document.getElementById('load').classList.add('hide');
 }, (p)=>{ if(p.loaded) ltxt.textContent='LOADING MODEL… '+(p.loaded/1048576).toFixed(1)+' MB'; },
-   (e)=>{ ltxt.textContent='LOAD ERROR'; console.error(e); });
+   (e)=>{ console.warn('GLB model not found, using procedural fallback hub:', e); buildFallbackHub(); });
 
 // ---- HTML labels ----
 const labels = {};
@@ -457,8 +654,6 @@ function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
 // ---- modal ----
 const modal = document.getElementById('modal'), cardEl = document.getElementById('card');
 function openModal(s){
-  cardEl.querySelector('.c-no').textContent = s.no+' · AGENT MODULE'; cardEl.querySelector('.c-no').style.color = s.c;
-  cardEl.querySelector('.c-en').textContent = s.en; cardEl.querySelector('h2').textContent = s.name;
   cardEl.querySelector('.c-desc').textContent = s.desc;
   const ag = cardEl.querySelector('.c-ag'); ag.innerHTML='';
   s.agents.forEach(x=>{ const sp=document.createElement('span'); sp.textContent=x; sp.style.border=`1px solid ${s.c}55`; sp.style.color=s.c; ag.appendChild(sp); });

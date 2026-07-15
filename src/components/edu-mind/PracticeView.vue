@@ -30,7 +30,9 @@ import {
   PlayCircle,
   ThumbsUp,
   X,
-  Plus
+  Plus,
+  PanelRightClose,
+  PanelRightOpen
 } from 'lucide-vue-next'
 import type { CourseItem } from '../../data/edu-mind-course-data'
 import { COURSES_DATA } from '../../data/edu-mind-course-data'
@@ -378,6 +380,8 @@ const selectedConceptId = ref<string>((() => {
   return saved && currentExercises.value.some(ex => ex.id === saved) ? saved : (currentExercises.value[0]?.id || '')
 })())
 
+const sidebarCollapsed = ref(true)
+
 watch(currentCourseId, () => {
   const defaultEx = currentExercises.value[0]?.id || ''
   selectedConceptId.value = defaultEx
@@ -674,112 +678,128 @@ const lineNumbers = Array.from({ length: 14 }, (_, i) => i + 1)
       <!-- PANEL 1: LEFT SIDEBAR DIRECTORY -->
       <div
         :class="[
-          'lg:col-span-2 border-b lg:border-b-0 lg:border-r p-3.5 flex flex-col justify-between',
-          'border-[rgba(0,212,255,0.1)]'
+          sidebarCollapsed ? 'lg:col-span-[0] lg:w-0 lg:min-w-0 lg:overflow-visible lg:p-0' : 'lg:col-span-2',
+          'border-b lg:border-b-0 lg:border-r',
+          'border-[rgba(0,212,255,0.1)]',
+          sidebarCollapsed ? 'hidden lg:block' : 'flex flex-col'
         ]"
-        style="background: rgba(18, 20, 50, 0.6);"
+        :style="sidebarCollapsed ? { background: 'transparent', position: 'relative' } : { background: 'rgba(18, 20, 50, 0.6)' }"
         id="ide-column-sidebar-directory"
       >
-        <div class="flex flex-col gap-3">
-          <div class="flex flex-col gap-1.5 border-b pb-2 mb-1 border-[rgba(0, 212, 255, 0.1)]/20 select-none">
-            <span :class="['text-[12px] font-bold tracking-wider uppercase', isDarkTheme ? 'text-[#00d4ff]' : 'text-slate-500']">当前关联课程</span>
-            <div class="relative">
-              <select
-                :value="currentCourseId"
-                @change="handleCourseChange"
+        <!-- 折叠按钮 -->
+        <button
+          @click="sidebarCollapsed = !sidebarCollapsed"
+          :class="sidebarCollapsed
+            ? 'absolute -right-3 top-3 z-10 w-6 h-6 rounded-full flex items-center justify-center bg-[rgba(18,20,50,0.9)] border border-[rgba(0,212,255,0.2)] hover:border-[#00d4ff] shadow-lg'
+            : 'flex items-center justify-end p-2 w-full'"
+          :title="sidebarCollapsed ? '展开目录' : '折叠目录'"
+        >
+          <component :is="sidebarCollapsed ? PanelRightOpen : PanelRightClose" :size="sidebarCollapsed ? 12 : 16" :class="sidebarCollapsed ? '' : 'text-[#9aa4d9] hover:text-[#00d4ff]'" />
+        </button>
+
+        <template v-if="!sidebarCollapsed">
+          <div class="flex flex-col gap-3 px-3.5">
+            <div class="flex flex-col gap-1.5 border-b pb-2 mb-1 border-[rgba(0, 212, 255, 0.1)]/20 select-none">
+              <span :class="['text-[12px] font-bold tracking-wider uppercase', isDarkTheme ? 'text-[#00d4ff]' : 'text-slate-500']">当前关联课程</span>
+              <div class="relative">
+                <select
+                  :value="currentCourseId"
+                  @change="handleCourseChange"
+                  :class="[
+                    'w-full text-[13.5px] font-bold rounded-lg border py-2.5 pl-2.5 pr-8 appearance-none cursor-pointer outline-none transition-all',
+                    'bg-[rgba(13,15,40,0.45)] border-[rgba(0,212,255,0.12)] text-[#d8def0] hover:border-[#00d4ff]'
+                  ]"
+                >
+                  <option v-for="c in COURSES_DATA" :key="c.id" :value="c.id">
+                    {{ c.name }}
+                  </option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-[#9aa4d9]">
+                  <ChevronDown :size="14" />
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pb-1 text-[#00d4ff] select-none font-mono">
+              <span class="font-bold text-[13px] tracking-wider uppercase">本栏加练大纲目录</span>
+              <span class="text-[12px] font-semibold opacity-85">({{ currentExercises.length }} 题)</span>
+            </div>
+
+            <div class="space-y-1.5 max-h-[360px] overflow-y-auto pr-0.5" id="ide-sidebar-directory-exercises">
+              <div
+                v-for="item in currentExercises"
+                :key="item.id"
+                @click="handleSelectConcept(item.id)"
                 :class="[
-                  'w-full text-[13.5px] font-bold rounded-lg border py-2.5 pl-2.5 pr-8 appearance-none cursor-pointer outline-none transition-all',
-                  'bg-[rgba(13,15,40,0.45)] border-[rgba(0,212,255,0.12)] text-[#d8def0] hover:border-[#00d4ff]'
+                  'group w-full p-2.5 rounded-lg border transition-all duration-150 cursor-pointer flex items-center justify-between text-left relative',
+                  selectedConceptId === item.id
+                    ? 'bg-[rgba(0,212,255,0.1)] border-[rgba(0,212,255,0.5)] text-[#00d4ff] font-bold shadow-sm'
+                    : 'bg-transparent border-transparent text-[#9aa4d9] hover:bg-[rgba(0,212,255,0.06)] hover:text-[#fff]'
                 ]"
               >
-                <option v-for="c in COURSES_DATA" :key="c.id" :value="c.id">
-                  {{ c.name }}
-                </option>
-              </select>
-              <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-[#9aa4d9]">
-                <ChevronDown :size="14" />
+                <div
+                  v-if="selectedConceptId === item.id"
+                  class="absolute left-0 top-0 bottom-0 w-1 rounded-l-md bg-[#00d4ff]"
+                />
+
+                <div class="flex items-center gap-2 truncate">
+                  <span class="truncate leading-tight font-mono text-xs">{{ item.name }}</span>
+                </div>
+
+                <ChevronRight
+                  :size="14"
+                  :class="[
+                    'opacity-0 group-hover:opacity-100 transition-opacity shrink-0',
+                    'text-[#9aa4d9]'
+                  ]"
+                />
               </div>
             </div>
           </div>
 
-          <div class="flex items-center justify-between pb-1 text-[#00d4ff] select-none font-mono">
-            <span class="font-bold text-[13px] tracking-wider uppercase">本栏加练大纲目录</span>
-            <span class="text-[12px] font-semibold opacity-85">({{ currentExercises.length }} 题)</span>
-          </div>
+          <div class="mt-4 pt-3.5 border-t border-[rgba(0, 212, 255, 0.1)]/30 select-none space-y-4 px-3.5">
+            <div class="font-mono">
+              <div class="flex justify-between items-center text-[13px] mb-1 font-bold">
+                <span :class="isDarkTheme ? 'text-slate-400' : 'text-slate-500'">学习进度</span>
+                <span :class="isDarkTheme ? 'text-[#d8def0]' : 'text-[#1a1a2e]'">62%</span>
+              </div>
 
-          <div class="space-y-1.5 max-h-[360px] overflow-y-auto pr-0.5" id="ide-sidebar-directory-exercises">
+              <div class="h-1.5 rounded-full overflow-hidden bg-[rgba(0,212,255,0.06)]">
+                <div class="h-full bg-[#00d4ff] rounded-full" style="width: 62%" />
+              </div>
+            </div>
+
             <div
-              v-for="item in currentExercises"
-              :key="item.id"
-              @click="handleSelectConcept(item.id)"
-              :class="[
-                'group w-full p-2.5 rounded-lg border transition-all duration-150 cursor-pointer flex items-center justify-between text-left relative',
-                selectedConceptId === item.id
-                  ? 'bg-[rgba(0,212,255,0.1)] border-[rgba(0,212,255,0.5)] text-[#00d4ff] font-bold shadow-sm'
-                  : 'bg-transparent border-transparent text-[#9aa4d9] hover:bg-[rgba(0,212,255,0.06)] hover:text-[#fff]'
-              ]"
+              @click="handleGoToResources"
+              class="p-2.5 rounded-lg border text-[13px] leading-relaxed cursor-pointer transition-all bg-[rgba(13,15,40,0.45)] border-[rgba(0,212,255,0.08)] text-indigo-200 hover:border-[#00d4ff]"
             >
-              <div
-                v-if="selectedConceptId === item.id"
-                class="absolute left-0 top-0 bottom-0 w-1 rounded-l-md bg-[#00d4ff]"
-              />
-
-              <div class="flex items-center gap-2 truncate">
-                <span class="truncate leading-tight font-mono text-xs">{{ item.name }}</span>
+              <div class="flex items-center gap-1.5 mb-1 font-bold">
+                <Lightbulb :size="14" class="text-amber-500 fill-amber-500/20" />
+                <span>学习建议 / 相关课程</span>
               </div>
-
-              <ChevronRight
-                :size="14"
-                :class="[
-                  'opacity-0 group-hover:opacity-100 transition-opacity shrink-0',
-                  'text-[#9aa4d9]'
-                ]"
-              />
+              <p class="opacity-95 leading-normal truncate-3-lines">
+                完成本大纲输入输出专项练习后，建议继续挑战下一大纲《条件判断》。在【资源中心】有该题解。
+              </p>
             </div>
           </div>
-        </div>
-
-        <div class="mt-4 pt-3.5 border-t border-[rgba(0, 212, 255, 0.1)]/30 select-none space-y-4">
-          <div class="font-mono">
-            <div class="flex justify-between items-center text-[13px] mb-1 font-bold">
-              <span :class="isDarkTheme ? 'text-slate-400' : 'text-slate-500'">学习进度</span>
-              <span :class="isDarkTheme ? 'text-[#d8def0]' : 'text-[#1a1a2e]'">62%</span>
-            </div>
-
-            <div class="h-1.5 rounded-full overflow-hidden bg-[rgba(0,212,255,0.06)]">
-              <div class="h-full bg-[#00d4ff] rounded-full" style="width: 62%" />
-            </div>
-          </div>
-
-          <div
-            @click="handleGoToResources"
-            class="p-2.5 rounded-lg border text-[13px] leading-relaxed cursor-pointer transition-all bg-[rgba(13,15,40,0.45)] border-[rgba(0,212,255,0.08)] text-indigo-200 hover:border-[#00d4ff]"
-          >
-            <div class="flex items-center gap-1.5 mb-1 font-bold">
-              <Lightbulb :size="14" class="text-amber-500 fill-amber-500/20" />
-              <span>学习建议 / 相关课程</span>
-            </div>
-            <p class="opacity-95 leading-normal truncate-3-lines">
-              完成本大纲输入输出专项练习后，建议继续挑战下一大纲《条件判断》。在【资源中心】有该题解。
-            </p>
-          </div>
-        </div>
+        </template>
       </div>
 
       <!-- PANEL 2: MIDDLE PROBLEM DESCRIPTION (TABS) -->
       <div
         :class="[
-          'lg:col-span-2 border-b lg:border-b-0 lg:border-r p-3.5 flex flex-col min-w-0 overflow-hidden',
+          sidebarCollapsed ? 'lg:col-span-3' : 'lg:col-span-2',
+          'border-b lg:border-b-0 lg:border-r p-3.5 flex flex-col min-w-0 overflow-hidden',
           'border-[rgba(0,212,255,0.1)]'
         ]"
         style="background: rgba(18, 20, 50, 0.6);"
         id="ide-column-problem-tabs-panel"
       >
-        <div class="flex items-center border-b border-[rgba(0, 212, 255, 0.1)]/20 pb-1.5 mb-2 select-none font-sans font-medium text-[14.5px]">
+        <div class="flex items-center justify-center border-b border-[rgba(0, 212, 255, 0.1)]/20 pb-1.5 mb-2 select-none font-sans font-medium text-[14.5px]">
           <button
             @click="activeTab = '题目描述'"
             :class="[
-              'flex-1 text-center pb-2 relative transition-all cursor-pointer',
+              'flex justify-center items-center flex-1 text-center pb-2 relative transition-all cursor-pointer',
               activeTab === '题目描述'
                 ? 'text-[#00d4ff] font-bold'
                 : 'text-[#8b9bc0] hover:text-[#d8def0]'
@@ -792,7 +812,7 @@ const lineNumbers = Array.from({ length: 14 }, (_, i) => i + 1)
           <button
             @click="activeTab = '提交记录'"
             :class="[
-              'flex-1 text-center pb-2 relative transition-all cursor-pointer',
+              'flex justify-center items-center flex-1 text-center pb-2 relative transition-all cursor-pointer',
               activeTab === '提交记录'
                 ? 'text-[#00d4ff] font-bold'
                 : 'text-[#8b9bc0] hover:text-[#d8def0]'
@@ -805,7 +825,7 @@ const lineNumbers = Array.from({ length: 14 }, (_, i) => i + 1)
           <button
             @click="activeTab = '讨论区'"
             :class="[
-              'flex-1 text-center pb-2 relative transition-all cursor-pointer',
+              'flex justify-center items-center flex-1 text-center pb-2 relative transition-all cursor-pointer',
               activeTab === '讨论区'
                 ? 'text-[#00d4ff] font-bold'
                 : 'text-[#8b9bc0] hover:text-[#d8def0]'
@@ -960,7 +980,8 @@ const lineNumbers = Array.from({ length: 14 }, (_, i) => i + 1)
       <!-- PANEL 3: CODE EDITOR -->
       <div
         :class="[
-          'lg:col-span-5 border-b lg:border-b-0 lg:border-r flex flex-col justify-between min-w-0',
+          sidebarCollapsed ? 'lg:col-span-7' : 'lg:col-span-5',
+          'border-b lg:border-b-0 lg:border-r flex flex-col justify-between min-w-0',
           'border-[rgba(0,212,255,0.1)]'
         ]"
         style="background: rgba(18, 20, 50, 0.6);"
@@ -1035,7 +1056,8 @@ const lineNumbers = Array.from({ length: 14 }, (_, i) => i + 1)
       <!-- PANEL 4: RIGHT PANEL RUN RESULTS -->
       <div
         :class="[
-          'lg:col-span-3 p-4 flex flex-col justify-between min-w-0',
+          sidebarCollapsed ? 'lg:col-span-2' : 'lg:col-span-3',
+          'p-4 flex flex-col justify-between min-w-0',
         ]"
         style="background: rgba(18, 20, 50, 0.6);"
         id="ide-column-run-results-panel"

@@ -2,6 +2,12 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { callLlm, isLlmAvailable } from './llm/provider.js'
+import {
+  getLatestAccountKnowledgePath,
+  getLatestAccountProfile,
+  saveAccountKnowledgePath,
+  saveAccountProfile,
+} from './store/account-profile.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -74,24 +80,20 @@ export function getTutoringTopics() {
   return readJsonFile('tutoring-topics.json')
 }
 
-export function getLatestProfileResult() {
-  return readStore().profileResult
+export async function getLatestProfileResult(accountId) {
+  return getLatestAccountProfile(accountId)
 }
 
-export function saveProfileResult(profileResult) {
-  const store = readStore()
-  store.profileResult = profileResult
-  writeStore(store)
+export async function saveProfileResult(profileResult, accountContext) {
+  return saveAccountProfile(profileResult, accountContext)
 }
 
-export function getLatestKnowledgePath() {
-  return readStore().knowledgePathResult
+export async function getLatestKnowledgePath(accountId) {
+  return getLatestAccountKnowledgePath(accountId)
 }
 
-export function saveKnowledgePathResult(result) {
-  const store = readStore()
-  store.knowledgePathResult = result
-  writeStore(store)
+export async function saveKnowledgePathResult(result, accountContext) {
+  return saveAccountKnowledgePath(result, accountContext)
 }
 
 export function getChatHistory() {

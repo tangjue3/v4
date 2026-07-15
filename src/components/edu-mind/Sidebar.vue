@@ -161,11 +161,10 @@ function handleNavClick(itemName: string) {
 
 <style scoped>
 .edu-sidebar {
-  background:
-    radial-gradient(circle at 42% 24%, rgba(59, 130, 246, 0.12), transparent 32%),
-    linear-gradient(180deg, #07060a 0%, #0e0c15 52%, #161220 100%);
-  border-right: 1px solid rgba(59, 130, 246, 0.15);
-  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.03), 18px 0 54px rgba(4, 5, 22, 0.34);
+  background: rgba(5, 10, 25, 0.35);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-right: 1px solid rgba(59, 130, 246, 0.1);
 }
 
 .edu-sidebar__item {
@@ -175,30 +174,15 @@ function handleNavClick(itemName: string) {
 
 .edu-sidebar__item:hover {
   background: rgba(59, 130, 246, 0.08);
-  box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.12);
 }
 
 .edu-sidebar__item.is-active {
-  background: linear-gradient(90deg, rgba(59, 130, 246, 0.18), rgba(37, 99, 235, 0.1));
-  box-shadow:
-    inset 0 0 0 1px rgba(59, 130, 246, 0.25),
-    0 0 18px rgba(59, 130, 246, 0.12);
-}
-
-.edu-sidebar__halo {
-  position: absolute;
-  bottom: 2px;
-  width: 138px;
-  height: 22px;
-  border-radius: 50%;
-  border: 1px solid rgba(59, 130, 246, 0.4);
-  background: radial-gradient(ellipse, rgba(59, 130, 246, 0.15), transparent 68%);
-  box-shadow: 0 0 18px rgba(59, 130, 246, 0.35);
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.08));
+  box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.2);
 }
 
 .edu-sidebar__profile {
-  background: rgba(14, 12, 21, 0.7);
-  border: 1px solid rgba(59, 130, 246, 0.12);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  background: rgba(5, 10, 25, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.08);
 }
 </style>

@@ -413,6 +413,7 @@ let scene: THREE.Scene | null = null
 let camera: THREE.PerspectiveCamera | null = null
 let graphGroup: THREE.Group | null = null
 let orbitBackdrop: THREE.Group | null = null
+let starfieldGroup: THREE.Group | null = null
 let centerPlanet: THREE.Object3D | null = null
 let resizeObserver: ResizeObserver | null = null
 let animationId = 0
@@ -485,24 +486,81 @@ function disposeObject(object: THREE.Object3D) {
 }
 
 function createStarfield(target: THREE.Scene) {
-  const count = 1200
-  const positions = new Float32Array(count * 3)
+  starfieldGroup = new THREE.Group()
+  starfieldGroup.name = 'Starfield'
+  target.add(starfieldGroup)
 
-  for (let i = 0; i < count; i += 1) {
-    const radius = 35 + Math.random() * 70
+  // Layer 1: distant tiny stars
+  const count1 = 3200
+  const pos1 = new Float32Array(count1 * 3)
+  for (let i = 0; i < count1; i += 1) {
+    const radius = 40 + Math.random() * 80
     const theta = Math.random() * Math.PI * 2
     const phi = Math.acos(2 * Math.random() - 1)
-    positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
-    positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
-    positions[i * 3 + 2] = radius * Math.cos(phi)
+    pos1[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
+    pos1[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
+    pos1[i * 3 + 2] = radius * Math.cos(phi)
   }
+  const geo1 = new THREE.BufferGeometry()
+  geo1.setAttribute('position', new THREE.BufferAttribute(pos1, 3))
+  starfieldGroup.add(new THREE.Points(geo1, new THREE.PointsMaterial({
+    color: 0xc8d8ff, size: 0.12, transparent: true, opacity: 0.35, depthWrite: false,
+  })))
 
-  const geometry = new THREE.BufferGeometry()
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-  target.add(new THREE.Points(
-    geometry,
-    new THREE.PointsMaterial({ color: 0xffffff, size: 0.18, transparent: true, opacity: 0.38, depthWrite: false }),
-  ))
+  // Layer 2: mid-range stars
+  const count2 = 1400
+  const pos2 = new Float32Array(count2 * 3)
+  for (let i = 0; i < count2; i += 1) {
+    const radius = 30 + Math.random() * 60
+    const theta = Math.random() * Math.PI * 2
+    const phi = Math.acos(2 * Math.random() - 1)
+    pos2[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
+    pos2[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
+    pos2[i * 3 + 2] = radius * Math.cos(phi)
+  }
+  const geo2 = new THREE.BufferGeometry()
+  geo2.setAttribute('position', new THREE.BufferAttribute(pos2, 3))
+  starfieldGroup.add(new THREE.Points(geo2, new THREE.PointsMaterial({
+    color: 0xffffff, size: 0.22, transparent: true, opacity: 0.52, depthWrite: false,
+  })))
+
+  // Layer 3: bright accent stars
+  const count3 = 200
+  const pos3 = new Float32Array(count3 * 3)
+  for (let i = 0; i < count3; i += 1) {
+    const radius = 25 + Math.random() * 50
+    const theta = Math.random() * Math.PI * 2
+    const phi = Math.acos(2 * Math.random() - 1)
+    pos3[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
+    pos3[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
+    pos3[i * 3 + 2] = radius * Math.cos(phi)
+  }
+  const geo3 = new THREE.BufferGeometry()
+  geo3.setAttribute('position', new THREE.BufferAttribute(pos3, 3))
+  starfieldGroup.add(new THREE.Points(geo3, new THREE.PointsMaterial({
+    color: 0x9ddfff, size: 0.38, transparent: true, opacity: 0.72, depthWrite: false,
+  })))
+
+  // Nebula clouds: subtle colored fog patches
+  const nebulaColors = [0x1e3a6e, 0x2a1852, 0x0c2e4a, 0x1a1040]
+  nebulaColors.forEach((color, idx) => {
+    const cloudGeo = new THREE.SphereGeometry(8 + idx * 3, 16, 16)
+    const cloudMat = new THREE.MeshBasicMaterial({
+      color,
+      transparent: true,
+      opacity: 0.04 + idx * 0.01,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    })
+    const cloud = new THREE.Mesh(cloudGeo, cloudMat)
+    cloud.position.set(
+      (Math.random() - 0.5) * 40,
+      (Math.random() - 0.5) * 20,
+      -20 + (Math.random() - 0.5) * 30,
+    )
+    cloud.scale.set(2 + Math.random(), 1.2 + Math.random() * 0.5, 1.5 + Math.random())
+    starfieldGroup!.add(cloud)
+  })
 }
 
 function cssToWorld(cssX: number, cssY: number, cssZ: number) {
@@ -860,6 +918,7 @@ function animateScene() {
       orbitBackdrop!.rotation.z = elapsed * 0.18
       orbitBackdrop!.rotation.x = Math.sin(elapsed * 0.18) * 0.08
       if (centerPlanet) centerPlanet.rotation.y += 0.004
+      if (starfieldGroup) starfieldGroup.rotation.y += 0.0003
     }
 
     camera!.position.x += (targetX * 5 - camera!.position.x) * 0.045
@@ -915,6 +974,7 @@ function cleanupScene() {
   camera = null
   graphGroup = null
   orbitBackdrop = null
+  starfieldGroup = null
   centerPlanet = null
   sceneNodes.length = 0
   interactables.length = 0

@@ -1,12 +1,27 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { courses } from '@/data/courses'
+import { useLearningProgressSync } from '@/composables/useLearningProgressSync'
 import { BASE_KNOWLEDGE_ITEMS, buildConstellationView, getDomainMeta } from './mapTransforms'
 import type { ConstellationNode, ConstellationEdge } from './mapTypes'
 
 const emit = defineEmits<{ 'select-node': [nodeId: string] }>()
+const router = useRouter()
+const {
+  applyProgressToMastery,
+  progressRevision,
+  recordKnowledgeAction,
+} = useLearningProgressSync()
 
 const { nodes: constellationNodes, edges: constellationEdges } = buildConstellationView(BASE_KNOWLEDGE_ITEMS)
-const nodes = ref<ConstellationNode[]>(constellationNodes)
+const nodes = computed<ConstellationNode[]>(() => {
+  progressRevision.value
+  return constellationNodes.map((node) => ({
+    ...node,
+    mastery: applyProgressToMastery(node.id, node.mastery, node.label) / 100,
+  }))
+})
 const edges = ref<ConstellationEdge[]>(constellationEdges)
 
 const domainLabels = [
@@ -41,16 +56,48 @@ function handleNodeClick(node: ConstellationNode) {
   emit('select-node', node.id)
 }
 
-// Cluster halos
-const clusterHalos = computed(() => {
-  return domainLabels.map(dl => {
-    const cluster = nodes.value.filter(n => n.domain === dl.domain)
-    const cx = cluster.reduce((s, n) => s + n.x, 0) / cluster.length
-    const cy = cluster.reduce((s, n) => s + n.y, 0) / cluster.length
-    const r = Math.max(...cluster.map(n => Math.hypot(n.x - cx, n.y - cy))) + 60
-    return { domain: dl.domain, cx, cy, r, color: getDomainMeta(dl.domain).color }
+function resolveCourseForNode(node: ConstellationNode) {
+  const label = node.label.replace(/\s+/g, '')
+  const byId = (id: number) => courses.find((course) => course.id === id) ?? courses[0]
+
+  if (node.domain === 'math') return byId(15)
+  if (node.domain === 'ml') return byId(17)
+  if (node.domain === 'dl') return byId(18)
+  if (node.domain === 'nlp') return byId(19)
+  if (node.domain === 'algo') return label.includes('动态规划') ? byId(6) : byId(5)
+  if (node.domain === 'eng') return label.includes('Python') ? byId(2) : byId(12)
+  return courses[0]
+}
+
+function lightFocusedNode(node: ConstellationNode) {
+  const targetCourse = resolveCourseForNode(node)
+  const updated = recordKnowledgeAction({
+    id: node.id,
+    label: node.label,
+    domainId: node.domain,
+    domainName: getDomainMeta(node.domain).name,
+    baseMastery: node.mastery,
+    targetMastery: 100,
+    action: 'light-star',
+    source: 'resource-constellation',
   })
-})
+
+  selectedNode.value = { ...node, mastery: updated.mastery / 100 }
+  emit('select-node', node.id)
+  router.push({
+    path: '/evaluation',
+    query: {
+      source: 'resource-constellation',
+      constellationAction: 'light',
+      knowledgePointId: node.id,
+      topic: node.label,
+      domain: node.domain,
+      course: String(targetCourse?.id ?? ''),
+      courseName: targetCourse?.name || getDomainMeta(node.domain).name,
+      targetMastery: '100',
+    },
+  })
+}
 
 // Inject keyframes
 let styleEl: HTMLStyleElement | null = null
@@ -97,10 +144,6 @@ onUnmounted(() => { styleEl?.remove() })
         <circle v-for="(s, i) in bgStars" :key="'s'+i"
           :cx="s.x" :cy="s.y" :r="s.r" fill="#fff" :opacity="s.o"
           :style="s.tw ? { animation: `constellation-twinkle ${2 + (i % 5)}s ease-in-out ${i * 0.13}s infinite` } : undefined" />
-
-        <!-- Cluster halos -->
-        <circle v-for="h in clusterHalos" :key="h.domain"
-          :cx="h.cx" :cy="h.cy" :r="h.r" :fill="h.color" opacity="0.04" />
 
         <!-- Edges -->
         <line v-for="(e, i) in edges" :key="'e'+i"
@@ -173,7 +216,7 @@ onUnmounted(() => { styleEl?.remove() })
           <div class="stat-row"><span>所属领域</span><span class="stat-val">{{ getDomainMeta(focused.domain).name }}</span></div>
           <div class="stat-row"><span>重要程度</span><span class="stat-val">{{ focused.importance > 0.8 ? '⭐ 核心' : '普通' }}</span></div>
         </div>
-        <button class="detail-btn" @click="emit('select-node', focused.id)">点亮这颗星 →</button>
+        <button type="button" class="detail-btn" @click="lightFocusedNode(focused)">点亮这颗星 →</button>
       </div>
 
       <!-- Legend -->
@@ -224,16 +267,16 @@ onUnmounted(() => { styleEl?.remove() })
 .constellation-banner {
   display: flex; align-items: center; gap: 10px;
   padding: 14px 20px; border-radius: 14px;
-  background: rgba(12, 12, 30, 0.42); backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: transparent;
+  border: none;
   margin-bottom: 20px; font-size: 13px; color: #8892b0; line-height: 1.6;
 }
 .banner-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
 .constellation-canvas {
   position: relative; width: 100%; aspect-ratio: 1400 / 900;
-  border-radius: 18px; background: rgba(7, 7, 13, 0.62);
-  border: 1px solid rgba(255, 255, 255, 0.06); overflow: hidden;
+  border-radius: 18px; background: transparent;
+  border: none; overflow: hidden;
 }
 .constellation-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .graph-node { cursor: pointer; transition: transform 0.2s ease, filter 0.2s ease; }

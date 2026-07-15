@@ -1,0 +1,119 @@
+[
+  {
+    "id": "01-login",
+    "title": "???",
+    "route": "/login",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots\\01-login.png",
+    "ok": true,
+    "url": "http://127.0.0.1:5176/login",
+    "size": "1920x1080"
+  },
+  {
+    "id": "02-home",
+    "title": "????",
+    "route": "/home",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots\\02-home.png",
+    "ok": true,
+    "url": "http://127.0.0.1:5176/home",
+    "size": "1920x1080"
+  },
+  {
+    "id": "03-dialogue",
+    "title": "????",
+    "route": "/dialogue",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots\\03-dialogue.png",
+    "ok": true,
+    "url": "http://127.0.0.1:5176/dialogue",
+    "size": "1920x1080"
+  },
+  {
+    "id": "04-profile",
+    "title": "????",
+    "route": "/profile",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots\\04-profile.png",
+    "ok": true,
+    "url": "http://127.0.0.1:5176/profile",
+    "size": "1920x1080"
+  },
+  {
+    "id": "05-learning-path",
+    "title": "????",
+    "route": "/learning-path",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots\\05-learning-path.png",
+    "ok": true,
+    "url": "http://127.0.0.1:5176/learning-path",
+    "size": "1920x1080"
+  },
+  {
+    "id": "06-resources",
+    "title": "????",
+    "route": "/resources",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots\\06-resources.png",
+    "ok": true,
+    "url": "http://127.0.0.1:5176/resources",
+    "size": "1920x1080"
+  },
+  {
+    "id": "07-evaluation",
+    "title": "????",
+    "route": "/evaluation",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots\\07-evaluation.png",
+    "ok": true,
+    "url": "http://127.0.0.1:5176/evaluation",
+    "size": "1920x1080"
+  },
+  {
+    "id": "08-reverse-evaluation",
+    "title": "????",
+    "route": "/reverse-evaluation",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots\\08-reverse-evaluation.png",
+    "ok": true,
+    "url": "http://127.0.0.1:5176/reverse-evaluation",
+    "size": "1920x1080"
+  },
+  {
+    "id": "09-tutoring",
+    "title": "????",
+    "route": "/tutoring",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots\\09-tutoring.png",
+    "ok": true,
+    "url": "http://127.0.0.1:5176/tutoring",
+    "size": "1920x1080"
+  },
+  {
+    "id": "10-settings",
+    "title": "????",
+    "route": "/settings",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots\\10-settings.png",
+    "ok": true,
+    "url": "http://127.0.0.1:5176/settings",
+    "size": "1920x1080"
+  },
+  {
+    "id": "11-edu-mind",
+    "title": "EduMind???",
+    "route": "/edu-mind",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots\\11-edu-mind.png",
+    "ok": true,
+    "url": "http://127.0.0.1:5176/edu-mind",
+    "size": "1920x1080"
+  },
+  {
+    "id": "12-trainflow",
+    "title": "???????",
+    "route": "/trainflow",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots\\12-trainflow.png",
+    "ok": true,
+    "url": "http://127.0.0.1:5176/trainflow",
+    "size": "1920x1080"
+  },
+  {
+    "id": "13-admin",
+    "title": "????",
+    "route": "/admin",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots\\13-admin.png",
+    "ok": true,
+    "url": "http://127.0.0.1:5176/admin",
+    "size": "1920x1080"
+  }
+]

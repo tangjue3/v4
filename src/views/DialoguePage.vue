@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { watch } from 'vue'
 import { useRoute } from 'vue-router'
-import CosmicBackground from '@/components/dialogue/CosmicBackground.vue'
+import CosmicPageBackground from '@/components/layout/CosmicPageBackground.vue'
 import ChatView from '@/components/dialogue/ChatView.vue'
-import XunfeiSidebar from '@/components/dialogue/XunfeiSidebar.vue'
+import AiSidebar from '@/components/dialogue/AiSidebar.vue'
 import DashboardView from '@/components/dialogue/DashboardView.vue'
 import HistoryView from '@/components/dialogue/HistoryView.vue'
 import RecommendView from '@/components/dialogue/RecommendView.vue'
@@ -39,8 +39,8 @@ watch(() => route.query.tab, (tab) => {
 </script>
 
 <template>
-  <div class="dialogue-root flex h-screen text-[var(--text-primary)] overflow-hidden font-sans selection:bg-blue-500/25 selection:text-white relative z-0" style="background: var(--bg-deep)">
-    <CosmicBackground />
+  <div class="dialogue-root flex h-screen text-[var(--text-primary)] overflow-hidden font-sans selection:bg-blue-500/25 selection:text-white relative z-0">
+    <CosmicPageBackground />
 
     <!-- Notification Banner -->
     <div v-if="exportNotification" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 glass-card py-2.5 px-6 rounded-xl shadow-lg text-xs font-medium flex items-center gap-2 animate-fade-in">
@@ -49,12 +49,11 @@ watch(() => route.query.tab, (tab) => {
     </div>
 
     <!-- Left Navigation Sidebar -->
-    <aside class="flex flex-col items-center transition-all duration-300 relative select-none shrink-0 border-r"
+    <aside class="dialogue-navbar flex flex-col items-center transition-all duration-300 relative select-none shrink-0"
       :class="[
         isSidebarCollapsed
-          ? 'w-0 overflow-hidden opacity-0 p-0 pointer-events-none border-transparent'
-          : 'w-[76px] py-8 opacity-100',
-        'border-[var(--border-subtle)]'
+          ? 'w-0 overflow-hidden opacity-0 p-0 pointer-events-none'
+          : 'w-[76px] py-8 opacity-100'
       ]"
     >
       <nav class="flex-1 w-full space-y-4 px-2">
@@ -81,7 +80,7 @@ watch(() => route.query.tab, (tab) => {
     <!-- Main Content Area -->
     <main class="flex-1 flex overflow-hidden relative"
       :class="activeMenu === 'recommend' ? 'flex-row-reverse' : 'flex-row'">
-      <XunfeiSidebar v-if="activeMenu === 'chat' || activeMenu === 'recommend'" :side="activeMenu === 'recommend' ? 'right' : 'left'" />
+      <AiSidebar v-if="activeMenu === 'chat' || activeMenu === 'recommend'" :side="activeMenu === 'recommend' ? 'right' : 'left'" />
       <ChatView v-if="activeMenu === 'chat'" />
       <DashboardView v-if="activeMenu === 'portrait-report'" />
       <HistoryView v-if="activeMenu === 'history'" />
@@ -89,3 +88,12 @@ watch(() => route.query.tab, (tab) => {
     </main>
   </div>
 </template>
+
+<style scoped>
+.dialogue-navbar {
+  border-right: 1px solid var(--border-subtle) !important;
+  background: rgba(59, 130, 246, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+</style>

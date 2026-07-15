@@ -10,6 +10,15 @@ export interface DimensionMap {
   method: string | null
 }
 
+export interface RecommendedCourse {
+  id: string
+  name: string
+  difficulty: string
+  color: string
+  reason: string
+  icon: string
+}
+
 export interface ChatMessage {
   id: string
   sender: 'ai' | 'user'
@@ -17,7 +26,8 @@ export interface ChatMessage {
   time?: string
   capturedTags?: string[]
   suggestChips?: string[]
-  source?: 'chat' | 'xunfei' | 'asr'
+  source?: 'chat' | 'ai' | 'asr'
+  recommendedCourses?: RecommendedCourse[]
 }
 
 export interface RadarPoint {

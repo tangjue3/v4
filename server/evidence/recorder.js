@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { getRetrievalMetrics } from '../knowledge-base/metrics.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -120,6 +121,7 @@ export function getTraceSummary() {
 }
 
 export function buildTrace({ requestId, agents, inputsSummary, outputsSummary, evidence, riskFlags, fallbackUsed, durationMs, agentResults }) {
+  const retrievalHits = extractRetrievalHits(agentResults || [])
   return {
     requestId: requestId || `req-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     timestamp: new Date().toISOString(),
@@ -139,5 +141,48 @@ export function buildTrace({ requestId, agents, inputsSummary, outputsSummary, e
       durationMs: r.durationMs || 0,
       fallbackUsed: r.fallbackUsed || false,
     })),
+    retrievalSummary: {
+      totalHits: retrievalHits.totalHits,
+      agentsUsed: retrievalHits.agentsUsed,
+      topDomains: retrievalHits.topDomains,
+      topDocs: retrievalHits.topDocs.slice(0, 5),
+      globalMetrics: getRetrievalMetrics(),
+    },
+  }
+}
+
+function extractRetrievalHits(agentResults) {
+  const agentsUsed = new Set()
+  const docHits = new Map()
+  const domainHits = new Map()
+  let totalHits = 0
+
+  for (const result of agentResults) {
+    const matches = result?.output?.knowledgeContext?.matches
+    if (Array.isArray(matches) && matches.length) {
+      agentsUsed.add(result.agentName)
+      for (const match of matches) {
+        totalHits += 1
+        const docKey = match.docId || match.id || match.title || 'unknown'
+        docHits.set(docKey, (docHits.get(docKey) || 0) + 1)
+        if (match.domain) {
+          domainHits.set(match.domain, (domainHits.get(match.domain) || 0) + 1)
+        }
+      }
+    }
+  }
+
+  const topDocs = Array.from(docHits.entries())
+    .sort((left, right) => right[1] - left[1])
+    .map(([docId, count]) => ({ docId, hits: count }))
+  const topDomains = Array.from(domainHits.entries())
+    .sort((left, right) => right[1] - left[1])
+    .map(([domain, count]) => ({ domain, count }))
+
+  return {
+    totalHits,
+    agentsUsed: Array.from(agentsUsed),
+    topDocs,
+    topDomains,
   }
 }

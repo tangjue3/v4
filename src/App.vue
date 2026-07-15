@@ -1,16 +1,26 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import AppLayout from './components/layout/AppLayout.vue'
 import GlobalCompanionPet from './components/tutor/GlobalCompanionPet.vue'
 import NewUserPetGuide from './components/tutor/NewUserPetGuide.vue'
-import { useAppStore } from '@/store'
+import { useAppStore, BLUR_PX } from '@/store'
 
 const showScanLine = ref(true)
 const appStore = useAppStore()
 const route = useRoute()
 const isAuthShellPage = computed(() => route.path === '/login' || route.path === '/admin')
-const showCompanionPet = computed(() => appStore.desktopPetEnabled && route.path !== '/edu-mind' && !isAuthShellPage.value)
+const showCompanionPet = computed(() =>
+  appStore.desktopPetEnabled && !isAuthShellPage.value
+)
+
+// 将 blurStrength 同步为全局 CSS 变量，供所有毛玻璃样式使用
+watchEffect(() => {
+  const px = BLUR_PX[appStore.blurStrength]
+  if (typeof document !== 'undefined') {
+    document.documentElement.style.setProperty('--blur-base', `${px}px`)
+  }
+})
 </script>
 
 <template>

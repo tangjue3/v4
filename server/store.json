@@ -1,5 +1,80 @@
 {
   "profileResult": {
+    "score": 50,
+    "evaluation": "一般",
+    "radarPoints": [
+      {
+        "dimension": "知识基础",
+        "score": 50
+      },
+      {
+        "dimension": "学习速度",
+        "score": 52
+      },
+      {
+        "dimension": "逻辑思维",
+        "score": 50
+      },
+      {
+        "dimension": "创造力",
+        "score": 50
+      },
+      {
+        "dimension": "专注力",
+        "score": 50
+      },
+      {
+        "dimension": "自律力",
+        "score": 50
+      }
+    ],
+    "weaknesses": [
+      "知识基础薄弱（50分），需要重点提升",
+      "逻辑思维有待加强（50分），建议专项训练",
+      "创造力有提升空间（50分），可通过实践巩固"
+    ],
+    "suggestions": [
+      "优先巩固知识基础，每天安排 20 分钟专项训练。",
+      "继续发挥学习速度优势，以此带动其他维度提升。",
+      "建议每两周复盘一次学习进度，动态调整资源和节奏。"
+    ],
+    "skills": {
+      "core": [
+        "Python",
+        "机器学习",
+        "数据分析"
+      ],
+      "foundation": [
+        "算法基础",
+        "数学基础"
+      ],
+      "additional": [
+        "项目实战",
+        "工程化部署"
+      ]
+    },
+    "recommendedPath": [
+      {
+        "step": 1,
+        "title": "夯实基础",
+        "description": "巩固知识基础等薄弱环节"
+      },
+      {
+        "step": 2,
+        "title": "核心突破",
+        "description": "掌握核心技能，建立知识体系"
+      },
+      {
+        "step": 3,
+        "title": "实战演练",
+        "description": "通过项目实践巩固所学"
+      },
+      {
+        "step": 4,
+        "title": "持续优化",
+        "description": "定期复盘，动态调整学习路径"
+      }
+    ],
     "dimensions": [
       {
         "label": "知识基础",
@@ -27,31 +102,12 @@
         "color": "#f59e0b"
       },
       {
-        "label": "自律性",
+        "label": "自律力",
         "value": 50,
         "color": "#f43f5e"
       }
     ],
-    "totalScore": 50,
-    "weaknesses": [
-      {
-        "tag": "知识基础提升",
-        "count": 8
-      },
-      {
-        "tag": "逻辑思维提升",
-        "count": 6
-      },
-      {
-        "tag": "创造力提升",
-        "count": 4
-      }
-    ],
-    "recommendations": [
-      "优先巩固 知识基础，每天安排 20 分钟专项训练。",
-      "继续发挥 学习速度 优势。",
-      "建议每两周复盘一次学习进度，动态调整资源和节奏。"
-    ]
+    "totalScore": 50
   },
   "knowledgePathResult": {
     "phases": [
@@ -65,7 +121,7 @@
             "id": "f1",
             "name": "编程基础与语法",
             "mastery": 0.5,
-            "importance": 1,
+            "importance": 0.9,
             "recommended": true
           },
           {
@@ -159,7 +215,7 @@
           {
             "id": "p2",
             "name": "代码规范与工程化",
-            "mastery": 0.5,
+            "mastery": 0.4,
             "importance": 0.6
           },
           {
@@ -173,249 +229,6 @@
     ]
   },
   "chatHistory": [
-    {
-      "id": 1778567366491,
-      "role": "user",
-      "content": "???????",
-      "time": "14:29"
-    },
-    {
-      "id": 1778567366492,
-      "role": "assistant",
-      "content": "我先帮你把问题拆开来看：???????\n\n1. 先确认你现在卡住的是概念、实现还是练习。\n2. 如果是概念问题，就抓住定义、例子和适用场景。\n3. 如果是实现问题，就优先理清输入、输出和边界条件。\n\n如果你愿意，我下一步可以继续把它拆成步骤、代码示例，或者配套练习题。",
-      "time": "14:29",
-      "resources": [
-        {
-          "type": "doc",
-          "title": "相关概念速查",
-          "color": "#00d4ff"
-        },
-        {
-          "type": "mindmap",
-          "title": "知识脉络图",
-          "color": "#7c3aed"
-        },
-        {
-          "type": "exercise",
-          "title": "配套练习",
-          "color": "#06d6a0"
-        }
-      ],
-      "suggestions": [
-        "用更简单的话解释",
-        "给我一个代码示例",
-        "顺便出 3 道练习题"
-      ]
-    },
-    {
-      "id": 1778674744276,
-      "role": "user",
-      "content": "帮我制定学习计划",
-      "time": "20:19"
-    },
-    {
-      "id": 1778674744277,
-      "role": "assistant",
-      "content": "我先帮你把问题拆开来看：帮我制定学习计划\n\n1. 先确认你现在卡住的是概念、实现还是练习。\n2. 如果是概念问题，就抓住定义、例子和适用场景。\n3. 如果是实现问题，就优先理清输入、输出和边界条件。\n\n如果你愿意，我下一步可以继续把它拆成步骤、代码示例，或者配套练习题。",
-      "time": "20:19",
-      "resources": [
-        {
-          "type": "doc",
-          "title": "相关概念速查",
-          "color": "#00d4ff"
-        },
-        {
-          "type": "mindmap",
-          "title": "知识脉络图",
-          "color": "#7c3aed"
-        },
-        {
-          "type": "exercise",
-          "title": "配套练习",
-          "color": "#06d6a0"
-        }
-      ],
-      "suggestions": [
-        "用更简单的话解释",
-        "给我一个代码示例",
-        "顺便出 3 道练习题"
-      ]
-    },
-    {
-      "id": 1779700095035,
-      "role": "user",
-      "content": "��ã����ҽ���Vue����Ӧʽԭ��",
-      "time": "17:08",
-      "multimodalContents": []
-    },
-    {
-      "id": 1779700095036,
-      "role": "assistant",
-      "content": "我先帮你把问题拆开来看：��ã����ҽ���Vue����Ӧʽԭ��\n\n1. 先确认你现在卡住的是概念、实现还是练习。\n2. 如果是概念问题，就抓住定义、例子和适用场景。\n3. 如果是实现问题，就优先理清输入、输出和边界条件。\n\n如果你愿意，我下一步可以继续把它拆成步骤、代码示例，或者配套练习题。",
-      "time": "17:08",
-      "resources": [
-        {
-          "type": "doc",
-          "title": "相关概念速查",
-          "color": "#00d4ff"
-        },
-        {
-          "type": "mindmap",
-          "title": "知识脉络图",
-          "color": "#7c3aed"
-        },
-        {
-          "type": "exercise",
-          "title": "配套练习",
-          "color": "#06d6a0"
-        }
-      ],
-      "suggestions": [
-        "用更简单的话解释",
-        "给我一个代码示例",
-        "顺便出 3 道练习题"
-      ]
-    },
-    {
-      "id": 1779700144724,
-      "role": "user",
-      "content": "���",
-      "time": "17:09",
-      "multimodalContents": []
-    },
-    {
-      "id": 1779700144725,
-      "role": "assistant",
-      "content": "我先帮你把问题拆开来看：���\n\n1. 先确认你现在卡住的是概念、实现还是练习。\n2. 如果是概念问题，就抓住定义、例子和适用场景。\n3. 如果是实现问题，就优先理清输入、输出和边界条件。\n\n如果你愿意，我下一步可以继续把它拆成步骤、代码示例，或者配套练习题。",
-      "time": "17:09",
-      "resources": [
-        {
-          "type": "doc",
-          "title": "相关概念速查",
-          "color": "#00d4ff"
-        },
-        {
-          "type": "mindmap",
-          "title": "知识脉络图",
-          "color": "#7c3aed"
-        },
-        {
-          "type": "exercise",
-          "title": "配套练习",
-          "color": "#06d6a0"
-        }
-      ],
-      "suggestions": [
-        "用更简单的话解释",
-        "给我一个代码示例",
-        "顺便出 3 道练习题"
-      ]
-    },
-    {
-      "id": 1779700159189,
-      "role": "user",
-      "content": "你好",
-      "time": "17:09",
-      "multimodalContents": []
-    },
-    {
-      "id": 1779700159190,
-      "role": "assistant",
-      "content": "我先帮你把问题拆开来看：你好\n\n1. 先确认你现在卡住的是概念、实现还是练习。\n2. 如果是概念问题，就抓住定义、例子和适用场景。\n3. 如果是实现问题，就优先理清输入、输出和边界条件。\n\n如果你愿意，我下一步可以继续把它拆成步骤、代码示例，或者配套练习题。",
-      "time": "17:09",
-      "resources": [
-        {
-          "type": "doc",
-          "title": "相关概念速查",
-          "color": "#00d4ff"
-        },
-        {
-          "type": "mindmap",
-          "title": "知识脉络图",
-          "color": "#7c3aed"
-        },
-        {
-          "type": "exercise",
-          "title": "配套练习",
-          "color": "#06d6a0"
-        }
-      ],
-      "suggestions": [
-        "用更简单的话解释",
-        "给我一个代码示例",
-        "顺便出 3 道练习题"
-      ]
-    },
-    {
-      "id": 1779773203223,
-      "role": "user",
-      "content": "",
-      "time": "13:26",
-      "multimodalContents": []
-    },
-    {
-      "id": 1779773203224,
-      "role": "assistant",
-      "content": "我先帮你把问题拆开来看：当前学习问题\n\n1. 先确认你现在卡住的是概念、实现还是练习。\n2. 如果是概念问题，就抓住定义、例子和适用场景。\n3. 如果是实现问题，就优先理清输入、输出和边界条件。\n\n如果你愿意，我下一步可以继续把它拆成步骤、代码示例，或者配套练习题。",
-      "time": "13:26",
-      "resources": [
-        {
-          "type": "doc",
-          "title": "相关概念速查",
-          "color": "#00d4ff"
-        },
-        {
-          "type": "mindmap",
-          "title": "知识脉络图",
-          "color": "#7c3aed"
-        },
-        {
-          "type": "exercise",
-          "title": "配套练习",
-          "color": "#06d6a0"
-        }
-      ],
-      "suggestions": [
-        "用更简单的话解释",
-        "给我一个代码示例",
-        "顺便出 3 道练习题"
-      ]
-    },
-    {
-      "id": 1779966449227,
-      "role": "user",
-      "content": "我刚开始学AI，想转行",
-      "time": "19:07",
-      "multimodalContents": []
-    },
-    {
-      "id": 1779966449228,
-      "role": "assistant",
-      "content": "我先帮你把问题拆开来看：我刚开始学AI，想转行\n\n1. 先确认你现在卡住的是概念、实现还是练习。\n2. 如果是概念问题，就抓住定义、例子和适用场景。\n3. 如果是实现问题，就优先理清输入、输出和边界条件。\n\n如果你愿意，我下一步可以继续把它拆成步骤、代码示例，或者配套练习题。",
-      "time": "19:07",
-      "resources": [
-        {
-          "type": "doc",
-          "title": "相关概念速查",
-          "color": "#00d4ff"
-        },
-        {
-          "type": "mindmap",
-          "title": "知识脉络图",
-          "color": "#7c3aed"
-        },
-        {
-          "type": "exercise",
-          "title": "配套练习",
-          "color": "#06d6a0"
-        }
-      ],
-      "suggestions": [
-        "用更简单的话解释",
-        "给我一个代码示例",
-        "顺便出 3 道练习题"
-      ]
-    },
     {
       "id": 1780558921031,
       "role": "user",
@@ -660,6 +473,286 @@
         "给我一个代码示例",
         "顺便出 3 道练习题"
       ]
+    },
+    {
+      "id": 1783681193527,
+      "role": "user",
+      "content": "你好",
+      "time": "18:59",
+      "multimodalContents": []
+    },
+    {
+      "id": 1783681193528,
+      "role": "assistant",
+      "content": "我先帮你把问题拆开来看：你好\n\n1. 先确认你现在卡住的是概念、实现还是练习。\n2. 如果是概念问题，就抓住定义、例子和适用场景。\n3. 如果是实现问题，就优先理清输入、输出和边界条件。\n\n如果你愿意，我下一步可以继续把它拆成步骤、代码示例，或者配套练习题。",
+      "time": "18:59",
+      "resources": [
+        {
+          "type": "doc",
+          "title": "相关概念速查",
+          "color": "#00d4ff"
+        },
+        {
+          "type": "mindmap",
+          "title": "知识脉络图",
+          "color": "#7c3aed"
+        },
+        {
+          "type": "exercise",
+          "title": "配套练习",
+          "color": "#06d6a0"
+        }
+      ],
+      "suggestions": [
+        "用更简单的话解释",
+        "给我一个代码示例",
+        "顺便出 3 道练习题"
+      ]
+    },
+    {
+      "id": 1783681229210,
+      "role": "user",
+      "content": "你好",
+      "time": "19:00",
+      "multimodalContents": []
+    },
+    {
+      "id": 1783681229211,
+      "role": "assistant",
+      "content": "我先帮你把问题拆开来看：你好\n\n1. 先确认你现在卡住的是概念、实现还是练习。\n2. 如果是概念问题，就抓住定义、例子和适用场景。\n3. 如果是实现问题，就优先理清输入、输出和边界条件。\n\n如果你愿意，我下一步可以继续把它拆成步骤、代码示例，或者配套练习题。",
+      "time": "19:00",
+      "resources": [
+        {
+          "type": "doc",
+          "title": "相关概念速查",
+          "color": "#00d4ff"
+        },
+        {
+          "type": "mindmap",
+          "title": "知识脉络图",
+          "color": "#7c3aed"
+        },
+        {
+          "type": "exercise",
+          "title": "配套练习",
+          "color": "#06d6a0"
+        }
+      ],
+      "suggestions": [
+        "用更简单的话解释",
+        "给我一个代码示例",
+        "顺便出 3 道练习题"
+      ]
+    },
+    {
+      "id": 1783682217394,
+      "role": "user",
+      "content": "你好",
+      "time": "19:16",
+      "multimodalContents": []
+    },
+    {
+      "id": 1783682217395,
+      "role": "assistant",
+      "content": "我先帮你把问题拆开来看：你好\n\n1. 先确认你现在卡住的是概念、实现还是练习。\n2. 如果是概念问题，就抓住定义、例子和适用场景。\n3. 如果是实现问题，就优先理清输入、输出和边界条件。\n\n如果你愿意，我下一步可以继续把它拆成步骤、代码示例，或者配套练习题。",
+      "time": "19:16",
+      "resources": [
+        {
+          "type": "doc",
+          "title": "相关概念速查",
+          "color": "#00d4ff"
+        },
+        {
+          "type": "mindmap",
+          "title": "知识脉络图",
+          "color": "#7c3aed"
+        },
+        {
+          "type": "exercise",
+          "title": "配套练习",
+          "color": "#06d6a0"
+        }
+      ],
+      "suggestions": [
+        "用更简单的话解释",
+        "给我一个代码示例",
+        "顺便出 3 道练习题"
+      ]
+    },
+    {
+      "id": 1783682781059,
+      "role": "user",
+      "content": "你好",
+      "time": "19:26",
+      "multimodalContents": []
+    },
+    {
+      "id": 1783682781060,
+      "role": "assistant",
+      "content": "我先帮你把问题拆开来看：你好\n\n1. 先确认你现在卡住的是概念、实现还是练习。\n2. 如果是概念问题，就抓住定义、例子和适用场景。\n3. 如果是实现问题，就优先理清输入、输出和边界条件。\n\n如果你愿意，我下一步可以继续把它拆成步骤、代码示例，或者配套练习题。",
+      "time": "19:26",
+      "resources": [
+        {
+          "type": "doc",
+          "title": "相关概念速查",
+          "color": "#00d4ff"
+        },
+        {
+          "type": "mindmap",
+          "title": "知识脉络图",
+          "color": "#7c3aed"
+        },
+        {
+          "type": "exercise",
+          "title": "配套练习",
+          "color": "#06d6a0"
+        }
+      ],
+      "suggestions": [
+        "用更简单的话解释",
+        "给我一个代码示例",
+        "顺便出 3 道练习题"
+      ]
+    },
+    {
+      "id": 1783960437494,
+      "role": "user",
+      "content": "你好",
+      "time": "00:33",
+      "multimodalContents": []
+    },
+    {
+      "id": 1783960437495,
+      "role": "assistant",
+      "content": "我先帮你把问题拆开来看：你好\n\n1. 先确认你现在卡住的是概念、实现还是练习。\n2. 如果是概念问题，就抓住定义、例子和适用场景。\n3. 如果是实现问题，就优先理清输入、输出和边界条件。\n\n如果你愿意，我下一步可以继续把它拆成步骤、代码示例，或者配套练习题。",
+      "time": "00:33",
+      "resources": [
+        {
+          "type": "doc",
+          "title": "相关概念速查",
+          "color": "#00d4ff"
+        },
+        {
+          "type": "mindmap",
+          "title": "知识脉络图",
+          "color": "#7c3aed"
+        },
+        {
+          "type": "exercise",
+          "title": "配套练习",
+          "color": "#06d6a0"
+        }
+      ],
+      "suggestions": [
+        "用更简单的话解释",
+        "给我一个代码示例",
+        "顺便出 3 道练习题"
+      ]
+    },
+    {
+      "id": 1784005222515,
+      "role": "user",
+      "content": "你好",
+      "time": "13:00",
+      "multimodalContents": []
+    },
+    {
+      "id": 1784005222516,
+      "role": "assistant",
+      "content": "我先帮你把问题拆开来看：你好\n\n1. 先确认你现在卡住的是概念、实现还是练习。\n2. 如果是概念问题，就抓住定义、例子和适用场景。\n3. 如果是实现问题，就优先理清输入、输出和边界条件。\n\n如果你愿意，我下一步可以继续把它拆成步骤、代码示例，或者配套练习题。",
+      "time": "13:00",
+      "resources": [
+        {
+          "type": "doc",
+          "title": "相关概念速查",
+          "color": "#00d4ff"
+        },
+        {
+          "type": "mindmap",
+          "title": "知识脉络图",
+          "color": "#7c3aed"
+        },
+        {
+          "type": "exercise",
+          "title": "配套练习",
+          "color": "#06d6a0"
+        }
+      ],
+      "suggestions": [
+        "用更简单的话解释",
+        "给我一个代码示例",
+        "顺便出 3 道练习题"
+      ]
+    },
+    {
+      "id": 1784022569670,
+      "role": "user",
+      "content": "你好",
+      "time": "17:49",
+      "multimodalContents": []
+    },
+    {
+      "id": 1784022569671,
+      "role": "assistant",
+      "content": "我先帮你把问题拆开来看：你好\n\n1. 先确认你现在卡住的是概念、实现还是练习。\n2. 如果是概念问题，就抓住定义、例子和适用场景。\n3. 如果是实现问题，就优先理清输入、输出和边界条件。\n\n如果你愿意，我下一步可以继续把它拆成步骤、代码示例，或者配套练习题。",
+      "time": "17:49",
+      "resources": [
+        {
+          "type": "doc",
+          "title": "相关概念速查",
+          "color": "#00d4ff"
+        },
+        {
+          "type": "mindmap",
+          "title": "知识脉络图",
+          "color": "#7c3aed"
+        },
+        {
+          "type": "exercise",
+          "title": "配套练习",
+          "color": "#06d6a0"
+        }
+      ],
+      "suggestions": [
+        "用更简单的话解释",
+        "给我一个代码示例",
+        "顺便出 3 道练习题"
+      ]
+    },
+    {
+      "id": 1784025100312,
+      "role": "user",
+      "content": "你好",
+      "time": "18:31",
+      "multimodalContents": []
+    },
+    {
+      "id": 1784025100313,
+      "role": "assistant",
+      "content": "我先帮你把问题拆开来看：你好\n\n1. 先确认你现在卡住的是概念、实现还是练习。\n2. 如果是概念问题，就抓住定义、例子和适用场景。\n3. 如果是实现问题，就优先理清输入、输出和边界条件。\n\n如果你愿意，我下一步可以继续把它拆成步骤、代码示例，或者配套练习题。",
+      "time": "18:31",
+      "resources": [
+        {
+          "type": "doc",
+          "title": "相关概念速查",
+          "color": "#00d4ff"
+        },
+        {
+          "type": "mindmap",
+          "title": "知识脉络图",
+          "color": "#7c3aed"
+        },
+        {
+          "type": "exercise",
+          "title": "配套练习",
+          "color": "#06d6a0"
+        }
+      ],
+      "suggestions": [
+        "用更简单的话解释",
+        "给我一个代码示例",
+        "顺便出 3 道练习题"
+      ]
     }
   ],
   "tutoringHistory": [
@@ -700,6 +793,1811 @@
       "mode": "qa",
       "scenario": "preview",
       "multimodalContents": []
+    }
+  ],
+  "accounts": {
+    "path-user-a": {
+      "accountId": "path-user-a",
+      "role": "student",
+      "name": "Path User A",
+      "latestKnowledgePath": {
+        "source": "test",
+        "phases": [
+          {
+            "title": "Path A",
+            "modules": []
+          }
+        ],
+        "accountId": "path-user-a",
+        "userAccount": "path-user-a",
+        "savedAt": "2026-07-11T06:48:59.600Z"
+      },
+      "updatedAt": "2026-07-11T06:48:59.600Z"
+    },
+    "path-user-b": {
+      "accountId": "path-user-b",
+      "role": "student",
+      "name": "Path User B",
+      "latestKnowledgePath": {
+        "source": "test",
+        "phases": [
+          {
+            "title": "Path B",
+            "modules": []
+          }
+        ],
+        "accountId": "path-user-b",
+        "userAccount": "path-user-b",
+        "savedAt": "2026-07-11T06:48:59.603Z"
+      },
+      "updatedAt": "2026-07-11T06:48:59.603Z"
+    },
+    "review-test-user": {
+      "accountId": "review-test-user",
+      "reviewSessions": [
+        {
+          "sessionId": "review-mrf7sr3m-ltc3ff",
+          "accountId": "review-test-user",
+          "source": "evaluation-live2d",
+          "status": "generated",
+          "knowledgePointId": "bfs",
+          "knowledgePointName": "BFS visited 标记",
+          "createdAt": "2026-07-10T17:33:44.627Z"
+        }
+      ],
+      "reviewQuestions": [
+        {
+          "questionId": "rq-mrf7sr3o-lgx9r4",
+          "sessionId": "review-mrf7sr3m-ltc3ff",
+          "accountId": "review-test-user",
+          "source": "evaluation-live2d",
+          "knowledgePointId": "bfs",
+          "knowledgePointName": "BFS visited 标记",
+          "questionType": "single-choice",
+          "difficulty": "adaptive",
+          "prompt": "关于「BFS visited 标记」，如果你刚刚做错了一道相关题，最适合的复盘动作是什么？",
+          "options": [
+            "先复述 BFS visited 标记 的定义，再完成一个最小练习",
+            "直接跳过 BFS visited 标记，进入更难的综合项目",
+            "只收藏相关资料，不做任何输出",
+            "把 BFS visited 标记 的错题结论删除，避免影响画像"
+          ],
+          "answer": 0,
+          "explanation": "先确认「BFS visited 标记」的概念边界，再用最小练习验证，能让错题证据更稳定地回写画像。",
+          "mistakeTags": [
+            "BFS visited 标记",
+            "selected-knowledge-point",
+            "adaptive"
+          ],
+          "status": "generated",
+          "createdAt": "2026-07-10T17:33:44.627Z",
+          "order": 1
+        },
+        {
+          "questionId": "rq-mrf7sr3o-an317z",
+          "sessionId": "review-mrf7sr3m-ltc3ff",
+          "accountId": "review-test-user",
+          "source": "evaluation-live2d",
+          "knowledgePointId": "bfs-visited-标记",
+          "knowledgePointName": "BFS visited 标记",
+          "questionType": "single-choice",
+          "difficulty": "adaptive",
+          "prompt": "关于「BFS visited 标记」，如果你刚刚做错了一道相关题，最适合的复盘动作是什么？",
+          "options": [
+            "先复述 BFS visited 标记 的定义，再完成一个最小练习",
+            "直接跳过 BFS visited 标记，进入更难的综合项目",
+            "只收藏相关资料，不做任何输出",
+            "把 BFS visited 标记 的错题结论删除，避免影响画像"
+          ],
+          "answer": 0,
+          "explanation": "先确认「BFS visited 标记」的概念边界，再用最小练习验证，能让错题证据更稳定地回写画像。",
+          "mistakeTags": [
+            "BFS visited 标记",
+            "profile-weakness",
+            "adaptive"
+          ],
+          "status": "generated",
+          "createdAt": "2026-07-10T17:33:44.627Z",
+          "order": 2
+        }
+      ],
+      "mistakeQuestions": []
+    },
+    "loop-audit-1783734315145": {
+      "accountId": "loop-audit-1783734315145",
+      "reviewSessions": [
+        {
+          "sessionId": "review-mrfpcu6w-aynxh1",
+          "accountId": "loop-audit-1783734315145",
+          "source": "loop-audit-live2d",
+          "status": "submitted",
+          "knowledgePointId": "kp-attention",
+          "knowledgePointName": "Attention??",
+          "createdAt": "2026-07-11T01:45:15.225Z",
+          "submittedAt": "2026-07-11T01:45:15.232Z",
+          "correctRate": 0,
+          "profilePatch": {
+            "source": "review-session",
+            "correctRate": 0,
+            "severity": "repair",
+            "dimensionDelta": -6,
+            "weakTags": [
+              "Attention??",
+              "????????",
+              "adaptive",
+              "profile-weakness",
+              "???",
+              "low-profile-dimension"
+            ],
+            "mistakeCount": 3,
+            "reason": "Review correct rate 0%, 3 mistakes captured.",
+            "updatedAt": "2026-07-11T01:45:15.231Z"
+          }
+        }
+      ],
+      "reviewQuestions": [
+        {
+          "questionId": "rq-mrfpcu6x-q38q23",
+          "sessionId": "review-mrfpcu6w-aynxh1",
+          "accountId": "loop-audit-1783734315145",
+          "source": "loop-audit-live2d",
+          "knowledgePointId": "kp-attention",
+          "knowledgePointName": "Attention??",
+          "questionType": "single-choice",
+          "difficulty": "adaptive",
+          "prompt": "关于「Attention??」，如果你刚刚做错了一道相关题，最适合的复盘动作是什么？",
+          "options": [
+            "先复述 Attention?? 的定义，再完成一个最小练习",
+            "直接跳过 Attention??，进入更难的综合项目",
+            "只收藏相关资料，不做任何输出",
+            "把 Attention?? 的错题结论删除，避免影响画像"
+          ],
+          "answer": 0,
+          "explanation": "先确认「Attention??」的概念边界，再用最小练习验证，能让错题证据更稳定地回写画像。",
+          "mistakeTags": [
+            "Attention??",
+            "????????",
+            "adaptive"
+          ],
+          "status": "answered",
+          "createdAt": "2026-07-11T01:45:15.225Z",
+          "order": 1,
+          "userAnswer": "__wrong__",
+          "isCorrect": false,
+          "answeredAt": "2026-07-11T01:45:15.231Z"
+        },
+        {
+          "questionId": "rq-mrfpcu6x-sp9ut5",
+          "sessionId": "review-mrfpcu6w-aynxh1",
+          "accountId": "loop-audit-1783734315145",
+          "source": "loop-audit-live2d",
+          "knowledgePointId": "attention",
+          "knowledgePointName": "Attention??",
+          "questionType": "single-choice",
+          "difficulty": "adaptive",
+          "prompt": "关于「Attention??」，如果你刚刚做错了一道相关题，最适合的复盘动作是什么？",
+          "options": [
+            "先复述 Attention?? 的定义，再完成一个最小练习",
+            "直接跳过 Attention??，进入更难的综合项目",
+            "只收藏相关资料，不做任何输出",
+            "把 Attention?? 的错题结论删除，避免影响画像"
+          ],
+          "answer": 0,
+          "explanation": "先确认「Attention??」的概念边界，再用最小练习验证，能让错题证据更稳定地回写画像。",
+          "mistakeTags": [
+            "Attention??",
+            "profile-weakness",
+            "adaptive"
+          ],
+          "status": "answered",
+          "createdAt": "2026-07-11T01:45:15.225Z",
+          "order": 2,
+          "userAnswer": "__wrong__",
+          "isCorrect": false,
+          "answeredAt": "2026-07-11T01:45:15.231Z"
+        },
+        {
+          "questionId": "rq-mrfpcu6x-0qtzpl",
+          "sessionId": "review-mrfpcu6w-aynxh1",
+          "accountId": "loop-audit-1783734315145",
+          "source": "loop-audit-live2d",
+          "knowledgePointId": "topic",
+          "knowledgePointName": "???",
+          "questionType": "single-choice",
+          "difficulty": "adaptive",
+          "prompt": "关于「???」，如果你刚刚做错了一道相关题，最适合的复盘动作是什么？",
+          "options": [
+            "先复述 ??? 的定义，再完成一个最小练习",
+            "直接跳过 ???，进入更难的综合项目",
+            "只收藏相关资料，不做任何输出",
+            "把 ??? 的错题结论删除，避免影响画像"
+          ],
+          "answer": 0,
+          "explanation": "先确认「???」的概念边界，再用最小练习验证，能让错题证据更稳定地回写画像。",
+          "mistakeTags": [
+            "???",
+            "low-profile-dimension",
+            "adaptive"
+          ],
+          "status": "answered",
+          "createdAt": "2026-07-11T01:45:15.225Z",
+          "order": 3,
+          "userAnswer": "__wrong__",
+          "isCorrect": false,
+          "answeredAt": "2026-07-11T01:45:15.231Z"
+        }
+      ],
+      "mistakeQuestions": [
+        {
+          "questionId": "rq-mrfpcu6x-q38q23",
+          "sessionId": "review-mrfpcu6w-aynxh1",
+          "accountId": "loop-audit-1783734315145",
+          "source": "loop-audit-live2d",
+          "knowledgePointId": "kp-attention",
+          "knowledgePointName": "Attention??",
+          "questionType": "single-choice",
+          "difficulty": "adaptive",
+          "prompt": "关于「Attention??」，如果你刚刚做错了一道相关题，最适合的复盘动作是什么？",
+          "options": [
+            "先复述 Attention?? 的定义，再完成一个最小练习",
+            "直接跳过 Attention??，进入更难的综合项目",
+            "只收藏相关资料，不做任何输出",
+            "把 Attention?? 的错题结论删除，避免影响画像"
+          ],
+          "answer": 0,
+          "explanation": "先确认「Attention??」的概念边界，再用最小练习验证，能让错题证据更稳定地回写画像。",
+          "mistakeTags": [
+            "Attention??",
+            "????????",
+            "adaptive"
+          ],
+          "status": "answered",
+          "createdAt": "2026-07-11T01:45:15.225Z",
+          "order": 1,
+          "userAnswer": "__wrong__",
+          "isCorrect": false,
+          "answeredAt": "2026-07-11T01:45:15.231Z",
+          "mistakeCapturedAt": "2026-07-11T01:45:15.232Z"
+        },
+        {
+          "questionId": "rq-mrfpcu6x-sp9ut5",
+          "sessionId": "review-mrfpcu6w-aynxh1",
+          "accountId": "loop-audit-1783734315145",
+          "source": "loop-audit-live2d",
+          "knowledgePointId": "attention",
+          "knowledgePointName": "Attention??",
+          "questionType": "single-choice",
+          "difficulty": "adaptive",
+          "prompt": "关于「Attention??」，如果你刚刚做错了一道相关题，最适合的复盘动作是什么？",
+          "options": [
+            "先复述 Attention?? 的定义，再完成一个最小练习",
+            "直接跳过 Attention??，进入更难的综合项目",
+            "只收藏相关资料，不做任何输出",
+            "把 Attention?? 的错题结论删除，避免影响画像"
+          ],
+          "answer": 0,
+          "explanation": "先确认「Attention??」的概念边界，再用最小练习验证，能让错题证据更稳定地回写画像。",
+          "mistakeTags": [
+            "Attention??",
+            "profile-weakness",
+            "adaptive"
+          ],
+          "status": "answered",
+          "createdAt": "2026-07-11T01:45:15.225Z",
+          "order": 2,
+          "userAnswer": "__wrong__",
+          "isCorrect": false,
+          "answeredAt": "2026-07-11T01:45:15.231Z",
+          "mistakeCapturedAt": "2026-07-11T01:45:15.232Z"
+        },
+        {
+          "questionId": "rq-mrfpcu6x-0qtzpl",
+          "sessionId": "review-mrfpcu6w-aynxh1",
+          "accountId": "loop-audit-1783734315145",
+          "source": "loop-audit-live2d",
+          "knowledgePointId": "topic",
+          "knowledgePointName": "???",
+          "questionType": "single-choice",
+          "difficulty": "adaptive",
+          "prompt": "关于「???」，如果你刚刚做错了一道相关题，最适合的复盘动作是什么？",
+          "options": [
+            "先复述 ??? 的定义，再完成一个最小练习",
+            "直接跳过 ???，进入更难的综合项目",
+            "只收藏相关资料，不做任何输出",
+            "把 ??? 的错题结论删除，避免影响画像"
+          ],
+          "answer": 0,
+          "explanation": "先确认「???」的概念边界，再用最小练习验证，能让错题证据更稳定地回写画像。",
+          "mistakeTags": [
+            "???",
+            "low-profile-dimension",
+            "adaptive"
+          ],
+          "status": "answered",
+          "createdAt": "2026-07-11T01:45:15.225Z",
+          "order": 3,
+          "userAnswer": "__wrong__",
+          "isCorrect": false,
+          "answeredAt": "2026-07-11T01:45:15.231Z",
+          "mistakeCapturedAt": "2026-07-11T01:45:15.232Z"
+        }
+      ],
+      "role": "student",
+      "name": "Loop Audit",
+      "latestProfile": {
+        "totalScore": 56,
+        "source": "review-reverse-update",
+        "dimensions": [
+          {
+            "label": "????",
+            "value": 52
+          },
+          {
+            "label": "????",
+            "value": 66
+          },
+          {
+            "label": "???",
+            "value": 38
+          },
+          {
+            "label": "????",
+            "value": 54
+          },
+          {
+            "label": "????",
+            "value": 60
+          },
+          {
+            "label": "???",
+            "value": 64
+          }
+        ],
+        "weaknesses": [
+          {
+            "tag": "Attention??",
+            "count": 3
+          },
+          {
+            "tag": "????????",
+            "count": 3
+          },
+          {
+            "tag": "adaptive",
+            "count": 3
+          },
+          {
+            "tag": "profile-weakness",
+            "count": 3
+          },
+          {
+            "tag": "???",
+            "count": 3
+          }
+        ],
+        "recommendations": [
+          "根据本次复测正确率 0%，已将错题证据回写到画像。",
+          "????????????????"
+        ],
+        "savedAt": "2026-07-11T01:45:15.236Z",
+        "accountId": "loop-audit-1783734315145",
+        "userAccount": "loop-audit-1783734315145",
+        "accountRole": "student",
+        "lastReviewPatch": {
+          "source": "review-session",
+          "correctRate": 0,
+          "severity": "repair",
+          "dimensionDelta": -6,
+          "weakTags": [
+            "Attention??",
+            "????????",
+            "adaptive",
+            "profile-weakness",
+            "???",
+            "low-profile-dimension"
+          ],
+          "mistakeCount": 3,
+          "reason": "Review correct rate 0%, 3 mistakes captured.",
+          "updatedAt": "2026-07-11T01:45:15.231Z"
+        }
+      },
+      "updatedAt": "2026-07-11T01:45:15.265Z",
+      "latestKnowledgePath": {
+        "phases": [
+          {
+            "id": "fundamentals",
+            "name": "基础巩固",
+            "short": "FUND",
+            "color": "#00d4ff",
+            "topics": [
+              {
+                "id": "f1",
+                "name": "编程基础与语法",
+                "mastery": 0.5,
+                "importance": 1,
+                "recommended": true
+              },
+              {
+                "id": "f2",
+                "name": "数据结构入门",
+                "mastery": 0.4,
+                "importance": 0.8
+              },
+              {
+                "id": "f3",
+                "name": "算法思维培养",
+                "mastery": 0.35,
+                "importance": 0.7
+              }
+            ]
+          },
+          {
+            "id": "core-skills",
+            "name": "核心技能",
+            "short": "CORE",
+            "color": "#7c3aed",
+            "topics": [
+              {
+                "id": "c1",
+                "name": "机器学习基础概念",
+                "mastery": 0.2,
+                "importance": 0.95,
+                "recommended": true
+              },
+              {
+                "id": "c2",
+                "name": "数据处理与分析",
+                "mastery": 0.3,
+                "importance": 0.85
+              },
+              {
+                "id": "c3",
+                "name": "模型训练与评估",
+                "mastery": 0.15,
+                "importance": 0.8
+              },
+              {
+                "id": "c4",
+                "name": "特征工程实践",
+                "mastery": 0.1,
+                "importance": 0.7
+              }
+            ]
+          },
+          {
+            "id": "deep-learning",
+            "name": "深度学习",
+            "short": "DL",
+            "color": "#06d6a0",
+            "topics": [
+              {
+                "id": "d1",
+                "name": "神经网络原理",
+                "mastery": 0.1,
+                "importance": 0.9,
+                "recommended": true
+              },
+              {
+                "id": "d2",
+                "name": "CNN 图像处理",
+                "mastery": 0.05,
+                "importance": 0.7
+              },
+              {
+                "id": "d3",
+                "name": "Transformer 架构",
+                "mastery": 0.02,
+                "importance": 0.95,
+                "recommended": true
+              }
+            ]
+          },
+          {
+            "id": "practice",
+            "name": "实战应用",
+            "short": "PRACT",
+            "color": "#f59e0b",
+            "topics": [
+              {
+                "id": "p1",
+                "name": "项目实战练习",
+                "mastery": 0.1,
+                "importance": 0.85,
+                "recommended": true
+              },
+              {
+                "id": "p2",
+                "name": "代码规范与工程化",
+                "mastery": 0.4,
+                "importance": 0.6
+              },
+              {
+                "id": "p3",
+                "name": "部署与上线",
+                "mastery": 0.05,
+                "importance": 0.5
+              }
+            ]
+          }
+        ],
+        "accountId": "loop-audit-1783734315145",
+        "userAccount": "loop-audit-1783734315145",
+        "savedAt": "2026-07-11T01:45:15.265Z"
+      }
+    },
+    "loop-audit-1783734507874": {
+      "accountId": "loop-audit-1783734507874",
+      "reviewSessions": [
+        {
+          "sessionId": "review-mrfpgywv-kvur67",
+          "accountId": "loop-audit-1783734507874",
+          "source": "loop-audit-live2d",
+          "status": "submitted",
+          "knowledgePointId": "kp-attention",
+          "knowledgePointName": "Attention??",
+          "createdAt": "2026-07-11T01:48:27.967Z",
+          "submittedAt": "2026-07-11T01:48:27.975Z",
+          "correctRate": 0,
+          "profilePatch": {
+            "source": "review-session",
+            "correctRate": 0,
+            "severity": "repair",
+            "dimensionDelta": -6,
+            "weakTags": [
+              "Attention??",
+              "????????",
+              "adaptive",
+              "profile-weakness",
+              "???",
+              "low-profile-dimension"
+            ],
+            "mistakeCount": 3,
+            "reason": "Review correct rate 0%, 3 mistakes captured.",
+            "updatedAt": "2026-07-11T01:48:27.974Z"
+          }
+        }
+      ],
+      "reviewQuestions": [
+        {
+          "questionId": "rq-mrfpgywv-q77gxm",
+          "sessionId": "review-mrfpgywv-kvur67",
+          "accountId": "loop-audit-1783734507874",
+          "source": "loop-audit-live2d",
+          "knowledgePointId": "kp-attention",
+          "knowledgePointName": "Attention??",
+          "questionType": "single-choice",
+          "difficulty": "adaptive",
+          "prompt": "关于「Attention??」，如果你刚刚做错了一道相关题，最适合的复盘动作是什么？",
+          "options": [
+            "先复述 Attention?? 的定义，再完成一个最小练习",
+            "直接跳过 Attention??，进入更难的综合项目",
+            "只收藏相关资料，不做任何输出",
+            "把 Attention?? 的错题结论删除，避免影响画像"
+          ],
+          "answer": 0,
+          "explanation": "先确认「Attention??」的概念边界，再用最小练习验证，能让错题证据更稳定地回写画像。",
+          "mistakeTags": [
+            "Attention??",
+            "????????",
+            "adaptive"
+          ],
+          "status": "answered",
+          "createdAt": "2026-07-11T01:48:27.967Z",
+          "order": 1,
+          "userAnswer": "__wrong__",
+          "isCorrect": false,
+          "answeredAt": "2026-07-11T01:48:27.974Z"
+        },
+        {
+          "questionId": "rq-mrfpgywv-q2e2l9",
+          "sessionId": "review-mrfpgywv-kvur67",
+          "accountId": "loop-audit-1783734507874",
+          "source": "loop-audit-live2d",
+          "knowledgePointId": "attention",
+          "knowledgePointName": "Attention??",
+          "questionType": "single-choice",
+          "difficulty": "adaptive",
+          "prompt": "关于「Attention??」，如果你刚刚做错了一道相关题，最适合的复盘动作是什么？",
+          "options": [
+            "先复述 Attention?? 的定义，再完成一个最小练习",
+            "直接跳过 Attention??，进入更难的综合项目",
+            "只收藏相关资料，不做任何输出",
+            "把 Attention?? 的错题结论删除，避免影响画像"
+          ],
+          "answer": 0,
+          "explanation": "先确认「Attention??」的概念边界，再用最小练习验证，能让错题证据更稳定地回写画像。",
+          "mistakeTags": [
+            "Attention??",
+            "profile-weakness",
+            "adaptive"
+          ],
+          "status": "answered",
+          "createdAt": "2026-07-11T01:48:27.967Z",
+          "order": 2,
+          "userAnswer": "__wrong__",
+          "isCorrect": false,
+          "answeredAt": "2026-07-11T01:48:27.974Z"
+        },
+        {
+          "questionId": "rq-mrfpgywv-y8d463",
+          "sessionId": "review-mrfpgywv-kvur67",
+          "accountId": "loop-audit-1783734507874",
+          "source": "loop-audit-live2d",
+          "knowledgePointId": "topic",
+          "knowledgePointName": "???",
+          "questionType": "single-choice",
+          "difficulty": "adaptive",
+          "prompt": "关于「???」，如果你刚刚做错了一道相关题，最适合的复盘动作是什么？",
+          "options": [
+            "先复述 ??? 的定义，再完成一个最小练习",
+            "直接跳过 ???，进入更难的综合项目",
+            "只收藏相关资料，不做任何输出",
+            "把 ??? 的错题结论删除，避免影响画像"
+          ],
+          "answer": 0,
+          "explanation": "先确认「???」的概念边界，再用最小练习验证，能让错题证据更稳定地回写画像。",
+          "mistakeTags": [
+            "???",
+            "low-profile-dimension",
+            "adaptive"
+          ],
+          "status": "answered",
+          "createdAt": "2026-07-11T01:48:27.967Z",
+          "order": 3,
+          "userAnswer": "__wrong__",
+          "isCorrect": false,
+          "answeredAt": "2026-07-11T01:48:27.974Z"
+        }
+      ],
+      "mistakeQuestions": [
+        {
+          "questionId": "rq-mrfpgywv-q77gxm",
+          "sessionId": "review-mrfpgywv-kvur67",
+          "accountId": "loop-audit-1783734507874",
+          "source": "loop-audit-live2d",
+          "knowledgePointId": "kp-attention",
+          "knowledgePointName": "Attention??",
+          "questionType": "single-choice",
+          "difficulty": "adaptive",
+          "prompt": "关于「Attention??」，如果你刚刚做错了一道相关题，最适合的复盘动作是什么？",
+          "options": [
+            "先复述 Attention?? 的定义，再完成一个最小练习",
+            "直接跳过 Attention??，进入更难的综合项目",
+            "只收藏相关资料，不做任何输出",
+            "把 Attention?? 的错题结论删除，避免影响画像"
+          ],
+          "answer": 0,
+          "explanation": "先确认「Attention??」的概念边界，再用最小练习验证，能让错题证据更稳定地回写画像。",
+          "mistakeTags": [
+            "Attention??",
+            "????????",
+            "adaptive"
+          ],
+          "status": "answered",
+          "createdAt": "2026-07-11T01:48:27.967Z",
+          "order": 1,
+          "userAnswer": "__wrong__",
+          "isCorrect": false,
+          "answeredAt": "2026-07-11T01:48:27.974Z",
+          "mistakeCapturedAt": "2026-07-11T01:48:27.975Z"
+        },
+        {
+          "questionId": "rq-mrfpgywv-q2e2l9",
+          "sessionId": "review-mrfpgywv-kvur67",
+          "accountId": "loop-audit-1783734507874",
+          "source": "loop-audit-live2d",
+          "knowledgePointId": "attention",
+          "knowledgePointName": "Attention??",
+          "questionType": "single-choice",
+          "difficulty": "adaptive",
+          "prompt": "关于「Attention??」，如果你刚刚做错了一道相关题，最适合的复盘动作是什么？",
+          "options": [
+            "先复述 Attention?? 的定义，再完成一个最小练习",
+            "直接跳过 Attention??，进入更难的综合项目",
+            "只收藏相关资料，不做任何输出",
+            "把 Attention?? 的错题结论删除，避免影响画像"
+          ],
+          "answer": 0,
+          "explanation": "先确认「Attention??」的概念边界，再用最小练习验证，能让错题证据更稳定地回写画像。",
+          "mistakeTags": [
+            "Attention??",
+            "profile-weakness",
+            "adaptive"
+          ],
+          "status": "answered",
+          "createdAt": "2026-07-11T01:48:27.967Z",
+          "order": 2,
+          "userAnswer": "__wrong__",
+          "isCorrect": false,
+          "answeredAt": "2026-07-11T01:48:27.974Z",
+          "mistakeCapturedAt": "2026-07-11T01:48:27.975Z"
+        },
+        {
+          "questionId": "rq-mrfpgywv-y8d463",
+          "sessionId": "review-mrfpgywv-kvur67",
+          "accountId": "loop-audit-1783734507874",
+          "source": "loop-audit-live2d",
+          "knowledgePointId": "topic",
+          "knowledgePointName": "???",
+          "questionType": "single-choice",
+          "difficulty": "adaptive",
+          "prompt": "关于「???」，如果你刚刚做错了一道相关题，最适合的复盘动作是什么？",
+          "options": [
+            "先复述 ??? 的定义，再完成一个最小练习",
+            "直接跳过 ???，进入更难的综合项目",
+            "只收藏相关资料，不做任何输出",
+            "把 ??? 的错题结论删除，避免影响画像"
+          ],
+          "answer": 0,
+          "explanation": "先确认「???」的概念边界，再用最小练习验证，能让错题证据更稳定地回写画像。",
+          "mistakeTags": [
+            "???",
+            "low-profile-dimension",
+            "adaptive"
+          ],
+          "status": "answered",
+          "createdAt": "2026-07-11T01:48:27.967Z",
+          "order": 3,
+          "userAnswer": "__wrong__",
+          "isCorrect": false,
+          "answeredAt": "2026-07-11T01:48:27.974Z",
+          "mistakeCapturedAt": "2026-07-11T01:48:27.975Z"
+        }
+      ],
+      "role": "student",
+      "name": "Loop Audit",
+      "latestProfile": {
+        "totalScore": 56,
+        "source": "review-reverse-update",
+        "dimensions": [
+          {
+            "label": "????",
+            "value": 52
+          },
+          {
+            "label": "????",
+            "value": 66
+          },
+          {
+            "label": "???",
+            "value": 38
+          },
+          {
+            "label": "????",
+            "value": 54
+          },
+          {
+            "label": "????",
+            "value": 60
+          },
+          {
+            "label": "???",
+            "value": 64
+          }
+        ],
+        "weaknesses": [
+          {
+            "tag": "Attention??",
+            "count": 3
+          },
+          {
+            "tag": "????????",
+            "count": 3
+          },
+          {
+            "tag": "adaptive",
+            "count": 3
+          },
+          {
+            "tag": "profile-weakness",
+            "count": 3
+          },
+          {
+            "tag": "???",
+            "count": 3
+          }
+        ],
+        "recommendations": [
+          "根据本次复测正确率 0%，已将错题证据回写到画像。",
+          "????????????????"
+        ],
+        "savedAt": "2026-07-11T01:48:27.978Z",
+        "accountId": "loop-audit-1783734507874",
+        "userAccount": "loop-audit-1783734507874",
+        "accountRole": "student",
+        "lastReviewPatch": {
+          "source": "review-session",
+          "correctRate": 0,
+          "severity": "repair",
+          "dimensionDelta": -6,
+          "weakTags": [
+            "Attention??",
+            "????????",
+            "adaptive",
+            "profile-weakness",
+            "???",
+            "low-profile-dimension"
+          ],
+          "mistakeCount": 3,
+          "reason": "Review correct rate 0%, 3 mistakes captured.",
+          "updatedAt": "2026-07-11T01:48:27.974Z"
+        }
+      },
+      "updatedAt": "2026-07-11T01:48:28.010Z",
+      "latestKnowledgePath": {
+        "phases": [
+          {
+            "id": "fundamentals",
+            "name": "基础巩固",
+            "short": "FUND",
+            "color": "#00d4ff",
+            "topics": [
+              {
+                "id": "f1",
+                "name": "编程基础与语法",
+                "mastery": 0.5,
+                "importance": 1,
+                "recommended": true
+              },
+              {
+                "id": "f2",
+                "name": "数据结构入门",
+                "mastery": 0.4,
+                "importance": 0.8
+              },
+              {
+                "id": "f3",
+                "name": "算法思维培养",
+                "mastery": 0.35,
+                "importance": 0.7
+              }
+            ]
+          },
+          {
+            "id": "core-skills",
+            "name": "核心技能",
+            "short": "CORE",
+            "color": "#7c3aed",
+            "topics": [
+              {
+                "id": "c1",
+                "name": "机器学习基础概念",
+                "mastery": 0.2,
+                "importance": 0.95,
+                "recommended": true
+              },
+              {
+                "id": "c2",
+                "name": "数据处理与分析",
+                "mastery": 0.3,
+                "importance": 0.85
+              },
+              {
+                "id": "c3",
+                "name": "模型训练与评估",
+                "mastery": 0.15,
+                "importance": 0.8
+              },
+              {
+                "id": "c4",
+                "name": "特征工程实践",
+                "mastery": 0.1,
+                "importance": 0.7
+              }
+            ]
+          },
+          {
+            "id": "deep-learning",
+            "name": "深度学习",
+            "short": "DL",
+            "color": "#06d6a0",
+            "topics": [
+              {
+                "id": "d1",
+                "name": "神经网络原理",
+                "mastery": 0.1,
+                "importance": 0.9,
+                "recommended": true
+              },
+              {
+                "id": "d2",
+                "name": "CNN 图像处理",
+                "mastery": 0.05,
+                "importance": 0.7
+              },
+              {
+                "id": "d3",
+                "name": "Transformer 架构",
+                "mastery": 0.02,
+                "importance": 0.95,
+                "recommended": true
+              }
+            ]
+          },
+          {
+            "id": "practice",
+            "name": "实战应用",
+            "short": "PRACT",
+            "color": "#f59e0b",
+            "topics": [
+              {
+                "id": "p1",
+                "name": "项目实战练习",
+                "mastery": 0.1,
+                "importance": 0.85,
+                "recommended": true
+              },
+              {
+                "id": "p2",
+                "name": "代码规范与工程化",
+                "mastery": 0.4,
+                "importance": 0.6
+              },
+              {
+                "id": "p3",
+                "name": "部署与上线",
+                "mastery": 0.05,
+                "importance": 0.5
+              }
+            ]
+          }
+        ],
+        "accountId": "loop-audit-1783734507874",
+        "userAccount": "loop-audit-1783734507874",
+        "savedAt": "2026-07-11T01:48:28.010Z"
+      }
+    }
+  },
+  "profileHistory": [
+    {
+      "accountId": "loop-audit-1783734315145",
+      "source": "loop-audit-seed",
+      "totalScore": 62,
+      "savedAt": "2026-07-11T01:45:15.172Z",
+      "profile": {
+        "totalScore": 62,
+        "source": "loop-audit-seed",
+        "dimensions": [
+          {
+            "label": "????",
+            "value": 58
+          },
+          {
+            "label": "????",
+            "value": 72
+          },
+          {
+            "label": "???",
+            "value": 44
+          },
+          {
+            "label": "????",
+            "value": 60
+          },
+          {
+            "label": "????",
+            "value": 66
+          },
+          {
+            "label": "???",
+            "value": 70
+          }
+        ],
+        "weaknesses": [
+          {
+            "tag": "Attention??",
+            "count": 2
+          }
+        ],
+        "recommendations": [
+          "????????????????"
+        ],
+        "savedAt": "2026-07-11T01:45:15.172Z",
+        "accountId": "loop-audit-1783734315145",
+        "userAccount": "loop-audit-1783734315145",
+        "accountRole": "student"
+      }
+    },
+    {
+      "accountId": "loop-audit-1783734315145",
+      "source": "review-reverse-update",
+      "totalScore": 56,
+      "savedAt": "2026-07-11T01:45:15.236Z",
+      "profile": {
+        "totalScore": 56,
+        "source": "review-reverse-update",
+        "dimensions": [
+          {
+            "label": "????",
+            "value": 52
+          },
+          {
+            "label": "????",
+            "value": 66
+          },
+          {
+            "label": "???",
+            "value": 38
+          },
+          {
+            "label": "????",
+            "value": 54
+          },
+          {
+            "label": "????",
+            "value": 60
+          },
+          {
+            "label": "???",
+            "value": 64
+          }
+        ],
+        "weaknesses": [
+          {
+            "tag": "Attention??",
+            "count": 3
+          },
+          {
+            "tag": "????????",
+            "count": 3
+          },
+          {
+            "tag": "adaptive",
+            "count": 3
+          },
+          {
+            "tag": "profile-weakness",
+            "count": 3
+          },
+          {
+            "tag": "???",
+            "count": 3
+          }
+        ],
+        "recommendations": [
+          "根据本次复测正确率 0%，已将错题证据回写到画像。",
+          "????????????????"
+        ],
+        "savedAt": "2026-07-11T01:45:15.236Z",
+        "accountId": "loop-audit-1783734315145",
+        "userAccount": "loop-audit-1783734315145",
+        "accountRole": "student",
+        "lastReviewPatch": {
+          "source": "review-session",
+          "correctRate": 0,
+          "severity": "repair",
+          "dimensionDelta": -6,
+          "weakTags": [
+            "Attention??",
+            "????????",
+            "adaptive",
+            "profile-weakness",
+            "???",
+            "low-profile-dimension"
+          ],
+          "mistakeCount": 3,
+          "reason": "Review correct rate 0%, 3 mistakes captured.",
+          "updatedAt": "2026-07-11T01:45:15.231Z"
+        }
+      }
+    },
+    {
+      "accountId": "loop-audit-1783734507874",
+      "source": "loop-audit-seed",
+      "totalScore": 62,
+      "savedAt": "2026-07-11T01:48:27.902Z",
+      "profile": {
+        "totalScore": 62,
+        "source": "loop-audit-seed",
+        "dimensions": [
+          {
+            "label": "????",
+            "value": 58
+          },
+          {
+            "label": "????",
+            "value": 72
+          },
+          {
+            "label": "???",
+            "value": 44
+          },
+          {
+            "label": "????",
+            "value": 60
+          },
+          {
+            "label": "????",
+            "value": 66
+          },
+          {
+            "label": "???",
+            "value": 70
+          }
+        ],
+        "weaknesses": [
+          {
+            "tag": "Attention??",
+            "count": 2
+          }
+        ],
+        "recommendations": [
+          "????????????????"
+        ],
+        "savedAt": "2026-07-11T01:48:27.902Z",
+        "accountId": "loop-audit-1783734507874",
+        "userAccount": "loop-audit-1783734507874",
+        "accountRole": "student"
+      }
+    },
+    {
+      "accountId": "loop-audit-1783734507874",
+      "source": "review-reverse-update",
+      "totalScore": 56,
+      "savedAt": "2026-07-11T01:48:27.978Z",
+      "profile": {
+        "totalScore": 56,
+        "source": "review-reverse-update",
+        "dimensions": [
+          {
+            "label": "????",
+            "value": 52
+          },
+          {
+            "label": "????",
+            "value": 66
+          },
+          {
+            "label": "???",
+            "value": 38
+          },
+          {
+            "label": "????",
+            "value": 54
+          },
+          {
+            "label": "????",
+            "value": 60
+          },
+          {
+            "label": "???",
+            "value": 64
+          }
+        ],
+        "weaknesses": [
+          {
+            "tag": "Attention??",
+            "count": 3
+          },
+          {
+            "tag": "????????",
+            "count": 3
+          },
+          {
+            "tag": "adaptive",
+            "count": 3
+          },
+          {
+            "tag": "profile-weakness",
+            "count": 3
+          },
+          {
+            "tag": "???",
+            "count": 3
+          }
+        ],
+        "recommendations": [
+          "根据本次复测正确率 0%，已将错题证据回写到画像。",
+          "????????????????"
+        ],
+        "savedAt": "2026-07-11T01:48:27.978Z",
+        "accountId": "loop-audit-1783734507874",
+        "userAccount": "loop-audit-1783734507874",
+        "accountRole": "student",
+        "lastReviewPatch": {
+          "source": "review-session",
+          "correctRate": 0,
+          "severity": "repair",
+          "dimensionDelta": -6,
+          "weakTags": [
+            "Attention??",
+            "????????",
+            "adaptive",
+            "profile-weakness",
+            "???",
+            "low-profile-dimension"
+          ],
+          "mistakeCount": 3,
+          "reason": "Review correct rate 0%, 3 mistakes captured.",
+          "updatedAt": "2026-07-11T01:48:27.974Z"
+        }
+      }
+    }
+  ],
+  "knowledgePathHistory": [
+    {
+      "accountId": "path-user-a",
+      "source": "test",
+      "savedAt": "2026-07-10T17:33:44.624Z",
+      "phaseCount": 1,
+      "path": {
+        "source": "test",
+        "phases": [
+          {
+            "title": "Path A",
+            "modules": []
+          }
+        ],
+        "accountId": "path-user-a",
+        "userAccount": "path-user-a",
+        "savedAt": "2026-07-10T17:33:44.624Z"
+      }
+    },
+    {
+      "accountId": "path-user-b",
+      "source": "test",
+      "savedAt": "2026-07-10T17:33:44.627Z",
+      "phaseCount": 1,
+      "path": {
+        "source": "test",
+        "phases": [
+          {
+            "title": "Path B",
+            "modules": []
+          }
+        ],
+        "accountId": "path-user-b",
+        "userAccount": "path-user-b",
+        "savedAt": "2026-07-10T17:33:44.627Z"
+      }
+    },
+    {
+      "accountId": "loop-audit-1783734315145",
+      "source": "knowledge-path",
+      "savedAt": "2026-07-11T01:45:15.216Z",
+      "phaseCount": 4,
+      "path": {
+        "phases": [
+          {
+            "id": "fundamentals",
+            "name": "基础巩固",
+            "short": "FUND",
+            "color": "#00d4ff",
+            "topics": [
+              {
+                "id": "f1",
+                "name": "编程基础与语法",
+                "mastery": 0.5,
+                "importance": 1,
+                "recommended": true
+              },
+              {
+                "id": "f2",
+                "name": "数据结构入门",
+                "mastery": 0.4,
+                "importance": 0.8
+              },
+              {
+                "id": "f3",
+                "name": "算法思维培养",
+                "mastery": 0.35,
+                "importance": 0.7
+              }
+            ]
+          },
+          {
+            "id": "core-skills",
+            "name": "核心技能",
+            "short": "CORE",
+            "color": "#7c3aed",
+            "topics": [
+              {
+                "id": "c1",
+                "name": "机器学习基础概念",
+                "mastery": 0.2,
+                "importance": 0.95,
+                "recommended": true
+              },
+              {
+                "id": "c2",
+                "name": "数据处理与分析",
+                "mastery": 0.3,
+                "importance": 0.85
+              },
+              {
+                "id": "c3",
+                "name": "模型训练与评估",
+                "mastery": 0.15,
+                "importance": 0.8
+              },
+              {
+                "id": "c4",
+                "name": "特征工程实践",
+                "mastery": 0.1,
+                "importance": 0.7
+              }
+            ]
+          },
+          {
+            "id": "deep-learning",
+            "name": "深度学习",
+            "short": "DL",
+            "color": "#06d6a0",
+            "topics": [
+              {
+                "id": "d1",
+                "name": "神经网络原理",
+                "mastery": 0.1,
+                "importance": 0.9,
+                "recommended": true
+              },
+              {
+                "id": "d2",
+                "name": "CNN 图像处理",
+                "mastery": 0.05,
+                "importance": 0.7
+              },
+              {
+                "id": "d3",
+                "name": "Transformer 架构",
+                "mastery": 0.02,
+                "importance": 0.95,
+                "recommended": true
+              }
+            ]
+          },
+          {
+            "id": "practice",
+            "name": "实战应用",
+            "short": "PRACT",
+            "color": "#f59e0b",
+            "topics": [
+              {
+                "id": "p1",
+                "name": "项目实战练习",
+                "mastery": 0.1,
+                "importance": 0.85,
+                "recommended": true
+              },
+              {
+                "id": "p2",
+                "name": "代码规范与工程化",
+                "mastery": 0.4,
+                "importance": 0.6
+              },
+              {
+                "id": "p3",
+                "name": "部署与上线",
+                "mastery": 0.05,
+                "importance": 0.5
+              }
+            ]
+          }
+        ],
+        "accountId": "loop-audit-1783734315145",
+        "userAccount": "loop-audit-1783734315145",
+        "savedAt": "2026-07-11T01:45:15.216Z"
+      }
+    },
+    {
+      "accountId": "loop-audit-1783734315145",
+      "source": "knowledge-path",
+      "savedAt": "2026-07-11T01:45:15.265Z",
+      "phaseCount": 4,
+      "path": {
+        "phases": [
+          {
+            "id": "fundamentals",
+            "name": "基础巩固",
+            "short": "FUND",
+            "color": "#00d4ff",
+            "topics": [
+              {
+                "id": "f1",
+                "name": "编程基础与语法",
+                "mastery": 0.5,
+                "importance": 1,
+                "recommended": true
+              },
+              {
+                "id": "f2",
+                "name": "数据结构入门",
+                "mastery": 0.4,
+                "importance": 0.8
+              },
+              {
+                "id": "f3",
+                "name": "算法思维培养",
+                "mastery": 0.35,
+                "importance": 0.7
+              }
+            ]
+          },
+          {
+            "id": "core-skills",
+            "name": "核心技能",
+            "short": "CORE",
+            "color": "#7c3aed",
+            "topics": [
+              {
+                "id": "c1",
+                "name": "机器学习基础概念",
+                "mastery": 0.2,
+                "importance": 0.95,
+                "recommended": true
+              },
+              {
+                "id": "c2",
+                "name": "数据处理与分析",
+                "mastery": 0.3,
+                "importance": 0.85
+              },
+              {
+                "id": "c3",
+                "name": "模型训练与评估",
+                "mastery": 0.15,
+                "importance": 0.8
+              },
+              {
+                "id": "c4",
+                "name": "特征工程实践",
+                "mastery": 0.1,
+                "importance": 0.7
+              }
+            ]
+          },
+          {
+            "id": "deep-learning",
+            "name": "深度学习",
+            "short": "DL",
+            "color": "#06d6a0",
+            "topics": [
+              {
+                "id": "d1",
+                "name": "神经网络原理",
+                "mastery": 0.1,
+                "importance": 0.9,
+                "recommended": true
+              },
+              {
+                "id": "d2",
+                "name": "CNN 图像处理",
+                "mastery": 0.05,
+                "importance": 0.7
+              },
+              {
+                "id": "d3",
+                "name": "Transformer 架构",
+                "mastery": 0.02,
+                "importance": 0.95,
+                "recommended": true
+              }
+            ]
+          },
+          {
+            "id": "practice",
+            "name": "实战应用",
+            "short": "PRACT",
+            "color": "#f59e0b",
+            "topics": [
+              {
+                "id": "p1",
+                "name": "项目实战练习",
+                "mastery": 0.1,
+                "importance": 0.85,
+                "recommended": true
+              },
+              {
+                "id": "p2",
+                "name": "代码规范与工程化",
+                "mastery": 0.4,
+                "importance": 0.6
+              },
+              {
+                "id": "p3",
+                "name": "部署与上线",
+                "mastery": 0.05,
+                "importance": 0.5
+              }
+            ]
+          }
+        ],
+        "accountId": "loop-audit-1783734315145",
+        "userAccount": "loop-audit-1783734315145",
+        "savedAt": "2026-07-11T01:45:15.265Z"
+      }
+    },
+    {
+      "accountId": "loop-audit-1783734507874",
+      "source": "knowledge-path",
+      "savedAt": "2026-07-11T01:48:27.957Z",
+      "phaseCount": 4,
+      "path": {
+        "phases": [
+          {
+            "id": "fundamentals",
+            "name": "基础巩固",
+            "short": "FUND",
+            "color": "#00d4ff",
+            "topics": [
+              {
+                "id": "f1",
+                "name": "编程基础与语法",
+                "mastery": 0.5,
+                "importance": 1,
+                "recommended": true
+              },
+              {
+                "id": "f2",
+                "name": "数据结构入门",
+                "mastery": 0.4,
+                "importance": 0.8
+              },
+              {
+                "id": "f3",
+                "name": "算法思维培养",
+                "mastery": 0.35,
+                "importance": 0.7
+              }
+            ]
+          },
+          {
+            "id": "core-skills",
+            "name": "核心技能",
+            "short": "CORE",
+            "color": "#7c3aed",
+            "topics": [
+              {
+                "id": "c1",
+                "name": "机器学习基础概念",
+                "mastery": 0.2,
+                "importance": 0.95,
+                "recommended": true
+              },
+              {
+                "id": "c2",
+                "name": "数据处理与分析",
+                "mastery": 0.3,
+                "importance": 0.85
+              },
+              {
+                "id": "c3",
+                "name": "模型训练与评估",
+                "mastery": 0.15,
+                "importance": 0.8
+              },
+              {
+                "id": "c4",
+                "name": "特征工程实践",
+                "mastery": 0.1,
+                "importance": 0.7
+              }
+            ]
+          },
+          {
+            "id": "deep-learning",
+            "name": "深度学习",
+            "short": "DL",
+            "color": "#06d6a0",
+            "topics": [
+              {
+                "id": "d1",
+                "name": "神经网络原理",
+                "mastery": 0.1,
+                "importance": 0.9,
+                "recommended": true
+              },
+              {
+                "id": "d2",
+                "name": "CNN 图像处理",
+                "mastery": 0.05,
+                "importance": 0.7
+              },
+              {
+                "id": "d3",
+                "name": "Transformer 架构",
+                "mastery": 0.02,
+                "importance": 0.95,
+                "recommended": true
+              }
+            ]
+          },
+          {
+            "id": "practice",
+            "name": "实战应用",
+            "short": "PRACT",
+            "color": "#f59e0b",
+            "topics": [
+              {
+                "id": "p1",
+                "name": "项目实战练习",
+                "mastery": 0.1,
+                "importance": 0.85,
+                "recommended": true
+              },
+              {
+                "id": "p2",
+                "name": "代码规范与工程化",
+                "mastery": 0.4,
+                "importance": 0.6
+              },
+              {
+                "id": "p3",
+                "name": "部署与上线",
+                "mastery": 0.05,
+                "importance": 0.5
+              }
+            ]
+          }
+        ],
+        "accountId": "loop-audit-1783734507874",
+        "userAccount": "loop-audit-1783734507874",
+        "savedAt": "2026-07-11T01:48:27.957Z"
+      }
+    },
+    {
+      "accountId": "loop-audit-1783734507874",
+      "source": "knowledge-path",
+      "savedAt": "2026-07-11T01:48:28.010Z",
+      "phaseCount": 4,
+      "path": {
+        "phases": [
+          {
+            "id": "fundamentals",
+            "name": "基础巩固",
+            "short": "FUND",
+            "color": "#00d4ff",
+            "topics": [
+              {
+                "id": "f1",
+                "name": "编程基础与语法",
+                "mastery": 0.5,
+                "importance": 1,
+                "recommended": true
+              },
+              {
+                "id": "f2",
+                "name": "数据结构入门",
+                "mastery": 0.4,
+                "importance": 0.8
+              },
+              {
+                "id": "f3",
+                "name": "算法思维培养",
+                "mastery": 0.35,
+                "importance": 0.7
+              }
+            ]
+          },
+          {
+            "id": "core-skills",
+            "name": "核心技能",
+            "short": "CORE",
+            "color": "#7c3aed",
+            "topics": [
+              {
+                "id": "c1",
+                "name": "机器学习基础概念",
+                "mastery": 0.2,
+                "importance": 0.95,
+                "recommended": true
+              },
+              {
+                "id": "c2",
+                "name": "数据处理与分析",
+                "mastery": 0.3,
+                "importance": 0.85
+              },
+              {
+                "id": "c3",
+                "name": "模型训练与评估",
+                "mastery": 0.15,
+                "importance": 0.8
+              },
+              {
+                "id": "c4",
+                "name": "特征工程实践",
+                "mastery": 0.1,
+                "importance": 0.7
+              }
+            ]
+          },
+          {
+            "id": "deep-learning",
+            "name": "深度学习",
+            "short": "DL",
+            "color": "#06d6a0",
+            "topics": [
+              {
+                "id": "d1",
+                "name": "神经网络原理",
+                "mastery": 0.1,
+                "importance": 0.9,
+                "recommended": true
+              },
+              {
+                "id": "d2",
+                "name": "CNN 图像处理",
+                "mastery": 0.05,
+                "importance": 0.7
+              },
+              {
+                "id": "d3",
+                "name": "Transformer 架构",
+                "mastery": 0.02,
+                "importance": 0.95,
+                "recommended": true
+              }
+            ]
+          },
+          {
+            "id": "practice",
+            "name": "实战应用",
+            "short": "PRACT",
+            "color": "#f59e0b",
+            "topics": [
+              {
+                "id": "p1",
+                "name": "项目实战练习",
+                "mastery": 0.1,
+                "importance": 0.85,
+                "recommended": true
+              },
+              {
+                "id": "p2",
+                "name": "代码规范与工程化",
+                "mastery": 0.4,
+                "importance": 0.6
+              },
+              {
+                "id": "p3",
+                "name": "部署与上线",
+                "mastery": 0.05,
+                "importance": 0.5
+              }
+            ]
+          }
+        ],
+        "accountId": "loop-audit-1783734507874",
+        "userAccount": "loop-audit-1783734507874",
+        "savedAt": "2026-07-11T01:48:28.010Z"
+      }
+    },
+    {
+      "accountId": "path-user-a",
+      "source": "test",
+      "savedAt": "2026-07-11T06:48:59.600Z",
+      "phaseCount": 1,
+      "path": {
+        "source": "test",
+        "phases": [
+          {
+            "title": "Path A",
+            "modules": []
+          }
+        ],
+        "accountId": "path-user-a",
+        "userAccount": "path-user-a",
+        "savedAt": "2026-07-11T06:48:59.600Z"
+      }
+    },
+    {
+      "accountId": "path-user-b",
+      "source": "test",
+      "savedAt": "2026-07-11T06:48:59.603Z",
+      "phaseCount": 1,
+      "path": {
+        "source": "test",
+        "phases": [
+          {
+            "title": "Path B",
+            "modules": []
+          }
+        ],
+        "accountId": "path-user-b",
+        "userAccount": "path-user-b",
+        "savedAt": "2026-07-11T06:48:59.603Z"
+      }
     }
   ]
 }

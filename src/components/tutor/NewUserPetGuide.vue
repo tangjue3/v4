@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { BarChart3, Library, MessageCircle, Route, Sparkles } from 'lucide-vue-next'
+import { BarChart3, HelpCircle, Library, MessageCircle, Route, Sparkles } from 'lucide-vue-next'
 import AiriLive2DRenderer from './live2d/AiriLive2DRenderer.vue'
 import type { CompanionState } from '@/store'
 
@@ -12,6 +12,7 @@ const VIEWPORT_GAP = 18
 
 interface GuideStep {
   target: string
+  label: string
   title: string
   detail: string
   icon: typeof MessageCircle
@@ -28,6 +29,7 @@ const petState = ref<CompanionState>('idle')
 const steps: GuideStep[] = [
   {
     target: 'dialogue',
+    label: '智能对话',
     title: '从「智能对话」开始',
     detail: '先点这里。在「对话」页告诉系统你的学习目标、薄弱点或一道错题；系统会据此建立学习画像。画像报告页可以随时查看分析结果。',
     icon: MessageCircle,
@@ -35,6 +37,7 @@ const steps: GuideStep[] = [
   },
   {
     target: 'learning-path',
+    label: '学习路径',
     title: '查看「学习路径」',
     detail: '对话分析后，来这里看「知识星座」和「学习路径」。点击星座里的知识点，系统会推荐最短学习路线和配套资源。',
     icon: Route,
@@ -42,6 +45,7 @@ const steps: GuideStep[] = [
   },
   {
     target: 'edu-mind',
+    label: '辅导资源',
     title: '使用「辅导资源」',
     detail: '需要资料、课程或练习时，来这里查找与知识点匹配的内容，辅助你完成路径中的任务。',
     icon: Library,
@@ -49,10 +53,19 @@ const steps: GuideStep[] = [
   },
   {
     target: 'evaluation',
+    label: '学习评估',
     title: '来做一次「评估」',
     detail: '学完一段后回来测试。系统会分析错因、更新画像，并推荐下一步任务，形成「诊断 → 学习 → 评估 → 再诊断」的闭环。',
     icon: BarChart3,
     accent: '#f0b24a',
+  },
+  {
+    target: 'companion-helper',
+    label: '陪伴助手',
+    title: '不知道问谁，就问这个小人',
+    detail: '右下角的 Live2D 小人主要负责学习之外的使用问题：比如页面在哪里、按钮怎么用、数据为什么变化、下一步该点哪里。学习内容本身交给画像、资源和评估模块；系统使用上的困惑可以直接问它。',
+    icon: HelpCircle,
+    accent: '#ff8fc7',
   },
 ]
 
@@ -270,6 +283,7 @@ onBeforeUnmount(() => {
       <div class="guide-dim" aria-hidden="true" />
       <div class="guide-spotlight" :style="spotlightStyle" aria-hidden="true">
         <span class="spotlight-pulse" />
+        <span class="spotlight-label">{{ currentStep.label }}</span>
       </div>
 
       <div class="guide-group" :style="guideGroupStyle">
@@ -334,12 +348,11 @@ onBeforeUnmount(() => {
 .guide-dim {
   position: absolute;
   inset: 0;
+  pointer-events: none;
   background:
-    radial-gradient(circle at 12% 18%, rgba(0, 212, 255, 0.16), transparent 28%),
-    radial-gradient(circle at 78% 72%, rgba(240, 178, 74, 0.12), transparent 30%),
-    rgba(2, 5, 16, 0.72);
-  backdrop-filter: blur(4px) saturate(1.08);
-  -webkit-backdrop-filter: blur(4px) saturate(1.08);
+    radial-gradient(circle at 12% 18%, rgba(0, 212, 255, 0.14), transparent 32%),
+    radial-gradient(circle at 78% 72%, rgba(240, 178, 74, 0.1), transparent 34%);
+  z-index: 1;
 }
 
 .guide-spotlight {
@@ -348,9 +361,9 @@ onBeforeUnmount(() => {
   border: 2px solid var(--guide-accent);
   border-radius: 14px;
   box-shadow:
-    0 0 0 9999px rgba(2, 5, 16, 0.46),
+    0 0 0 9999px rgba(2, 5, 16, 0.72),
     0 0 26px color-mix(in srgb, var(--guide-accent) 62%, transparent),
-    inset 0 0 18px color-mix(in srgb, var(--guide-accent) 18%, transparent);
+    inset 0 0 18px color-mix(in srgb, var(--guide-accent) 22%, transparent);
   transition:
     left 0.24s var(--ease-out),
     top 0.24s var(--ease-out),
@@ -365,6 +378,23 @@ onBeforeUnmount(() => {
   border: 1px solid color-mix(in srgb, var(--guide-accent) 72%, white);
   border-radius: 18px;
   animation: spotlight-pulse 1.55s ease-in-out infinite;
+}
+
+.spotlight-label {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 14px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--guide-accent) 72%, #04111c), color-mix(in srgb, var(--guide-accent) 48%, #081838));
+  border: 1px solid color-mix(in srgb, var(--guide-accent) 56%, rgba(255, 255, 255, 0.18));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--guide-accent) 28%, transparent);
 }
 
 .guide-group {

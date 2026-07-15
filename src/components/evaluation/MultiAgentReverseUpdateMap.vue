@@ -62,16 +62,16 @@ const stage = { w: 1600, h: 980 }
 const palette = {
   bg: '#05070f',
   ink: '#070b18',
-  cyan: '#22d3ee',
-  teal: '#2dd4bf',
-  blue: '#3b82f6',
-  purple: '#8b5cf6',
-  violet: '#a78bfa',
-  emerald: '#34d399',
-  amber: '#fbbf24',
+  cyan: '#5fb5da',
+  teal: '#5fb3a6',
+  blue: '#6f9dd8',
+  purple: '#8d84d6',
+  violet: '#a89fdd',
+  emerald: '#55b18e',
+  amber: '#d8b36c',
   gold: '#fcd34d',
-  magenta: '#ec4899',
-  rose: '#fb5a8c',
+  magenta: '#c583a6',
+  rose: '#d98aa4',
   orange: '#fb923c',
   text: '#eaf4ff',
   textSub: '#9bb4d4',
@@ -168,7 +168,11 @@ const nodes: Record<NodeId, LoopNode> = {
     img: '/reverse-evaluation/agent-tutor.png',
     role: '调整讲解与练习策略',
     emit: '调整 2 处策略',
-    route: { path: '/dialogue', query: { tab: 'chat' }, label: '进入辅导对话' },
+    route: {
+      path: '/tutoring',
+      query: { topic: 'BFS visited 标记时机', module: '图结构', unit: '广度优先搜索', mastery: '42' },
+      label: '进入智能辅导',
+    },
   },
 }
 
@@ -936,8 +940,8 @@ onBeforeUnmount(() => {
   border: 1px solid rgba(132, 190, 220, 0.22);
   border-radius: 18px;
   background:
-    linear-gradient(135deg, rgba(34, 211, 238, 0.055), transparent 28%),
-    linear-gradient(315deg, rgba(251, 191, 36, 0.05), transparent 26%);
+    linear-gradient(135deg, rgba(95, 181, 218, 0.055), transparent 28%),
+    linear-gradient(315deg, rgba(216, 179, 108, 0.05), transparent 26%);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.035),
     0 18px 54px rgba(0, 0, 0, 0.16);
@@ -949,8 +953,8 @@ onBeforeUnmount(() => {
   overflow: hidden;
   border-radius: 14px;
   background:
-    radial-gradient(circle at 20% 8%, rgba(34, 211, 238, 0.045), transparent 30%),
-    radial-gradient(circle at 82% 86%, rgba(52, 211, 153, 0.04), transparent 34%);
+    radial-gradient(circle at 20% 8%, rgba(95, 181, 218, 0.045), transparent 30%),
+    radial-gradient(circle at 82% 86%, rgba(85, 177, 142, 0.04), transparent 34%);
 }
 
 .fixed-stage {
@@ -1030,22 +1034,22 @@ onBeforeUnmount(() => {
   min-width: 134px;
   height: 40px;
   padding: 0 18px;
-  border: 1px solid rgba(34, 211, 238, 0.48);
+  border: 1px solid rgba(95, 181, 218, 0.48);
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.18), rgba(52, 211, 153, 0.12));
-  color: #67e8f9;
+  background: linear-gradient(135deg, rgba(95, 181, 218, 0.18), rgba(85, 177, 142, 0.12));
+  color: #9cd3ea;
   font-size: 13px;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 0 22px rgba(34, 211, 238, 0.18);
+  box-shadow: 0 0 22px rgba(95, 181, 218, 0.18);
   transition: border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
 }
 
 .replay-btn:hover,
 .replay-btn:focus-visible {
-  border-color: rgba(52, 211, 153, 0.82);
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.26), rgba(52, 211, 153, 0.2));
-  box-shadow: 0 0 34px rgba(34, 211, 238, 0.32);
+  border-color: rgba(85, 177, 142, 0.82);
+  background: linear-gradient(135deg, rgba(95, 181, 218, 0.26), rgba(85, 177, 142, 0.2));
+  box-shadow: 0 0 34px rgba(95, 181, 218, 0.32);
   outline: none;
   transform: translateY(-1px);
 }
@@ -1110,8 +1114,8 @@ onBeforeUnmount(() => {
 }
 
 .step-rail button.done i {
-  border-color: rgba(34, 211, 238, 0.7);
-  background: rgba(34, 211, 238, 0.45);
+  border-color: rgba(95, 181, 218, 0.7);
+  background: rgba(95, 181, 218, 0.45);
 }
 
 .step-rail b {
@@ -1122,7 +1126,7 @@ onBeforeUnmount(() => {
 }
 
 .step-rail b.done {
-  background: rgba(34, 211, 238, 0.5);
+  background: rgba(95, 181, 218, 0.5);
 }
 
 .evidence-title {
@@ -1481,11 +1485,11 @@ onBeforeUnmount(() => {
 .link-chip {
   z-index: 6;
   padding: 5px 13px;
-  border: 1px solid rgba(34, 211, 238, 0.3);
+  border: 1px solid rgba(95, 181, 218, 0.3);
   border-radius: 999px;
   background: rgba(6, 10, 22, 0.38);
   backdrop-filter: blur(6px);
-  color: #22d3ee;
+  color: #5fb5da;
   font-size: 12px;
   opacity: 0.2;
   transform: translate(-50%, -50%);
@@ -1508,8 +1512,8 @@ onBeforeUnmount(() => {
 }
 
 .link-chip.writeback {
-  border-color: rgba(52, 211, 153, 0.46);
-  color: #34d399;
+  border-color: rgba(85, 177, 142, 0.46);
+  color: #55b18e;
 }
 
 .link-chip.hero {
@@ -1518,7 +1522,7 @@ onBeforeUnmount(() => {
   border-radius: 0;
   text-align: center;
   clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
-  filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.32));
+  filter: drop-shadow(0 0 12px rgba(85, 177, 142, 0.32));
 }
 
 .link-chip strong,
@@ -1539,7 +1543,7 @@ onBeforeUnmount(() => {
   z-index: 9;
   width: 250px;
   padding: 14px 16px;
-  border: 1px solid rgba(139, 92, 246, 0.32);
+  border: 1px solid rgba(141, 132, 214, 0.32);
   border-radius: 14px;
   background: rgba(8, 15, 32, 0.36);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.26);
@@ -1553,13 +1557,13 @@ onBeforeUnmount(() => {
   right: 16px;
   left: 16px;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #8b5cf6, transparent);
+  background: linear-gradient(90deg, transparent, #8d84d6, transparent);
   content: "";
 }
 
 .profile-panel.active {
-  border-color: rgba(139, 92, 246, 0.58);
-  box-shadow: 0 0 28px rgba(139, 92, 246, 0.3);
+  border-color: rgba(141, 132, 214, 0.58);
+  box-shadow: 0 0 28px rgba(141, 132, 214, 0.3);
 }
 
 .panel-head,
@@ -1574,7 +1578,7 @@ onBeforeUnmount(() => {
 }
 
 .panel-head span {
-  color: #a78bfa;
+  color: #a89fdd;
   font-family: "JetBrains Mono", monospace;
   font-size: 9px;
   font-weight: 700;
@@ -1582,7 +1586,7 @@ onBeforeUnmount(() => {
 }
 
 .panel-head strong {
-  color: #34d399;
+  color: #55b18e;
   font-family: "Noto Serif SC", serif;
   font-size: 18px;
 }
@@ -1605,8 +1609,8 @@ onBeforeUnmount(() => {
 .dim-row i {
   padding: 0 3px;
   border-radius: 3px;
-  background: rgba(251, 90, 140, 0.18);
-  color: #fb5a8c;
+  background: rgba(217, 138, 164, 0.18);
+  color: #d98aa4;
   font-size: 7px;
   font-style: normal;
 }
@@ -1751,9 +1755,9 @@ onBeforeUnmount(() => {
 }
 
 .agent-inspector.done .inspector-head b {
-  border-color: rgba(52, 211, 153, 0.42);
-  background: rgba(52, 211, 153, 0.1);
-  color: #34d399;
+  border-color: rgba(85, 177, 142, 0.42);
+  background: rgba(85, 177, 142, 0.1);
+  color: #55b18e;
 }
 
 .inspector-summary {
@@ -1978,9 +1982,9 @@ onBeforeUnmount(() => {
   align-items: center;
   margin-top: 9px;
   padding: 9px 10px;
-  border: 1px solid rgba(251, 191, 36, 0.28);
+  border: 1px solid rgba(216, 179, 108, 0.28);
   border-radius: 10px;
-  background: rgba(251, 191, 36, 0.08);
+  background: rgba(216, 179, 108, 0.08);
 }
 
 .route-request span {
@@ -1997,9 +2001,9 @@ onBeforeUnmount(() => {
 .route-request button {
   min-height: 28px;
   padding: 0 9px;
-  border: 1px solid rgba(251, 191, 36, 0.32);
+  border: 1px solid rgba(216, 179, 108, 0.32);
   border-radius: 7px;
-  background: rgba(251, 191, 36, 0.12);
+  background: rgba(216, 179, 108, 0.12);
   color: #fff2cc;
   font-size: 11px;
   font-weight: 800;
@@ -2107,7 +2111,7 @@ onBeforeUnmount(() => {
 }
 
 .loop-narration span {
-  color: #22d3ee;
+  color: #5fb5da;
   font-family: "JetBrains Mono", monospace;
   font-size: 10px;
   letter-spacing: 0.12em;
@@ -2139,8 +2143,8 @@ onBeforeUnmount(() => {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #22d3ee, #ec4899, #fbbf24);
-  box-shadow: 0 0 18px rgba(236, 72, 153, 0.28);
+  background: linear-gradient(90deg, #5fb5da, #c583a6, #d8b36c);
+  box-shadow: 0 0 18px rgba(197, 131, 166, 0.28);
   transition: width 0.42s ease;
 }
 
@@ -2171,7 +2175,7 @@ onBeforeUnmount(() => {
 .loop-legend i {
   width: 32px;
   height: 2px;
-  background: #2dd4bf;
+  background: #5fb3a6;
 }
 
 .loop-legend .engine {
@@ -2180,11 +2184,11 @@ onBeforeUnmount(() => {
 
 .loop-legend .writeback {
   height: 3px;
-  background: #ec4899;
+  background: #c583a6;
 }
 
 .loop-legend .drive {
-  background: repeating-linear-gradient(90deg, #22d3ee 0 6px, transparent 6px 10px);
+  background: repeating-linear-gradient(90deg, #5fb5da 0 6px, transparent 6px 10px);
 }
 
 @keyframes flow {

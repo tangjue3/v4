@@ -19,22 +19,6 @@ const isOpen = ref(true)
       <Bot :size="18" stroke-width="1.5" />
     </button>
 
-    <!-- ============================================================ -->
-    <!-- Digital Human Panel Content                                  -->
-    <!-- ============================================================ -->
-    <!--
-      AI 数字人面板 — 集成说明：
-      ==========
-      1. 替换 #digital-human-slot 中的占位内容为实际的数字人组件
-      2. 数字人组件应接收以下 props（已透传）:
-         - currentQuestion: string   (当前用户问题)
-         - currentAnswer: string     (当前 AI 回答)
-         - scenario: string           (当前场景)
-         - subMode: string           (当前子模式)
-      3. 面板已实现折叠/展开功能（isOpen）
-      4. 宽度: 260px (展开) / 0 (折叠)
-      5. 通过 @update:open 事件通知父组件展开状态
-    -->
     <div class="dh-panel">
       <div class="dh-header">
         <Bot :size="18" stroke-width="1.5" />
@@ -44,27 +28,15 @@ const isOpen = ref(true)
         </button>
       </div>
 
-      <!-- === DIGITAL HUMAN SLOT (预留) === -->
-      <!--
-        TODO: 在此替换为数字人组件
-        示例:
-        <DigitalHuman
-          :current-question="currentQuestion"
-          :current-answer="currentAnswer"
-          :scenario="scenario"
-          :sub-mode="subMode"
-        />
-      -->
       <div id="digital-human-slot" class="dh-slot">
         <div class="dh-placeholder">
           <div class="dhp-icon">
             <Bot :size="36" stroke-width="1" />
           </div>
           <span class="dhp-text">AI 数字人</span>
-          <span class="dhp-hint">集成后将在此显示</span>
+          <span class="dhp-hint">实时讲解同步中</span>
         </div>
       </div>
-      <!-- === END DIGITAL HUMAN SLOT === -->
 
       <div class="dh-footer">
         <div class="dhf-label">当前讲解</div>

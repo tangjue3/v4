@@ -2,17 +2,22 @@ import { ref, shallowRef } from 'vue'
 
 const API_INFO = {
   serverUrl: 'wss://avatar.cn-huadong-1.xf-yun.com/v1/interact',
-  appId: 'd31e0ddb',
-  apiKey: '5fba054353c813fd5b5def545bd7230e',
-  apiSecret: 'MDRjMDQ0Y2NmZDNjYzJlZjcyOWNlMjY1',
-  sceneId: '314670014336733184',
+  appId: 'ce39128c',
+  apiKey: '46d88496fc86492253ba9355584dde23',
+  apiSecret: 'OTMwYTQ3ZjQ5ZTI5ODdhZGNjNjIwOTA2',
+  sceneId: '331730107897090048',
 }
 
-const GLOBAL_CONFIG = {
-  stream: { protocol: 'xrtc' as const, alpha: 1, bitrate: 1000000, fps: 25 as const },
-  avatar: { avatar_id: '111188001', width: 720, height: 1280, scale: 1, move_h: 0, move_v: 0, audio_format: 1 as const },
-  tts: { vcn: 'x4_yuexiaoni_assist', speed: 50, pitch: 50, volume: 100 },
-  avatar_dispatch: { interactive_mode: 0 as const, content_analysis: 0 as const },
+const PREFERRED_AVATAR_ID = '110117005'
+const FALLBACK_AVATAR_ID = '111188001'
+
+function createGlobalConfig(avatarId: string) {
+  return {
+    stream: { protocol: 'xrtc' as const, alpha: 1, bitrate: 1000000, fps: 25 as const },
+    avatar: { avatar_id: avatarId, width: 720, height: 1280, scale: 1, move_h: 0, move_v: 0, audio_format: 1 as const },
+    tts: { vcn: 'x4_yuexiaoni_assist', speed: 50, pitch: 50, volume: 100 },
+    avatar_dispatch: { interactive_mode: 0 as const, content_analysis: 0 as const },
+  }
 }
 
 export const avatarStatus = ref<'idle' | 'loading' | 'connected' | 'error'>('idle')
@@ -26,6 +31,7 @@ let onAsrResult: ((data: any) => void) | null = null
 export function setAvatarNlpHandler(handler: (data: any) => void) {
   onNlpResult = handler
 }
+
 export function setAvatarAsrHandler(handler: (data: any) => void) {
   onAsrResult = handler
 }
@@ -37,12 +43,30 @@ async function getSdkModule(): Promise<any> {
   return import('@/sdk/index.js')
 }
 
+function getMissingApiInfoFields() {
+  return [
+    ['APPID', API_INFO.appId],
+    ['APIKey', API_INFO.apiKey],
+    ['APISecret', API_INFO.apiSecret],
+    ['接口服务ID', API_INFO.sceneId],
+  ].filter(([, value]) => !value).map(([label]) => label)
+}
+
+function isAvatarAuthError(error: any) {
+  return String(error?.message || error).toLowerCase().includes('avatar authentication failed')
+}
+
 export async function initAvatar(wrapperEl: HTMLElement): Promise<boolean> {
   if (autoStarted) return true
   avatarStatus.value = 'loading'
   avatarError.value = null
 
   try {
+    const missingFields = getMissingApiInfoFields()
+    if (missingFields.length > 0) {
+      throw new Error(`缺少虚拟人配置：${missingFields.join('、')}`)
+    }
+
     const sdkModule = await getSdkModule()
     const AvatarPlatform = sdkModule.default || sdkModule
 
@@ -50,7 +74,7 @@ export async function initAvatar(wrapperEl: HTMLElement): Promise<boolean> {
     sdkRef.value = instance
 
     instance.setApiInfo(API_INFO)
-    instance.setGlobalParams(GLOBAL_CONFIG)
+    instance.setGlobalParams(createGlobalConfig(PREFERRED_AVATAR_ID))
 
     instance.removeAllListeners()
     instance
@@ -81,7 +105,17 @@ export async function initAvatar(wrapperEl: HTMLElement): Promise<boolean> {
         playNotAllowed.value = true
       })
 
-    await instance.start({ wrapper: wrapperEl })
+    try {
+      await instance.start({ wrapper: wrapperEl })
+    } catch (startError) {
+      if (!isAvatarAuthError(startError)) throw startError
+
+      console.warn(`[Avatar] avatar ${PREFERRED_AVATAR_ID} is not authorized for this scene, retrying ${FALLBACK_AVATAR_ID}`)
+      try { instance.stop?.() } catch { /* ignore */ }
+      instance.setGlobalParams(createGlobalConfig(FALLBACK_AVATAR_ID))
+      await instance.start({ wrapper: wrapperEl })
+    }
+
     autoStarted = true
     playNotAllowed.value = false
     return true

@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-EduMind 是面向 **科大讯飞软件杯 A3 赛题** 的"基于大模型的个性化资源生成与学习多智能体系统"。
+EduMind 是面向 **软件杯 A3 赛题** 的"基于大模型的个性化资源生成与学习多智能体系统"。
 
 ## 核心升级内容
 
@@ -106,7 +106,7 @@ LLM_API_URL=https://your-api/v1/chat/completions LLM_API_KEY=your-key npm run se
 ```
 
 说明：
-- 后端默认端口 `8787`，前端 Vite 已配置代理 `/api` → `http://localhost:8787`
+- 后端默认端口 `8788`，前端 Vite 已配置代理 `/api` → `http://localhost:8788`
 - 如果希望后端自动监听重启，可用 `npm run dev:server` 代替 `npm run server`
 
 ## 验收场景对照

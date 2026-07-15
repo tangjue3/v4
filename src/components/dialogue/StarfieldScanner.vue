@@ -11,14 +11,15 @@
           <span class="text-sm text-slate-400 font-medium font-mono">已采集 {{ collectedCount }} / 9</span>
           <button
             @click="isCollapsed = !isCollapsed"
-            class="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-cyan-400 border border-slate-850 bg-slate-900/60 transition-all cursor-pointer flex items-center justify-center shrink-0"
+            class="p-1.5 rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0 hover:bg-blue-500/10"
+            style="color: var(--text-muted); border: 1px solid var(--border-card); background: rgba(59, 130, 246, 0.06)"
           >
             <ChevronDown v-if="isCollapsed" class="w-4 h-4" />
             <ChevronUp v-else class="w-4 h-4" />
           </button>
         </div>
       </div>
-      <div class="w-full bg-slate-900 border border-slate-850/80 rounded-full h-2 overflow-hidden">
+      <div class="w-full rounded-full h-2 overflow-hidden" style="background: rgba(59, 130, 246, 0.1); border: 1px solid var(--border-subtle)">
         <div
           class="bg-gradient-to-r from-blue-500 to-cyan-400 h-2 rounded-full transition-all duration-500 ease-out shadow-[0_0_8px_rgba(6,182,212,0.5)]"
           :style="{ width: `${(collectedCount / 9) * 100}%` }"
@@ -29,7 +30,7 @@
     <div v-if="!isCollapsed" class="space-y-3 animate-fade-in">
       <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-center">
         <!-- Scanner SVG -->
-        <div class="col-span-5 flex justify-center relative bg-slate-950/40 rounded-2xl py-2 border border-slate-900/60">
+        <div class="col-span-5 flex justify-center relative rounded-2xl py-2" style="background: rgba(59, 130, 246, 0.04); border: 1px solid var(--border-subtle)">
           <svg :width="size" :height="size" class="overflow-visible select-none">
             <circle :cx="center" :cy="center" :r="radius" fill="none" stroke="rgba(56, 189, 248, 0.18)" stroke-width="1.5" />
             <circle :cx="center" :cy="center" :r="radius * 0.6" fill="none" stroke="rgba(99, 102, 241, 0.12)" stroke-width="1" />
@@ -77,14 +78,14 @@
                 />
               </template>
               <template v-else>
-                <circle :cx="getNodeCoords(n.index).x" :cy="getNodeCoords(n.index).y" r="5" fill="#1e293b" stroke="#334155" stroke-width="1" />
-                <circle :cx="getNodeCoords(n.index).x" :cy="getNodeCoords(n.index).y" r="2.2" fill="#475569" />
+                <circle :cx="getNodeCoords(n.index).x" :cy="getNodeCoords(n.index).y" r="5" fill="rgba(59, 130, 246, 0.15)" stroke="rgba(59, 130, 246, 0.2)" stroke-width="1" />
+                <circle :cx="getNodeCoords(n.index).x" :cy="getNodeCoords(n.index).y" r="2.2" fill="rgba(147, 197, 253, 0.3)" />
               </template>
               <circle :cx="getNodeCoords(n.index).x" :cy="getNodeCoords(n.index).y" r="12" fill="transparent" />
             </g>
 
             <g v-if="hoveredNode !== null" :transform="`translate(${center}, ${center})`">
-              <rect x="-60" y="-14" width="120" height="28" rx="6" fill="#0b0f1a" opacity="0.95" stroke="rgba(6, 182, 212, 0.3)" stroke-width="1" />
+              <rect x="-60" y="-14" width="120" height="28" rx="6" fill="rgba(10, 20, 50, 0.85)" stroke="rgba(59, 130, 246, 0.3)" stroke-width="1" />
               <text x="0" y="4" text-anchor="middle" fill="#ffffff" class="text-xs font-sans font-medium">
                 {{ nodes[hoveredNode - 1].label }}: {{ nodes[hoveredNode - 1].value || '未采集' }}
               </text>
@@ -100,8 +101,9 @@
             @click="$emit('selectNode', n.label)"
             class="py-2 px-1.5 rounded-xl text-center font-medium transition-all duration-300 border cursor-pointer text-sm"
             :class="n.value !== null
-              ? 'bg-emerald-950/40 text-emerald-400 border-emerald-900/50 hover:bg-emerald-950/60 hover:border-emerald-700'
-              : 'bg-slate-900/40 text-slate-500 border-slate-850 hover:bg-slate-850/50 hover:text-slate-300'"
+              ? 'text-emerald-400 hover:bg-emerald-500/10'
+              : 'text-slate-400 hover:text-slate-200'"
+            style="background: rgba(59, 130, 246, 0.04); border: 1px solid var(--border-subtle)"
           >
             <div class="flex items-center justify-center gap-1">
               <span class="opacity-90">{{ circledDigits[n.index] }}</span>
@@ -112,7 +114,7 @@
       </div>
 
       <!-- Action bar -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-2.5 pt-2.5 border-t border-slate-900 text-sm text-slate-400">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-2.5 pt-2.5 text-sm" style="border-top: 1px solid var(--border-subtle); color: var(--text-muted)">
         <div class="flex items-center gap-1 px-0.5">
           <Lock class="w-4 h-4 text-slate-500 shrink-0" />
           <span v-if="canUnlockReport" class="text-emerald-400 font-semibold">● 画像也已就绪，立即开启测绘！</span>
@@ -122,9 +124,13 @@
           @click="$emit('triggerReport')"
           :disabled="!canUnlockReport"
           class="px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-1 transition-all select-none border cursor-pointer"
-          :class="canUnlockReport
-            ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white border-cyan-500/20 hover:from-blue-700 hover:to-cyan-600 shadow-md shadow-cyan-950/50'
-            : 'bg-slate-900 text-slate-500 border-slate-850 cursor-not-allowed shadow-none'"
+            :class="canUnlockReport
+              ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-md shadow-cyan-950/50'
+              : 'text-slate-400 cursor-not-allowed shadow-none'"
+            :style="{
+              border: '1px solid var(--border-card)',
+              background: canUnlockReport ? undefined : 'rgba(59, 130, 246, 0.04)',
+            }"
         >
           <Sparkles class="w-4 h-4" :class="canUnlockReport ? 'text-cyan-400 animate-pulse' : 'text-slate-500'" />
           <span>信号充足，可进行学习画像</span>

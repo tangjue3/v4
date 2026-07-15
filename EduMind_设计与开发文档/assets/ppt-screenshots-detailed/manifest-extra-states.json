@@ -1,0 +1,210 @@
+[
+  {
+    "id": "40-dialogue-chat",
+    "title": "画像生成-智能对话",
+    "note": "",
+    "url": "http://127.0.0.1:5176/dialogue?tab=chat",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\40-dialogue-chat.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "41-dialogue-recommend",
+    "title": "画像生成-课程推荐",
+    "note": "",
+    "url": "http://127.0.0.1:5176/dialogue?tab=recommend",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\41-dialogue-recommend.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "42-dialogue-portrait-report",
+    "title": "画像生成-画像报告",
+    "note": "",
+    "url": "http://127.0.0.1:5176/dialogue?tab=portrait-report&from=reverse",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\42-dialogue-portrait-report.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "43-dialogue-history",
+    "title": "画像生成-历史记录",
+    "note": "",
+    "url": "http://127.0.0.1:5176/dialogue?tab=history",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\43-dialogue-history.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "44-learning-path-stage-01",
+    "title": "学习路径-阶段1",
+    "note": "",
+    "url": "http://127.0.0.1:5176/learning-path?source=home-universe-path&topic=Transformer&courseName=%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\44-learning-path-stage-01.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "44-learning-path-stage-02",
+    "title": "学习路径-阶段2",
+    "note": "",
+    "url": "http://127.0.0.1:5176/learning-path?source=home-universe-path&topic=Transformer&courseName=%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\44-learning-path-stage-02.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "44-learning-path-stage-03",
+    "title": "学习路径-阶段3",
+    "note": "",
+    "url": "http://127.0.0.1:5176/learning-path?source=home-universe-path&topic=Transformer&courseName=%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\44-learning-path-stage-03.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "44-learning-path-stage-04",
+    "title": "学习路径-阶段4",
+    "note": "",
+    "url": "http://127.0.0.1:5176/learning-path?source=home-universe-path&topic=Transformer&courseName=%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\44-learning-path-stage-04.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "44-learning-path-stage-05",
+    "title": "学习路径-阶段5",
+    "note": "",
+    "url": "http://127.0.0.1:5176/learning-path?source=home-universe-path&topic=Transformer&courseName=%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\44-learning-path-stage-05.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "45-learning-path-map-02",
+    "title": "学习路径-闯关地图2",
+    "note": "",
+    "url": "http://127.0.0.1:5176/learning-path?source=home-universe-path&topic=Transformer&courseName=%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\45-learning-path-map-02.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "45-learning-path-map-03",
+    "title": "学习路径-闯关地图3",
+    "note": "",
+    "url": "http://127.0.0.1:5176/learning-path?source=home-universe-path&topic=Transformer&courseName=%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\45-learning-path-map-03.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "45-learning-path-map-04",
+    "title": "学习路径-闯关地图4",
+    "note": "",
+    "url": "http://127.0.0.1:5176/learning-path?source=home-universe-path&topic=Transformer&courseName=%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\45-learning-path-map-04.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "46-resources-grid",
+    "title": "资源中心-网格视图",
+    "note": "",
+    "url": "http://127.0.0.1:5176/resources?topic=Transformer&domain=%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0&sourceType=all",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\46-resources-grid.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "47-resources-list",
+    "title": "资源中心-列表视图",
+    "note": "",
+    "url": "http://127.0.0.1:5176/resources?topic=Transformer&domain=%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0&sourceType=all",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\47-resources-list.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "48-resources-detail",
+    "title": "资源中心-资源详情",
+    "note": "",
+    "url": "http://127.0.0.1:5176/resources?topic=Transformer&domain=%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0&sourceType=all",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\48-resources-detail.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "49-evaluation-selected-topic",
+    "title": "智能评估-知识点选中联动",
+    "note": "",
+    "url": "http://127.0.0.1:5176/evaluation?topic=Transformer&courseName=%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\49-evaluation-selected-topic.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "50-reverse-idle",
+    "title": "反向更新-待运行",
+    "note": "",
+    "url": "http://127.0.0.1:5176/reverse-evaluation",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\50-reverse-idle.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "51-reverse-running",
+    "title": "反向更新-运行中",
+    "note": "",
+    "url": "http://127.0.0.1:5176/reverse-evaluation",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\51-reverse-running.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "52-reverse-done",
+    "title": "反向更新-完成写回",
+    "note": "",
+    "url": "http://127.0.0.1:5176/reverse-evaluation",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\52-reverse-done.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "53-reverse-panorama",
+    "title": "反向更新-全景推演",
+    "note": "",
+    "url": "http://127.0.0.1:5176/reverse-evaluation",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\53-reverse-panorama.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "54-onboarding-guide-01",
+    "title": "新用户指引-Live2D步骤1",
+    "note": "",
+    "url": "http://127.0.0.1:5176/home",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\54-onboarding-guide-01.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "54-onboarding-guide-02",
+    "title": "新用户指引-Live2D步骤2",
+    "note": "",
+    "url": "http://127.0.0.1:5176/home",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\54-onboarding-guide-02.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "54-onboarding-guide-03",
+    "title": "新用户指引-Live2D步骤3",
+    "note": "",
+    "url": "http://127.0.0.1:5176/home",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\54-onboarding-guide-03.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "54-onboarding-guide-04",
+    "title": "新用户指引-Live2D步骤4",
+    "note": "",
+    "url": "http://127.0.0.1:5176/home",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\54-onboarding-guide-04.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "54-onboarding-guide-05",
+    "title": "新用户指引-Live2D步骤5",
+    "note": "",
+    "url": "http://127.0.0.1:5176/home",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\54-onboarding-guide-05.png",
+    "size": "1920x1080"
+  },
+  {
+    "id": "55-companion-chat",
+    "title": "Live2D陪伴人-辅助问答面板",
+    "note": "",
+    "url": "http://127.0.0.1:5176/home",
+    "file": "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\55-companion-chat.png",
+    "size": "1920x1080"
+  }
+]

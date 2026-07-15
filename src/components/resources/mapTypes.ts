@@ -101,3 +101,21 @@ export interface NodeDetail {
   fields: { key: string; label: string; value: string }[]
   resourceLink?: { focus: string; nodeId: string }
 }
+
+// 学习路径阶段 / 资源类型
+export type StageResourceType = 'doc' | 'video' | 'exercise' | 'code'
+
+export interface StageResource {
+  title: string
+  type: StageResourceType
+  isRemedial?: boolean
+}
+
+export interface LearningStage {
+  id: string
+  label: string
+  icon: string
+  color: string
+}
+
+export type StageContentMap = Record<string, StageResource[][]>

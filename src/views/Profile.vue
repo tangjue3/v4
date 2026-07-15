@@ -4,6 +4,7 @@ import {
   ArrowLeft, ArrowRight, Check, Brain, Sparkles,
   RefreshCw,
 } from 'lucide-vue-next'
+import { useLearningProgressSync, type LearningAction } from '@/composables/useLearningProgressSync'
 import { useProfileSurvey, roleOptions, fieldOptions, levelOptions, experienceOptions, goalOptions, longTermGoalOptions, motivationOptions, timeOptions, resourceOptions, weeklyHourOptions, paceOptions, stepLabels } from '@/composables/useProfileSurvey'
 
 const {
@@ -13,6 +14,7 @@ const {
   canProceed, nextStep, prevStep, startAnalysis, toResults,
   reset, loadFromStorage, loadLatestSavedResult,
 } = useProfileSurvey()
+const { recentEvents } = useLearningProgressSync()
 
 const loaded = ref(false)
 
@@ -52,6 +54,30 @@ function skillLevelColor(val: number) {
 function setSlider(key: string, val: number) {
   (answers.value as any)[key] = val
 }
+
+function actionLabel(action: LearningAction) {
+  if (action === 'light-star') return '学习路径点亮知识点'
+  if (action === 'favorite-resource') return '资源收藏偏好更新'
+  if (action === 'complete-resource') return '资源学完并提升掌握度'
+  if (action === 'reverse-update') return '反向更新写回画像'
+  return '智能评估聚焦知识点'
+}
+
+const profileTimeline = computed(() => {
+  const synced = recentEvents.value.slice(0, 5).map((event) => ({
+    date: new Date(event.createdAt).toLocaleString('zh-CN', {
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }),
+    event: `${actionLabel(event.action)}：${event.domainName} / ${event.label}`,
+    score: `${event.after - event.before >= 0 ? '+' : ''}${event.after - event.before}%`,
+    type: event.after >= event.before ? 'up' : 'down',
+  }))
+  return [...synced, ...(result.value?.timeline ?? [])]
+})
 </script>
 
 <template>
@@ -73,28 +99,28 @@ function setSlider(key: string, val: number) {
             帮助你更清晰地认识自己的学习特征与成长方向。
           </p>
           <div class="welcome-steps">
-            <div class="welcome-step-item">
+            <div class="welcome-step-item breathe-subtle">
               <div class="wstep-num">1</div>
               <div class="wstep-info">
                 <span class="wstep-title">学习背景</span>
                 <span class="wstep-desc">你的经历与基础</span>
               </div>
             </div>
-            <div class="welcome-step-item">
+            <div class="welcome-step-item breathe-subtle">
               <div class="wstep-num">2</div>
               <div class="wstep-info">
                 <span class="wstep-title">学习目标</span>
                 <span class="wstep-desc">你前行的方向</span>
               </div>
             </div>
-            <div class="welcome-step-item">
+            <div class="welcome-step-item breathe-subtle">
               <div class="wstep-num">3</div>
               <div class="wstep-info">
                 <span class="wstep-title">技能自评</span>
                 <span class="wstep-desc">了解你的能力分布</span>
               </div>
             </div>
-            <div class="welcome-step-item">
+            <div class="welcome-step-item breathe-subtle">
               <div class="wstep-num">4</div>
               <div class="wstep-info">
                 <span class="wstep-title">学习偏好</span>
@@ -541,7 +567,7 @@ function setSlider(key: string, val: number) {
           <div class="res-timeline">
             <h2 class="res-sec-title">画像演变</h2>
             <div class="tl-list">
-              <div v-for="(t, i) in result.timeline" :key="i" class="tl-item">
+              <div v-for="(t, i) in profileTimeline" :key="`${t.date}-${i}`" class="tl-item">
                 <div class="tl-marker">
                   <span :class="['tl-dot', { 'tl-dot--cur': i === 0 }]" />
                   <span v-if="i < result.timeline.length - 1" class="tl-line" />
@@ -731,9 +757,6 @@ function setSlider(key: string, val: number) {
   position: relative;
   padding: 48px 56px 72px;
   animation: fadeInUp 0.5s var(--ease-out);
-  background:
-    radial-gradient(ellipse 800px 350px at 15% 8%, rgba(0,212,255,0.025), transparent),
-    radial-gradient(ellipse 500px 500px at 85% 15%, rgba(124,58,237,0.02), transparent);
 }
 
 /* Background constellation dots */

@@ -325,7 +325,7 @@ onMounted(() => {
 
 <template>
   <div class="chat">
-    <div class="pipeline-bar">
+    <div class="pipeline-bar breathe-subtle">
       <div class="pipeline-flow">
         <div
           v-for="(a, i) in agents"
@@ -353,7 +353,7 @@ onMounted(() => {
     </div>
 
     <transition name="slide-up">
-      <div v-if="showAgentPanel" class="agent-detail">
+      <div v-if="showAgentPanel" class="agent-detail breathe-subtle">
         <div v-for="a in agents" :key="a.name" class="agent-card" :style="{ '--accent': a.color }">
           <div class="agent-card-left">
             <div :class="['agent-badge', a.status]">
@@ -373,7 +373,7 @@ onMounted(() => {
     </transition>
 
     <div class="chat-body">
-      <aside class="history-sidebar">
+      <aside class="history-sidebar breathe">
         <div class="sidebar-header">
           <h3 class="sidebar-title">对话历史</h3>
           <button class="sidebar-new">
@@ -422,7 +422,7 @@ onMounted(() => {
               <button
                 v-for="preset in presets"
                 :key="preset.label"
-                class="feature-card"
+                class="feature-card breathe-subtle"
                 :style="{ '--card-color': preset.color }"
                 @click="usePreset(preset)"
               >
@@ -436,7 +436,7 @@ onMounted(() => {
               </button>
             </div>
 
-            <div class="quick-questions-section">
+            <div class="quick-questions-section breathe-subtle">
               <div class="quick-questions-header">
                 <Lightbulb :size="14" stroke-width="1.5" />
                 <span>你可能想问</span>
@@ -524,7 +524,7 @@ onMounted(() => {
           <div ref="chatEndRef" />
         </div>
 
-        <div class="input-area">
+        <div class="input-area breathe-subtle">
           <div class="pending-images" v-if="pendingImages.length > 0">
             <div v-for="img in pendingImages" :key="img.id" class="pending-image-item">
               <img :src="img.dataUrl" class="pending-image-preview" />
@@ -1291,6 +1291,7 @@ onMounted(() => {
 .message.assistant .message-content {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
+  animation: breathe-subtle 4.5s ease-in-out infinite;
 }
 
 .message.user .message-content {

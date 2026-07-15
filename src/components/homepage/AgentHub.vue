@@ -84,7 +84,7 @@ watch(
 .agent-hub-frame {
   display: block;
   width: 100%;
-  height: clamp(460px, 37vw, 540px);
+  height: clamp(600px, 50vw, 740px);
   min-height: 0;
   border: 0;
   background: transparent;
@@ -96,7 +96,7 @@ watch(
   }
 
   .agent-hub-frame {
-    height: 420px;
+    height: 480px;
   }
 
   .hub-head,

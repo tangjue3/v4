@@ -1,6 +1,6 @@
 /**
  * 学习路径 → 资源中心 的完整资源数据
- * 从 ResourcePathLinkView.vue 的 NODE_CONTENT 扩展而来
+ * 从 mapTransforms.NODE_CONTENT 扩展而来
  * 每条资源包含 PPT 幻灯片内容，用于 PPTViewer 展示
  */
 

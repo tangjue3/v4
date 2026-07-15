@@ -144,8 +144,12 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { Search, Bell, ChevronDown, Check, Info, Menu, Plus, LayoutGrid } from 'lucide-vue-next'
 import { useTheme } from '../../composables/useEduMindTheme'
+import { clearAuthSession } from '@/lib/auth'
+
+const router = useRouter()
 
 const { isDark } = useTheme()
 
@@ -203,7 +207,8 @@ function clearAllNotifications() {
 }
 
 function handleLogout() {
-  window.alert('此复刻页面仅为展示模式，当前用户保持登录。')
+  clearAuthSession()
+  window.location.href = '/login'
 }
 </script>
 

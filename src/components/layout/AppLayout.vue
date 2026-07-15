@@ -51,7 +51,7 @@ watch(
           <span class="brand-icon">
             <Sparkles :size="18" stroke-width="1.5" />
           </span>
-          <span class="brand-text">EduMind</span>
+          <span class="brand-text">智学星枢</span>
         </router-link>
 
         <nav class="topbar-nav" aria-label="主导航">

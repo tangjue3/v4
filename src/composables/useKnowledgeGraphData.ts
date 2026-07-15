@@ -121,15 +121,10 @@ export function useKnowledgeGraphData() {
     loading.value = true
 
     try {
-      // 优先获取AI生成的知识路径
-      let aiKnowledgePath: any = null
-      try {
-        const aiResult = await fetchKnowledgePath()
-        aiKnowledgePath = aiResult?.result
-      } catch { /* AI数据不可用 */ }
-
+      // 始终用 learning-path 数据（m1/m2/ml1 等 ID 命名空间跟星座 + mapTransforms.NODE_CONTENT 一致）
+      // AI 知识路径用的是另一套 ID (f1/c1/d1/p1)，会让星座点击后无法匹配 topic
       const [pathData, evalData, profileData, topicsData] = await Promise.allSettled([
-        aiKnowledgePath ? Promise.resolve(aiKnowledgePath) : fetchLearningPath(),
+        fetchLearningPath().catch(() => null),
         fetchEvaluation().catch(() => null),
         fetchLatestProfile().catch(() => null),
         fetchTutoringTopics().catch(() => null),

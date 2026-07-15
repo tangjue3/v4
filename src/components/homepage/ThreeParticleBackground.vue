@@ -58,13 +58,9 @@ function createParticleField(texture: THREE.Texture) {
     positions[i * 3 + 2] = Math.sin(spiral) * radius - 24 + (Math.random() - 0.5) * 18
 
     const mix = Math.random()
-    if (props.variant === 'genre') {
-      if (mix < 0.5) color.setHSL(0.56 + Math.random() * 0.04, 0.66, 0.68)
-      else if (mix < 0.78) color.setHSL(0.49 + Math.random() * 0.04, 0.58, 0.62)
-      else color.setHSL(0.08 + Math.random() * 0.04, 0.6, 0.58)
-    } else if (mix < 0.42) color.setHSL(0.56 + Math.random() * 0.05, 0.78, 0.62)
-    else if (mix < 0.72) color.setHSL(0.78 + Math.random() * 0.06, 0.62, 0.58)
-    else color.setHSL(0.09 + Math.random() * 0.05, 0.82, 0.62)
+    if (mix < 0.45) color.setHSL(0.56 + Math.random() * 0.06, 0.55, 0.78)
+    else if (mix < 0.75) color.setHSL(0.52 + Math.random() * 0.05, 0.45, 0.85)
+    else color.setHSL(0.0, 0.0, 0.92 + Math.random() * 0.06)
 
     colors[i * 3] = color.r
     colors[i * 3 + 1] = color.g
@@ -105,8 +101,7 @@ function createEnergyRibbon(texture: THREE.Texture) {
     positions[i * 3 + 1] = Math.sin(angle * 0.48) * 5 + wave
     positions[i * 3 + 2] = Math.sin(angle) * radius - 18
 
-    if (props.variant === 'genre') color.setHSL(0.51 + t * 0.1, 0.68, 0.6)
-    else color.setHSL(0.52 + t * 0.18, 0.86, 0.58)
+    color.setHSL(0.54 + t * 0.1, 0.5, 0.82)
     colors[i * 3] = color.r
     colors[i * 3 + 1] = color.g
     colors[i * 3 + 2] = color.b
@@ -235,17 +230,17 @@ onBeforeUnmount(() => {
   inset: 0;
   overflow: hidden;
   background:
-    radial-gradient(ellipse 1100px 760px at 72% 42%, rgba(12, 180, 255, 0.12), transparent 58%),
-    radial-gradient(ellipse 760px 520px at 22% 72%, rgba(247, 164, 58, 0.08), transparent 66%),
-    linear-gradient(160deg, #02050e 0%, #07101f 42%, #04040b 100%);
+    radial-gradient(ellipse 1100px 760px at 72% 32%, rgba(120, 190, 255, 0.12), transparent 58%),
+    radial-gradient(ellipse 800px 600px at 28% 82%, rgba(80, 140, 220, 0.12), transparent 66%),
+    linear-gradient(180deg, #0a0f1a 0%, #0d1f38 25%, #153055 50%, #254878 70%, #3a6298 85%, #4e78b0 100%);
 }
 
 .three-particle-bg.variant-genre {
   background:
-    radial-gradient(ellipse 880px 420px at 20% 14%, rgba(84, 34, 12, 0.22), transparent 64%),
-    radial-gradient(ellipse 720px 520px at 73% 44%, rgba(20, 92, 142, 0.15), transparent 62%),
-    radial-gradient(ellipse 900px 460px at 36% 88%, rgba(112, 147, 178, 0.22), transparent 68%),
-    linear-gradient(180deg, #2a0f05 0%, #211317 15%, #101722 38%, #1c3354 68%, #6e8daa 100%);
+    radial-gradient(ellipse 880px 420px at 20% 14%, rgba(50, 80, 130, 0.15), transparent 64%),
+    radial-gradient(ellipse 720px 520px at 73% 44%, rgba(90, 160, 230, 0.2), transparent 62%),
+    radial-gradient(ellipse 900px 460px at 36% 88%, rgba(80, 140, 220, 0.12), transparent 68%),
+    linear-gradient(180deg, #120a18 0%, #121a2e 15%, #152b50 35%, #284a78 55%, #3a6298 75%, #4e78b0 100%);
 }
 
 .three-particle-bg canvas {
@@ -271,39 +266,39 @@ onBeforeUnmount(() => {
 
 .particle-fallback {
   background:
-    radial-gradient(1px 1px at 12% 22%, rgba(255,255,255,0.55), transparent),
-    radial-gradient(1px 1px at 42% 16%, rgba(94,223,255,0.5), transparent),
-    radial-gradient(1.5px 1.5px at 68% 38%, rgba(255,204,122,0.44), transparent),
-    radial-gradient(1px 1px at 82% 72%, rgba(176,132,255,0.5), transparent),
-    radial-gradient(1px 1px at 28% 84%, rgba(255,255,255,0.4), transparent);
+    radial-gradient(1px 1px at 12% 22%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 42% 16%, rgba(180,220,255,0.55), transparent),
+    radial-gradient(1.5px 1.5px at 68% 38%, rgba(220,235,255,0.5), transparent),
+    radial-gradient(1px 1px at 82% 72%, rgba(160,200,255,0.55), transparent),
+    radial-gradient(1px 1px at 28% 84%, rgba(255,255,255,0.5), transparent);
   opacity: 0.75;
 }
 
 .variant-genre .particle-fallback {
   background:
-    radial-gradient(1px 1px at 12% 24%, rgba(255,255,255,0.46), transparent),
-    radial-gradient(1px 1px at 44% 18%, rgba(125,211,252,0.42), transparent),
-    radial-gradient(1.5px 1.5px at 70% 40%, rgba(245,198,139,0.32), transparent),
-    radial-gradient(1px 1px at 82% 72%, rgba(148,193,226,0.46), transparent),
-    radial-gradient(1px 1px at 28% 86%, rgba(255,255,255,0.34), transparent);
+    radial-gradient(1px 1px at 12% 24%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 44% 18%, rgba(180,220,255,0.48), transparent),
+    radial-gradient(1.5px 1.5px at 70% 40%, rgba(210,230,255,0.4), transparent),
+    radial-gradient(1px 1px at 82% 72%, rgba(180,210,240,0.5), transparent),
+    radial-gradient(1px 1px at 28% 86%, rgba(255,255,255,0.4), transparent);
   opacity: 0.5;
 }
 
 .particle-scan {
   background:
-    linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px),
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(200,225,255,0.035) 1px, transparent 1px),
+    linear-gradient(rgba(200,225,255,0.02) 1px, transparent 1px);
   background-size: 72px 72px;
   mask-image: radial-gradient(ellipse at 56% 42%, black 0%, transparent 74%);
   -webkit-mask-image: radial-gradient(ellipse at 56% 42%, black 0%, transparent 74%);
-  opacity: 0.28;
+  opacity: 0.2;
 }
 
 .variant-genre .particle-scan {
   background:
-    linear-gradient(90deg, rgba(225,239,255,0.026) 1px, transparent 1px),
-    linear-gradient(rgba(225,239,255,0.018) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(210,230,255,0.025) 1px, transparent 1px),
+    linear-gradient(rgba(210,230,255,0.015) 1px, transparent 1px);
   background-size: 84px 84px;
-  opacity: 0.16;
+  opacity: 0.15;
 }
 </style>

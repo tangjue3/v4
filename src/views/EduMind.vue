@@ -31,6 +31,8 @@ import {
   SHUFFLED_RECOMMENDATIONS_GROUPS
 } from '../data/edu-mind-data'
 import { fetchResources, fetchRecommendedResources } from '@/lib/api'
+import { normalizeLearningKey, resolveLearningPoint, useLearningProgressSync } from '@/composables/useLearningProgressSync'
+import { getAllLearningResources } from '@/data/learning-resources'
 
 import Sidebar from '../components/edu-mind/Sidebar.vue'
 import Header from '../components/edu-mind/Header.vue'
@@ -52,6 +54,7 @@ import PPTViewer from '../components/edu-mind/PPTViewer.vue'
 
 const { isDark } = useTheme()
 const route = useRoute()
+const { recordResourceAction } = useLearningProgressSync()
 
 const ITEMS_PER_PAGE = 9
 
@@ -123,6 +126,17 @@ const mobileSidebarOpen = ref<boolean>(false)
 
 const goalHours = 20
 
+function findResourceForProgress(idOrTitle: string) {
+  return resources.value.find(res => res.id === idOrTitle || res.title === idOrTitle)
+    ?? getAllLearningResources().find(res => res.id === idOrTitle || res.title === idOrTitle)
+}
+
+function syncSelectedResourceStar(id: string, starred: boolean) {
+  if (selectedResourceDetail.value?.id === id) {
+    selectedResourceDetail.value = { ...selectedResourceDetail.value, starred }
+  }
+}
+
 watch(resources, (val) => {
   localStorage.setItem('resource_center_list', JSON.stringify(val))
 }, { deep: true })
@@ -151,6 +165,7 @@ const handleToggleStar = (id: string) => {
     if (res.id === id) {
       const nextState = !res.starred
       if (nextState) {
+        recordResourceAction(res, 'favorite-resource')
         if (!collections.value.some(c => c.id === id)) {
           const newItem: CollectionItem = {
             id: res.id,
@@ -165,6 +180,7 @@ const handleToggleStar = (id: string) => {
         collections.value = collections.value.filter(item => item.id !== id)
         triggerToast(`已将《${res.title}》从您的收藏夹中移除`)
       }
+      syncSelectedResourceStar(id, nextState)
       return { ...res, starred: nextState }
     }
     return res
@@ -179,9 +195,11 @@ const handleToggleStar = (id: string) => {
 }
 
 const handleToggleRecommendStar = (id: string) => {
+  let shouldRecordFavorite = false
   recommendations.value = recommendations.value.map(rec => {
     if (rec.id === id) {
       const nextState = !rec.starred
+      shouldRecordFavorite = nextState
       if (nextState) {
         if (!collections.value.some(c => c.id === id)) {
           collections.value = [
@@ -202,6 +220,12 @@ const handleToggleRecommendStar = (id: string) => {
   const foundInResources = resources.value.find(r => r.id === id)
   if (foundInResources) {
     resources.value = resources.value.map(r => r.id === id ? { ...r, starred: !r.starred } : r)
+    syncSelectedResourceStar(id, !foundInResources.starred)
+  }
+
+  if (shouldRecordFavorite) {
+    const resourceForProgress = findResourceForProgress(id)
+    if (resourceForProgress) recordResourceAction(resourceForProgress, 'favorite-resource')
   }
 }
 
@@ -223,6 +247,10 @@ const handleRefreshRecommend = () => {
 const handleMarkAsCompleted = (hours: number, title: string) => {
   const updated = parseFloat((weeklyHours.value + hours).toFixed(1))
   weeklyHours.value = updated
+  const completedResource = findResourceForProgress(title)
+  if (completedResource) {
+    recordResourceAction(completedResource, 'complete-resource', hours)
+  }
   triggerToast(`恭喜！您完成学习了 《${title}》, 累计进度 +${hours} 小时！`)
 }
 
@@ -255,16 +283,36 @@ const handleAddResource = (newRes: Resource) => {
   triggerToast(`成功发布并入库全新资源：《${newRes.title}》！`)
 }
 
+const routeLearningFilter = computed(() => {
+  const q = route.query
+  const id = typeof q.knowledgePointId === 'string' ? q.knowledgePointId : ''
+  const topic = typeof q.topic === 'string' ? q.topic : ''
+  const domain = typeof q.domain === 'string' ? q.domain : ''
+  if (!id && !topic && !domain) return null
+  return resolveLearningPoint({ id, label: topic, domainName: domain })
+})
+
 const filteredResources = computed(() => {
   return resources.value.filter(res => {
     const matchesCategory = activeFilter.value === '全部' || res.category === activeFilter.value
     const matchesDifficulty = difficultyFilter.value === '全部难度' || res.difficulty === difficultyFilter.value
+    const pointFilter = routeLearningFilter.value
+    const matchesLearningPoint = !pointFilter || (
+      res.id.includes(`-${pointFilter.id}-`) ||
+      res.id.startsWith(`lr-${pointFilter.id}-`) ||
+      normalizeLearningKey(res.topic) === normalizeLearningKey(pointFilter.label) ||
+      res.tags.some(tag => normalizeLearningKey(tag) === normalizeLearningKey(pointFilter.label)) ||
+      (
+        normalizeLearningKey(res.domain) === normalizeLearningKey(pointFilter.domainName) &&
+        (!pointFilter.label || res.description.includes(pointFilter.label))
+      )
+    )
     const normalizedKeyword = searchValue.value.trim().toLowerCase()
     const matchesSearch = !normalizedKeyword ||
       res.title.toLowerCase().includes(normalizedKeyword) ||
       res.description.toLowerCase().includes(normalizedKeyword) ||
       res.tags.some(tag => tag.toLowerCase().includes(normalizedKeyword))
-    return matchesCategory && matchesDifficulty && matchesSearch
+    return matchesCategory && matchesDifficulty && matchesLearningPoint && matchesSearch
   })
 })
 
@@ -284,6 +332,40 @@ const sortedResources = computed(() => {
 
 const totalItemsCount = computed(() => sortedResources.value.length)
 const totalPagesCount = computed(() => Math.max(Math.ceil(totalItemsCount.value / ITEMS_PER_PAGE), 1))
+
+/** 分页器：始终显示固定数量的页码按钮，保证容器宽度不变 */
+const visiblePages = computed(() => {
+  const total = totalPagesCount.value
+  const maxButtons = 11
+
+  if (total <= maxButtons) {
+    return Array.from({ length: total }, (_, i) => i + 1)
+  }
+
+  const pages: (number | '...')[] = []
+  const cur = currentPage.value
+
+  if (cur <= 6) {
+    // 靠前：[1 2 3 4 5 6 7 8 ... total]
+    for (let i = 1; i <= 8; i++) pages.push(i)
+    pages.push('...')
+    pages.push(total)
+  } else if (cur >= total - 5) {
+    // 靠后：[1 ... total-7 total-6 ... total]
+    pages.push(1)
+    pages.push('...')
+    for (let i = total - 8; i <= total; i++) pages.push(i)
+  } else {
+    // 中间：[1 ... cur-4 cur-3 cur-2 cur-1 cur cur+1 cur+2 cur+3 cur+4 ... total]
+    pages.push(1)
+    pages.push('...')
+    for (let i = cur - 4; i <= cur + 4; i++) pages.push(i)
+    pages.push('...')
+    pages.push(total)
+  }
+
+  return pages
+})
 const paginatedResources = computed(() => {
   return sortedResources.value.slice(
     (currentPage.value - 1) * ITEMS_PER_PAGE,
@@ -291,7 +373,7 @@ const paginatedResources = computed(() => {
   )
 })
 
-watch([activeFilter, difficultyFilter, sortType, searchValue], () => {
+watch([activeFilter, difficultyFilter, sortType, searchValue, routeLearningFilter], () => {
   currentPage.value = 1
 })
 
@@ -309,17 +391,63 @@ const getCountForFilter = (category: ResourceCategory) => {
 const categoriesList: { name: ResourceCategory; icon: any }[] = [
   { name: '全部', icon: BookOpen },
   { name: '文档', icon: FileText },
+  { name: '视频', icon: Video },
   { name: '思维导图', icon: Network },
   { name: '流程图', icon: Network },
   { name: '习题', icon: HelpCircle },
-  { name: '视频', icon: Video },
   { name: '代码', icon: Code },
 ]
 
 const handleCardClick = (id: string) => {
   const resObj = resources.value.find(r => r.id === id)
   if (resObj) {
+    // 思维导图卡片点击跳转到左侧思维导图页面
+    if (resObj.category === '思维导图') {
+      currentTab.value = '思维导图'
+      return
+    }
     selectedResourceDetail.value = resObj
+  }
+}
+
+/**
+ * 处理从学习路径跳转过来的资源导航
+ * 读取 query 参数，找到匹配的资源并自动打开详情
+ */
+function handleResourceNavigation() {
+  const q = route.query
+  const resourceTitle = q.resourceTitle as string
+  if (!resourceTitle) return
+
+  // 切换到资源中心 tab
+  currentTab.value = '资源中心'
+
+  // 从学习路径资源数据中查找匹配的资源
+  const allLearningResources = getAllLearningResources()
+  const matched = allLearningResources.find(r => {
+    const titleMatch = r.title === resourceTitle
+    const domainMatch = !q.domain || r.domain === q.domain
+    const topicMatch = !q.topic || r.topic === q.topic
+    return titleMatch && domainMatch && topicMatch
+  })
+
+  if (matched) {
+    // 根据 sourceType 决定渲染文档卡片还是视频卡片（带 -doc/-video 后缀）
+    const sourceType = (q.sourceType as 'doc' | 'video') || 'doc'
+    const detailCard: Resource = {
+      ...matched,
+      id: matched.id + '-' + sourceType,
+      category: sourceType === 'video' ? '视频' : '文档',
+      sourceType,
+    }
+
+    // 检查是否已在列表中，不在则注入
+    const exists = resources.value.some(r => r.id === detailCard.id)
+    if (!exists) {
+      resources.value = [detailCard, ...resources.value]
+    }
+    // 自动打开详情
+    selectedResourceDetail.value = detailCard
   }
 }
 
@@ -367,6 +495,36 @@ onMounted(async () => {
       }))
     }
   } catch { /* keep local data */ }
+
+  // 加载学习路径的全部资源到资源中心（每条生成文档+视频两个卡片）
+  const allLearningRes = getAllLearningResources()
+  const learningCards: Resource[] = []
+  for (const r of allLearningRes) {
+    // 文档卡片
+    learningCards.push({
+      ...r,
+      id: r.id + '-doc',
+      category: '文档',
+      sourceType: 'doc',
+    })
+    // 视频卡片
+    learningCards.push({
+      ...r,
+      id: r.id + '-video',
+      category: '视频',
+      sourceType: 'video',
+      description: r.description.replace(/—.*/, '— ' + r.title + '（视频讲解）'),
+    })
+  }
+  resources.value = [...learningCards, ...resources.value]
+
+  // 处理从学习路径跳转过来的资源导航
+  handleResourceNavigation()
+})
+
+// 监听路由 query 变化，支持从学习路径连续跳转不同资源
+watch(() => route.query.resourceTitle, (newTitle) => {
+  if (newTitle) handleResourceNavigation()
 })
 
 onBeforeUnmount(() => {
@@ -376,7 +534,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div id="edu-mind-app" class="w-full max-w-full h-screen font-sans flex antialiased select-none" style="background-color: var(--edu-bg-page); color: var(--edu-text-main);">
-    <CosmicParticles class="cosmic-bg" />
+    <CosmicParticles v-if="currentTab !== '学习路径'" class="cosmic-bg" />
     <Sidebar
       :weeklyHours="weeklyHours"
       :goalHours="goalHours"
@@ -549,42 +707,46 @@ onBeforeUnmount(() => {
               />
             </div>
 
-            <div v-if="totalItemsCount > ITEMS_PER_PAGE" class="flex justify-between items-center bg-white dark:bg-[#1e293b] px-5 py-3.5 rounded-xl border border-[#e8e8e8] dark:border-slate-700/60 shadow-xs mt-2 select-none">
-              <div class="flex gap-1">
+            <div v-if="totalItemsCount > ITEMS_PER_PAGE" class="flex flex-col items-center gap-2 mt-4 select-none">
+              <div class="flex gap-1 items-center bg-white dark:bg-[#1e293b] px-4 py-2.5 rounded-xl border border-[#e8e8e8] dark:border-slate-700/60 shadow-xs" style="min-width: 380px; justify-content: center;">
                 <button
                   :disabled="currentPage === 1"
                   @click="currentPage = Math.max(currentPage - 1, 1)"
-                  class="w-8 h-8 rounded-md border border-slate-200 dark:border-slate-600 flex items-center justify-center p-0 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  class="w-8 h-8 rounded-md border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 flex items-center justify-center p-0 hover:border-slate-300 dark:hover:border-slate-500 text-slate-700 dark:text-slate-300 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                 >
-                  <ChevronLeft :size="16" class="text-slate-600 dark:text-slate-300" />
+                  <ChevronLeft :size="16" />
                 </button>
 
-                <button
-                  v-for="pageIdx in totalPagesCount"
-                  :key="pageIdx"
-                  @click="currentPage = pageIdx"
-                  :class="[
-                    'w-8 h-8 rounded-md border text-[14px] font-medium transition-all cursor-pointer',
-                    currentPage === pageIdx
-                      ? 'bg-[#4a6cf7] border-[#4a6cf7] text-white'
-                      : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 text-slate-700 dark:text-slate-300'
-                  ]"
-                >
-                  {{ pageIdx }}
-                </button>
+                <template v-for="(page, pIdx) in visiblePages" :key="pIdx">
+                  <span
+                    v-if="page === '...'"
+                    class="w-8 h-8 flex items-center justify-center text-[13px] text-slate-400 dark:text-slate-500 select-none"
+                  >···</span>
+                  <button
+                    v-else
+                    @click="currentPage = page"
+                    :class="[
+                      'w-8 h-8 rounded-md border text-[14px] font-medium transition-all cursor-pointer flex items-center justify-center',
+                      currentPage === page
+                        ? 'bg-[#4a6cf7] border-[#4a6cf7] text-white'
+                        : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 text-slate-700 dark:text-slate-300'
+                    ]"
+                  >
+                    {{ page }}
+                  </button>
+                </template>
 
                 <button
                   :disabled="currentPage === totalPagesCount"
                   @click="currentPage = Math.min(currentPage + 1, totalPagesCount)"
-                  class="w-8 h-8 rounded-md border border-slate-200 dark:border-slate-600 flex items-center justify-center p-0 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  class="w-8 h-8 rounded-md border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 flex items-center justify-center p-0 hover:border-slate-300 dark:hover:border-slate-500 text-slate-700 dark:text-slate-300 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                 >
-                  <ChevronRight :size="16" class="text-slate-600 dark:text-slate-300" />
+                  <ChevronRight :size="16" />
                 </button>
               </div>
-
-              <div class="text-[14px] text-slate-500 font-medium font-mono">
-                共 {{ totalItemsCount }} 条
-              </div>
+              <span class="text-[13px] text-slate-400 dark:text-slate-500 font-mono">
+                共 {{ totalItemsCount }} 条 · 第 {{ currentPage }}/{{ totalPagesCount }} 页
+              </span>
             </div>
             </template>
 
@@ -619,8 +781,27 @@ onBeforeUnmount(() => {
                   <span><Eye :size="14" /> 阅读次数: {{ selectedResourceDetail.views }}</span>
                 </div>
 
+                <!-- 视频展示：同样的PPT外框，内嵌B站播放器 -->
+                <div v-if="selectedResourceDetail.sourceType === 'video'" class="resource-detail-ppt">
+                  <div class="ppt-video-frame">
+                    <iframe
+                      v-if="selectedResourceDetail.bilibiliBvid"
+                      :src="'https://player.bilibili.com/player.html?bvid=' + selectedResourceDetail.bilibiliBvid + '&page=1&autoplay=0&high_quality=1'"
+                      class="ppt-video-iframe"
+                      allowfullscreen
+                      sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"
+                    />
+                    <iframe
+                      v-else
+                      :src="'https://search.bilibili.com/all?keyword=' + encodeURIComponent(selectedResourceDetail.title)"
+                      class="ppt-video-iframe"
+                      sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"
+                    />
+                  </div>
+                </div>
+
                 <!-- PPT展示（有slides数据的资源） -->
-                <div v-if="selectedResourceDetail.slides && selectedResourceDetail.slides.length > 0" class="resource-detail-ppt">
+                <div v-else-if="selectedResourceDetail.slides && selectedResourceDetail.slides.length > 0" class="resource-detail-ppt">
                   <PPTViewer
                     :slides="selectedResourceDetail.slides"
                     :color="selectedResourceDetail.color"
@@ -1223,6 +1404,9 @@ html.dark #edu-mind-app .bg-slate-900\/60 { background-color: rgba(0, 0, 0, 0.35
 .edu-main-stage {
   background: transparent;
 }
+.edu-main-stage:has(> div > #ideal-ide-workspace-box) {
+  padding: 0 !important;
+}
 
 
 
@@ -1288,6 +1472,22 @@ html.dark #edu-mind-app .bg-slate-900\/60 { background-color: rgba(0, 0, 0, 0.35
 .resource-detail-ppt {
   margin: 20px 0;
   height: 800px;
+}
+
+.ppt-video-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+}
+
+.ppt-video-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
 }
 
 .resource-detail-bottom {

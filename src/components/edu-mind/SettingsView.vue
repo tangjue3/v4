@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { computed, onMounted, ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 import { useTheme } from '../../composables/useEduMindTheme'
+import { clearAuthSession, getAuthSession, setAuthSession } from '@/lib/auth'
+import { fetchAccountSettings, saveAccountSettings } from '@/lib/api'
 import {
   User,
   Bell,
@@ -25,7 +28,12 @@ import {
 } from 'lucide-vue-next'
 
 const activeSection = ref<string>('profile')
+const router = useRouter()
 const { themeMode, isDark, setTheme } = useTheme()
+const authSession = getAuthSession()
+const accountName = authSession?.name || authSession?.account || '学习者'
+const accountId = authSession?.account || 'student'
+const accountRole = computed(() => authSession?.role === 'admin' ? '管理员' : '学习者')
 
 const profileForm = reactive({
   nickname: '小明同学',
@@ -35,6 +43,23 @@ const profileForm = reactive({
   location: '北京',
   school: '清华大学',
   studentId: '2024XXXX'
+})
+
+profileForm.nickname = accountName
+profileForm.email = `${accountId}@edumind.local`
+profileForm.studentId = accountId
+
+onMounted(async () => {
+  if (!authSession) return
+  try {
+    const settings = await fetchAccountSettings(authSession.account)
+    if (settings?.displayName) {
+      profileForm.nickname = settings.displayName
+      setAuthSession({ ...authSession, name: settings.displayName })
+    }
+  } catch {
+    // Keep the current session display name when the API is unavailable.
+  }
 })
 
 const studySettings = reactive({
@@ -72,7 +97,17 @@ const showToast = (msg: string) => {
   toastTimer = setTimeout(() => { toastMsg.value = null }, 2500)
 }
 
-const handleSaveProfile = () => {
+const handleSaveProfile = async () => {
+  if (authSession) {
+    const name = profileForm.nickname.trim() || authSession.account
+    try {
+      const settings = await saveAccountSettings(name)
+      profileForm.nickname = settings.displayName
+      setAuthSession({ ...authSession, name: settings.displayName })
+    } catch {
+      setAuthSession({ ...authSession, name })
+    }
+  }
   showToast('个人资料已保存')
 }
 
@@ -93,7 +128,8 @@ const handleResetAll = () => {
 }
 
 const handleLogout = () => {
-  window.alert('此复刻页面仅为展示模式，当前用户保持登录。')
+  clearAuthSession()
+  window.location.href = '/login'
 }
 
 const sections = [
@@ -136,7 +172,7 @@ const sections = [
             </div>
             <div class="leading-tight">
               <h3 class="text-[15px] font-bold text-[#1a1a2e] dark:text-white">{{ profileForm.nickname }}</h3>
-              <p class="text-[13px] text-[#8c8c8c] dark:text-slate-500 mt-0.5">Lv.12 · VIP会员</p>
+              <p class="text-[13px] text-[#8c8c8c] dark:text-slate-500 mt-0.5">{{ accountRole }} · {{ accountId }}</p>
             </div>
           </div>
         </div>

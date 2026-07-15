@@ -1487,26 +1487,31 @@ watch(selectedDay, () => {
                   <span>{{ evt.agent.name }}</span>
                   <span>{{ evt.evidenceCount }} 条证据</span>
                 </div>
-                <div class="latest-tail">
-                  <div class="latest-time">{{ evt.time }}</div>
-                  <div class="latest-tag" :class="evt.value">
-                    {{ evt.value === 'high' ? '高价值' : evt.value === 'medium' ? '中价值' : '低价值' }}
+                <div class="latest-action">
+                  <div class="latest-tail">
+                    <div class="latest-time">{{ evt.time }}</div>
+                    <div class="latest-tag" :class="evt.value">
+                      {{ evt.value === 'high' ? '高价值' : evt.value === 'medium' ? '中价值' : '低价值' }}
+                    </div>
                   </div>
+                  <button
+                    type="button"
+                    class="latest-route"
+                    @click.stop="navigateTo(evt.routePath)"
+                  >
+                    {{ evt.routeLabel }}
+                    <ChevronRight :size="12" />
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  class="latest-route"
-                  @click.stop="navigateTo(evt.routePath)"
-                >
-                  {{ evt.routeLabel }}
-                  <ChevronRight :size="12" />
-                </button>
               </div>
             </div>
           </div>
 
           <div class="module-chips-row">
-            <span class="chips-label">模块协作概览</span>
+            <div class="chips-copy">
+              <span class="chips-label">模块协作概览</span>
+              <small>切换下方事件链路</small>
+            </div>
             <div class="module-chips">
               <button
                 v-for="mod in moduleCards"
@@ -2028,7 +2033,7 @@ watch(selectedDay, () => {
 
 /* Latest events */
 .latest-card {
-  padding: 14px;
+  padding: 16px;
 }
 
 .latest-list {
@@ -2039,11 +2044,12 @@ watch(selectedDay, () => {
 
 .latest-item {
   display: grid;
-  grid-template-columns: 34px minmax(260px, 1.1fr) minmax(360px, 0.9fr) 104px 118px;
+  grid-template-columns: 34px minmax(0, 1fr) 150px;
+  grid-template-rows: auto auto;
   align-items: center;
   gap: 12px;
-  min-height: 62px;
-  padding: 10px 12px;
+  min-height: 68px;
+  padding: 11px 14px;
   border: 1px solid transparent;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.03);
@@ -2061,6 +2067,8 @@ watch(selectedDay, () => {
 .latest-icon {
   width: 28px;
   height: 28px;
+  align-self: center;
+  grid-row: 1 / 3;
   display: grid;
   place-items: center;
   border-radius: 7px;
@@ -2070,6 +2078,9 @@ watch(selectedDay, () => {
 
 .latest-info {
   min-width: 0;
+  align-self: center;
+  grid-column: 2;
+  grid-row: 1;
 }
 
 .latest-title {
@@ -2088,15 +2099,19 @@ watch(selectedDay, () => {
 }
 
 .latest-context {
-  display: grid;
-  grid-template-columns: minmax(96px, 1fr) minmax(86px, 0.9fr) 78px;
-  gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-self: center;
+  grid-column: 2;
+  grid-row: 2;
   min-width: 0;
 }
 
 .latest-context span {
   min-width: 0;
-  padding: 5px 8px;
+  max-width: 180px;
+  padding: 4px 8px;
   border: 1px solid rgba(150, 175, 220, 0.08);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.035);
@@ -2107,11 +2122,22 @@ watch(selectedDay, () => {
   white-space: nowrap;
 }
 
+.latest-action {
+  display: grid;
+  grid-template-rows: auto auto;
+  align-content: center;
+  justify-items: end;
+  grid-column: 3;
+  grid-row: 1 / 3;
+  gap: 7px;
+  min-width: 0;
+}
+
 .latest-tail {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 8px;
   min-width: 0;
 }
 
@@ -2129,7 +2155,7 @@ watch(selectedDay, () => {
   align-items: center;
   justify-content: center;
   gap: 3px;
-  width: 100%;
+  width: 138px;
   min-height: 32px;
   border: 1px solid rgba(34, 211, 238, 0.18);
   border-radius: 9px;
@@ -2455,16 +2481,23 @@ watch(selectedDay, () => {
 
 /* Module chips */
 .module-chips-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(140px, 0.18fr) minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
+  gap: 14px;
+  padding: 14px 18px;
   border-radius: 14px;
   background:
     radial-gradient(ellipse at 20% 0%, rgba(34, 211, 238, 0.04), transparent 46%),
     linear-gradient(180deg, rgba(12, 18, 38, 0.62), rgba(6, 10, 24, 0.46));
   border: 1px solid rgba(150, 175, 220, 0.10);
   backdrop-filter: blur(20px) saturate(1.18);
+}
+
+.chips-copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
 }
 
 .chips-label {
@@ -2474,11 +2507,19 @@ watch(selectedDay, () => {
   white-space: nowrap;
 }
 
+.chips-copy small {
+  color: #526580;
+  font-size: 10px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
 .module-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   flex: 1 1 auto;
+  justify-content: flex-start;
 }
 
 .module-chip {
@@ -2636,8 +2677,8 @@ watch(selectedDay, () => {
 }
 
 @keyframes node-breathe {
-  0%, 100% { filter: drop-shadow(0 0 6px color-mix(in srgb, var(--node-color) 36%, transparent)); }
-  50% { filter: drop-shadow(0 0 18px color-mix(in srgb, var(--node-color) 72%, transparent)); }
+  0%, 100% { filter: drop-shadow(0 0 3px color-mix(in srgb, var(--node-color) 25%, transparent)); }
+  50% { filter: drop-shadow(0 0 6px color-mix(in srgb, var(--node-color) 35%, transparent)); }
 }
 
 @media (max-width: 1200px) {
@@ -2661,13 +2702,12 @@ watch(selectedDay, () => {
   }
 
   .latest-item {
-    grid-template-columns: 34px minmax(220px, 1fr) minmax(260px, 0.9fr) 96px;
+    grid-template-columns: 34px minmax(0, 1fr) 142px;
   }
 
-  .latest-route {
-    grid-column: 3 / 5;
+  .latest-action {
+    grid-column: 3;
     justify-self: end;
-    width: 128px;
   }
 }
 
@@ -2719,6 +2759,37 @@ watch(selectedDay, () => {
 
   .charts-grid {
     grid-template-columns: 1fr;
+  }
+
+  .latest-item {
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .latest-context,
+  .latest-action {
+    grid-column: 2;
+  }
+
+  .latest-context {
+    grid-template-columns: 1fr;
+  }
+
+  .latest-action {
+    justify-items: stretch;
+  }
+
+  .latest-tail {
+    justify-content: space-between;
+  }
+
+  .latest-route {
+    width: 100%;
+  }
+
+  .module-chips-row {
+    grid-template-columns: 1fr;
+    align-items: start;
   }
 
   .agent-rows,

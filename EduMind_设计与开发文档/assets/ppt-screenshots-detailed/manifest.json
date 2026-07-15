@@ -1,0 +1,311 @@
+[
+  {
+    "id": "01-login",
+    "title": "???",
+    "url": "http://127.0.0.1:5176/login",
+    "target": {
+      "index": -1,
+      "id": "document",
+      "scrollHeight": 1080,
+      "clientHeight": 1080,
+      "range": 0
+    },
+    "count": 1,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\01-login-p01.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "02-home",
+    "title": "????",
+    "url": "http://127.0.0.1:5176/home",
+    "target": {
+      "index": 0,
+      "id": "el-0",
+      "scrollHeight": 6077,
+      "clientHeight": 1080,
+      "range": 4997
+    },
+    "count": 7,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\02-home-p01.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\02-home-p02.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\02-home-p03.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\02-home-p04.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\02-home-p05.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\02-home-p06.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\02-home-p07.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "03-dialogue",
+    "title": "????",
+    "url": "http://127.0.0.1:5176/dialogue",
+    "target": {
+      "index": -1,
+      "id": "document",
+      "scrollHeight": 1144,
+      "clientHeight": 1080,
+      "range": 64
+    },
+    "count": 1,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\03-dialogue-p01.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "04-profile",
+    "title": "????",
+    "url": "http://127.0.0.1:5176/profile",
+    "target": {
+      "index": -1,
+      "id": "document",
+      "scrollHeight": 1080,
+      "clientHeight": 1080,
+      "range": 0
+    },
+    "count": 1,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\04-profile-p01.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "05-learning-path",
+    "title": "????",
+    "url": "http://127.0.0.1:5176/learning-path",
+    "target": {
+      "index": 0,
+      "id": "el-0",
+      "scrollHeight": 3454,
+      "clientHeight": 1080,
+      "range": 2374
+    },
+    "count": 4,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\05-learning-path-p01.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\05-learning-path-p02.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\05-learning-path-p03.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\05-learning-path-p04.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "06-resources-route",
+    "title": "??????",
+    "url": "http://127.0.0.1:5176/resources",
+    "target": {
+      "index": 169,
+      "id": "flex-1 flex flex-col ml-0 min-w-0 h-screen overflow-y-auto",
+      "scrollHeight": 2636,
+      "clientHeight": 1080,
+      "range": 1556
+    },
+    "count": 3,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\06-resources-route-p01.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\06-resources-route-p02.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\06-resources-route-p03.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "07-evaluation",
+    "title": "????",
+    "url": "http://127.0.0.1:5176/evaluation",
+    "target": {
+      "index": 93,
+      "id": "cockpit-shell",
+      "scrollHeight": 1954,
+      "clientHeight": 1032,
+      "range": 922
+    },
+    "count": 3,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\07-evaluation-p01.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\07-evaluation-p02.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\07-evaluation-p03.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "08-reverse-evaluation",
+    "title": "????",
+    "url": "http://127.0.0.1:5176/reverse-evaluation",
+    "target": {
+      "index": 0,
+      "id": "el-0",
+      "scrollHeight": 1558,
+      "clientHeight": 1080,
+      "range": 478
+    },
+    "count": 2,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\08-reverse-evaluation-p01.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\08-reverse-evaluation-p02.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "09-tutoring",
+    "title": "????",
+    "url": "http://127.0.0.1:5176/tutoring",
+    "target": {
+      "index": -1,
+      "id": "document",
+      "scrollHeight": 1144,
+      "clientHeight": 1080,
+      "range": 64
+    },
+    "count": 1,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\09-tutoring-p01.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "10-settings-route",
+    "title": "??????",
+    "url": "http://127.0.0.1:5176/settings",
+    "target": {
+      "index": 0,
+      "id": "el-0",
+      "scrollHeight": 2369,
+      "clientHeight": 1080,
+      "range": 1289
+    },
+    "count": 3,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\10-settings-route-p01.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\10-settings-route-p02.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\10-settings-route-p03.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "11-trainflow",
+    "title": "???????",
+    "url": "http://127.0.0.1:5176/trainflow",
+    "target": {
+      "index": 0,
+      "id": "el-0",
+      "scrollHeight": 1350,
+      "clientHeight": 1080,
+      "range": 270
+    },
+    "count": 2,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\11-trainflow-p01.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\11-trainflow-p02.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "12-admin",
+    "title": "????",
+    "url": "http://127.0.0.1:5176/admin",
+    "target": {
+      "index": -1,
+      "id": "document",
+      "scrollHeight": 1080,
+      "clientHeight": 1080,
+      "range": 0
+    },
+    "count": 1,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\12-admin-p01.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "24-edumind-study-record",
+    "title": "EduMind-????",
+    "url": "http://127.0.0.1:5176/edu-mind",
+    "target": {
+      "index": 178,
+      "id": "flex-1 flex flex-col ml-0 min-w-0 h-screen overflow-y-auto",
+      "scrollHeight": 2064,
+      "clientHeight": 1080,
+      "range": 984
+    },
+    "count": 3,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\24-edumind-study-record-p01.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\24-edumind-study-record-p02.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\24-edumind-study-record-p03.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "25-edumind-favorites",
+    "title": "EduMind-???",
+    "url": "http://127.0.0.1:5176/edu-mind",
+    "target": {
+      "index": 180,
+      "id": "flex-1 flex flex-col ml-0 min-w-0 h-screen overflow-y-auto",
+      "scrollHeight": 1394,
+      "clientHeight": 1080,
+      "range": 314
+    },
+    "count": 2,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\25-edumind-favorites-p01.png",
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\25-edumind-favorites-p02.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "29-edumind-practice-desc",
+    "title": "EduMind-????-desc",
+    "url": "http://127.0.0.1:5176/edu-mind",
+    "target": {
+      "index": 169,
+      "id": "flex-1 flex flex-col ml-0 min-w-0 h-screen overflow-y-auto",
+      "scrollHeight": 2311,
+      "clientHeight": 1080,
+      "range": 1231
+    },
+    "count": 1,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\29-edumind-practice-desc-p01.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "29-edumind-practice-submissions",
+    "title": "EduMind-????-submissions",
+    "url": "http://127.0.0.1:5176/edu-mind",
+    "target": {
+      "index": 170,
+      "id": "flex-1 flex flex-col ml-0 min-w-0 h-screen overflow-y-auto",
+      "scrollHeight": 2311,
+      "clientHeight": 1080,
+      "range": 1231
+    },
+    "count": 1,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\29-edumind-practice-submissions-p01.png"
+    ],
+    "size": "1920x1080"
+  },
+  {
+    "id": "29-edumind-practice-discussion",
+    "title": "EduMind-????-discussion",
+    "url": "http://127.0.0.1:5176/edu-mind",
+    "target": {
+      "index": 171,
+      "id": "flex-1 flex flex-col ml-0 min-w-0 h-screen overflow-y-auto",
+      "scrollHeight": 2311,
+      "clientHeight": 1080,
+      "range": 1231
+    },
+    "count": 1,
+    "files": [
+      "D:\\ZYY_Project\\1\\v4-main\\EduMind_设计与开发文档\\assets\\ppt-screenshots-detailed\\29-edumind-practice-discussion-p01.png"
+    ],
+    "size": "1920x1080"
+  }
+]

@@ -124,6 +124,7 @@ let worldGroup: THREE.Group | null = null
 let treeRoot: THREE.Group | null = null
 let generatedTree: (THREE.Object3D & { update: (elapsedTime: number) => void; loadFromJson: (options: any) => void }) | null = null
 let stageGroup: THREE.Group | null = null
+let skyStarGroup: THREE.Points | null = null
 let leafGeometry: THREE.ShapeGeometry | null = null
 let leafMaterial: THREE.MeshStandardMaterial | null = null
 let denseLeafGeometry: THREE.PlaneGeometry | null = null
@@ -210,6 +211,7 @@ function visualTreeSeed() {
 
 function createScene() {
   scene = new THREE.Scene()
+  const diagnosticStage = props.backgroundStageVariant === 'diagnostic'
 
   worldGroup = new THREE.Group()
   worldGroup.name = 'EzKnowledgeTreeWorld'
@@ -218,28 +220,32 @@ function createScene() {
 
   ezEnvironment = applyEzTreeAtmosphere(scene, {
     skybox: {
-      sunAzimuth: 110,
-      sunElevation: 42,
-      sunColor: new THREE.Color(0xfff0d0),
-      skyColorLow: new THREE.Color(0xa8d4ff),
-      skyColorHigh: new THREE.Color(0x5c9dff),
-      sunSize: 1.0,
+      sunAzimuth: diagnosticStage ? 124 : 110,
+      sunElevation: diagnosticStage ? 36 : 42,
+      sunColor: new THREE.Color(diagnosticStage ? 0xfff5dc : 0xfff0d0),
+      skyColorLow: new THREE.Color(diagnosticStage ? 0x4b86ad : 0xa8d4ff),
+      skyColorHigh: new THREE.Color(diagnosticStage ? 0x173b64 : 0x5c9dff),
+      sunSize: diagnosticStage ? 1.35 : 1.0,
     },
-    ground: { radius: 55, scale: 45, patchiness: 0.72 },
+    ground: { radius: 55, scale: 45, patchiness: diagnosticStage ? 0.66 : 0.72 },
     grass: {
-      instanceCount: 420,
+      instanceCount: diagnosticStage ? 500 : 420,
       maxInstanceCount: 1200,
-      flowerCount: 4,
+      flowerCount: diagnosticStage ? 6 : 4,
       scale: 36,
       patchiness: 0.74,
       size: new THREE.Vector3(0.48, 0.38, 0.48),
       sizeVariation: new THREE.Vector3(0.1, 0.16, 0.1),
     },
     rocks: { count: 4, spread: 24, size: new THREE.Vector3(0.28, 0.28, 0.28), sizeVariation: new THREE.Vector3(0.5, 0.5, 0.5) },
-    fogColor: new THREE.Color(0xd9ecff),
-    fogDensity: 0.0045,
+    fogColor: new THREE.Color(diagnosticStage ? 0x123456 : 0xd9ecff),
+    fogDensity: diagnosticStage ? 0.0032 : 0.0045,
     enableClouds: false,
   })
+
+  if (diagnosticStage) {
+    createDiagnosticStarField()
+  }
 
   camera = new THREE.PerspectiveCamera(42, 1, 0.1, 300)
   camera.position.set(8.5, 8.8, 28.5)
@@ -260,7 +266,7 @@ function initRenderer() {
   renderer.setSize(w, h)
   renderer.outputColorSpace = THREE.SRGBColorSpace
   renderer.toneMapping = THREE.ACESFilmicToneMapping
-  renderer.toneMappingExposure = 1.28
+  renderer.toneMappingExposure = props.backgroundStageVariant === 'diagnostic' ? 1.55 : 1.28
   renderer.shadowMap.enabled = true
   renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
@@ -300,6 +306,52 @@ function getCanvasSize() {
   const fallbackHeight = typeof props.height === 'number' ? props.height : 480
   const h = Math.max(320, props.fill ? (rect?.height ?? fallbackHeight) : fallbackHeight)
   return { w, h }
+}
+
+function createDiagnosticStarField() {
+  if (!scene) return
+  const starCount = 1500
+  const positions = new Float32Array(starCount * 3)
+  const colors = new Float32Array(starCount * 3)
+  const colorA = new THREE.Color(0x88d9ff)
+  const colorB = new THREE.Color(0xffffff)
+  const colorC = new THREE.Color(0x4f86ff)
+
+  for (let i = 0; i < starCount; i++) {
+    const radius = 95 + Math.random() * 125
+    const theta = Math.random() * Math.PI * 2
+    const phi = Math.PI * (0.05 + Math.random() * 0.5)
+    const x = Math.sin(phi) * Math.cos(theta) * radius
+    const y = Math.cos(phi) * radius + 18
+    const z = Math.sin(phi) * Math.sin(theta) * radius - 22
+    positions[i * 3] = x
+    positions[i * 3 + 1] = y
+    positions[i * 3 + 2] = z
+
+    const mix = Math.random()
+    const color = mix < 0.62 ? colorA : mix < 0.88 ? colorB : colorC
+    const intensity = 0.72 + Math.random() * 0.58
+    colors[i * 3] = color.r * intensity
+    colors[i * 3 + 1] = color.g * intensity
+    colors[i * 3 + 2] = color.b * intensity
+  }
+
+  const geometry = new THREE.BufferGeometry()
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+  const material = new THREE.PointsMaterial({
+    size: 1.05,
+    sizeAttenuation: true,
+    transparent: true,
+    opacity: 0.98,
+    depthWrite: false,
+    vertexColors: true,
+    blending: THREE.AdditiveBlending,
+  })
+  skyStarGroup = new THREE.Points(geometry, material)
+  skyStarGroup.name = 'DiagnosticStarField'
+  skyStarGroup.renderOrder = -1
+  scene.add(skyStarGroup)
 }
 
 function createTreeOptions() {
@@ -1038,6 +1090,7 @@ function createAppleMarker(marker: GraphMarker, position: THREE.Vector3, size: n
   group.position.copy(position)
   group.name = `KnowledgeMarker-${marker.id}`
   group.userData.marker = marker
+  group.userData.baseColor = color
 
   const isHighlighted = props.highlightNames.length > 0 && props.highlightNames.includes(marker.label)
   group.userData.isHighlighted = isHighlighted
@@ -1056,6 +1109,8 @@ function createAppleMarker(marker: GraphMarker, position: THREE.Vector3, size: n
     }),
   )
   glow.userData.marker = marker
+  glow.userData.markerRole = 'glow'
+  glow.userData.baseColor = color
   group.add(glow)
 
   // Apple body: slightly tapered sphere with dimple on top
@@ -1098,6 +1153,8 @@ function createAppleMarker(marker: GraphMarker, position: THREE.Vector3, size: n
   body.castShadow = true
   body.receiveShadow = true
   body.userData.marker = marker
+  body.userData.markerRole = 'body'
+  body.userData.baseColor = color
   group.add(body)
 
   // Subtle highlight spot to make it look rounder
@@ -1173,13 +1230,48 @@ function createAppleMarker(marker: GraphMarker, position: THREE.Vector3, size: n
   return group
 }
 
+function updateMarkerHighlight(markerObject: THREE.Object3D, isHighlighted: boolean) {
+  markerObject.userData.isHighlighted = isHighlighted
+  const baseColor = markerObject.userData.baseColor ?? 0xef4444
+
+  markerObject.traverse(child => {
+    if (!(child instanceof THREE.Mesh)) return
+    const role = child.userData.markerRole
+    const material = child.material
+    if (!material || Array.isArray(material)) return
+
+    if (role === 'glow' && material instanceof THREE.MeshBasicMaterial) {
+      material.color.set(isHighlighted ? 0x00d4ff : baseColor)
+      material.opacity = isHighlighted ? 0.42 : 0.28
+      child.scale.setScalar(isHighlighted ? 1.22 : 1)
+      material.needsUpdate = true
+    }
+
+    if (role === 'body' && material instanceof THREE.MeshPhysicalMaterial) {
+      material.color.set(baseColor)
+      material.emissive.set(isHighlighted ? 0x00d4ff : baseColor)
+      material.emissiveIntensity = isHighlighted ? 0.45 : 0.22
+      material.clearcoat = isHighlighted ? 0.22 : 0.12
+      material.needsUpdate = true
+    }
+  })
+}
+
+function applyMarkerHighlights() {
+  const highlightedNames = new Set(props.highlightNames)
+  markerObjects.forEach(marker => {
+    const label = marker.userData.marker?.label
+    updateMarkerHighlight(marker, highlightedNames.has(label))
+  })
+}
+
 function createAppleLabel(text: string, appleSize: number, tone: NonNullable<GraphMarker['labelTone']>) {
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')!
   const fontSize = 22
   const paddingX = 18
   const paddingY = 9
-  const maxChars = 4
+  const maxChars = 6
   const displayText = text.length > maxChars ? text.slice(0, maxChars) + '…' : text
   const palette = {
     danger: { bg: 'rgba(55, 9, 18, 0.82)', border: 'rgba(255, 113, 133, 0.72)', text: '#ffe4e6', glow: 'rgba(244, 63, 94, 0.35)' },
@@ -1420,6 +1512,9 @@ function animate() {
 
   generatedTree?.update(time)
   ezEnvironment?.update(time)
+  if (skyStarGroup) {
+    skyStarGroup.rotation.y = time * 0.012
+  }
   if (worldGroup && !props.horizontalOnlyControls) {
     worldGroup.rotation.y = 0
   }
@@ -1481,6 +1576,14 @@ function removeStage() {
   stageGroup = null
 }
 
+function removeStarField() {
+  if (skyStarGroup && scene) {
+    scene.remove(skyStarGroup)
+  }
+  skyStarGroup && disposeObject(skyStarGroup as DisposableObject)
+  skyStarGroup = null
+}
+
 onMounted(async () => {
   loading.value = true
   await preloadEzTreeAssets()
@@ -1505,13 +1608,14 @@ onBeforeUnmount(() => {
   canvasRef.value?.removeEventListener('click', handleCanvasClick)
   removeCurrentTree()
   removeStage()
+  removeStarField()
   renderer?.dispose()
   scene?.clear()
   worldGroup = null
 })
 
 watch(() => props.knowledgePoints, rebuildTree, { deep: true })
-watch(() => props.highlightNames, rebuildTree, { deep: true })
+watch(() => props.highlightNames, applyMarkerHighlights, { deep: true })
 </script>
 
 <template>

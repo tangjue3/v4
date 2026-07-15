@@ -16,13 +16,13 @@ const props = defineProps<{
 }>()
 
 const agents: AgentNode[] = [
-  { name: 'ProfileAgent', short: 'Profile', angle: -90, radius: 3.55, color: 0x67e8f9 },
-  { name: 'ResourceAgent', short: 'Resource', angle: -38, radius: 3.85, color: 0x2dd4bf },
+  { name: 'ProfileAgent', short: 'Profile', angle: -90, radius: 3.55, color: 0x67b8f9 },
+  { name: 'ResourceAgent', short: 'Resource', angle: -38, radius: 3.85, color: 0x7ac8f0 },
   { name: 'PathAgent', short: 'Path', angle: 13, radius: 3.58, color: 0x60a5fa },
-  { name: 'TutorAgent', short: 'Tutor', angle: 64, radius: 3.76, color: 0xa78bfa },
-  { name: 'EvaluationAgent', short: 'Evaluation', angle: 121, radius: 3.6, color: 0x22d3ee },
-  { name: 'ReflectionAgent', short: 'Reflection', angle: 176, radius: 3.88, color: 0x818cf8 },
-  { name: 'KnowledgePathAgent', short: 'KnowledgePath', angle: 232, radius: 3.62, color: 0x5eead4 },
+  { name: 'TutorAgent', short: 'Tutor', angle: 64, radius: 3.76, color: 0x93c5fd },
+  { name: 'EvaluationAgent', short: 'Evaluation', angle: 121, radius: 3.6, color: 0x93c5fd },
+  { name: 'ReflectionAgent', short: 'Reflection', angle: 176, radius: 3.88, color: 0xb8d8ff },
+  { name: 'KnowledgePathAgent', short: 'KnowledgePath', angle: 232, radius: 3.62, color: 0x7dd3fc },
 ]
 
 const containerRef = ref<HTMLElement | null>(null)
@@ -62,15 +62,15 @@ function createGlowTexture() {
 
   const gradient = ctx.createRadialGradient(64, 64, 0, 64, 64, 64)
   gradient.addColorStop(0, 'rgba(255,255,255,0.95)')
-  gradient.addColorStop(0.24, 'rgba(103,232,249,0.52)')
-  gradient.addColorStop(1, 'rgba(103,232,249,0)')
+  gradient.addColorStop(0.24, 'rgba(120,184,255,0.52)')
+  gradient.addColorStop(1, 'rgba(120,184,255,0)')
   ctx.fillStyle = gradient
   ctx.fillRect(0, 0, 128, 128)
 
   return track(new THREE.CanvasTexture(canvas))
 }
 
-function makeLine(points: THREE.Vector3[], color = 0x67e8f9, opacity = 0.28) {
+function makeLine(points: THREE.Vector3[], color = 0x78bfff, opacity = 0.28) {
   const geometry = track(new THREE.BufferGeometry().setFromPoints(points))
   const material = track(new THREE.LineBasicMaterial({
     color,
@@ -86,14 +86,14 @@ function createCore() {
   const group = new THREE.Group()
 
   const wireMaterial = track(new THREE.MeshBasicMaterial({
-    color: 0x8eeaff,
+    color: 0xb8d8ff,
     opacity: 0.22,
     transparent: true,
     wireframe: true,
     blending: THREE.AdditiveBlending,
   }))
   const surfaceMaterial = track(new THREE.MeshBasicMaterial({
-    color: 0x1d4ed8,
+    color: 0x5a9fd8,
     opacity: 0.1,
     transparent: true,
     blending: THREE.AdditiveBlending,
@@ -105,7 +105,7 @@ function createCore() {
   group.add(icosahedron, inner)
 
   const ringMaterial = track(new THREE.MeshBasicMaterial({
-    color: 0x22d3ee,
+    color: 0x78bfff,
     opacity: 0.28,
     transparent: true,
     wireframe: true,
@@ -134,7 +134,7 @@ function createCore() {
   const pointGeometry = track(new THREE.BufferGeometry())
   pointGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
   const pointMaterial = track(new THREE.PointsMaterial({
-    color: 0xbff8ff,
+    color: 0xe0edff,
     size: props.compact ? 0.022 : 0.018,
     opacity: 0.62,
     transparent: true,
@@ -193,13 +193,13 @@ function createAgentNetwork() {
   for (let i = 0; i < nodeWorldPositions.length; i += 1) {
     const current = nodeWorldPositions[i]
     const next = nodeWorldPositions[(i + 1) % nodeWorldPositions.length]
-    group.add(makeLine([current, next], 0x38bdf8, 0.16))
+    group.add(makeLine([current, next], 0x78bfff, 0.16))
   }
 
   const dotGeometry = track(new THREE.SphereGeometry(0.035, 12, 8))
   for (let i = 0; i < 28; i += 1) {
     const material = track(new THREE.MeshBasicMaterial({
-      color: i % 3 === 0 ? 0xa78bfa : 0x67e8f9,
+      color: i % 2 === 0 ? 0x93c5fd : 0x67b8f9,
       transparent: true,
       opacity: 0.85,
       blending: THREE.AdditiveBlending,
@@ -227,7 +227,10 @@ function createParticleField() {
       (Math.random() - 0.5) * 8,
       (Math.random() - 0.5) * 8,
     )
-    color.set(i % 4 === 0 ? 0x7c3aed : i % 3 === 0 ? 0x2dd4bf : 0x38bdf8)
+    const mix = Math.random()
+    if (mix < 0.4) color.setHex(0x78bfff)
+    else if (mix < 0.7) color.setHex(0xb8d8ff)
+    else color.setHex(0xf0f6ff)
     colors.push(color.r, color.g, color.b)
   }
 
@@ -340,40 +343,48 @@ function handlePointerLeave() {
 }
 
 function initScene() {
-  const container = containerRef.value
-  if (!container) return
+  try {
+    const container = containerRef.value
+    if (!container) return
 
-  scene = new THREE.Scene()
-  scene.fog = new THREE.FogExp2(0x020817, 0.055)
+    scene = new THREE.Scene()
+    scene.fog = new THREE.FogExp2(0x0a1a35, 0.05)
 
-  const { width, height } = container.getBoundingClientRect()
-  camera = new THREE.PerspectiveCamera(42, Math.max(1, width) / Math.max(1, height), 0.1, 100)
-  camera.position.set(0, 0, props.compact ? 8.2 : 7.4)
+    const { width, height } = container.getBoundingClientRect()
+    camera = new THREE.PerspectiveCamera(42, Math.max(1, width) / Math.max(1, height), 0.1, 100)
+    camera.position.set(0, 0, props.compact ? 8.2 : 7.4)
 
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' })
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, props.compact ? 1.3 : 1.75))
-  renderer.setSize(Math.max(1, width), Math.max(1, height), false)
-  renderer.outputColorSpace = THREE.SRGBColorSpace
-  container.appendChild(renderer.domElement)
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' })
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, props.compact ? 1.3 : 1.75))
+    renderer.setSize(Math.max(1, width), Math.max(1, height), false)
+    renderer.outputColorSpace = THREE.SRGBColorSpace
+    container.appendChild(renderer.domElement)
 
-  particleField = createParticleField()
-  coreGroup = createCore()
-  nodeGroup = createAgentNetwork()
-  scene.add(particleField, coreGroup, nodeGroup)
+    particleField = createParticleField()
+    coreGroup = createCore()
+    nodeGroup = createAgentNetwork()
+    scene.add(particleField, coreGroup, nodeGroup)
 
-  const ambient = new THREE.AmbientLight(0x8bdcff, 0.28)
-  const blueLight = new THREE.PointLight(0x38bdf8, 2.4, 12)
-  blueLight.position.set(-2.8, 2.2, 3)
-  const violetLight = new THREE.PointLight(0x8b5cf6, 1.8, 10)
-  violetLight.position.set(3.2, -1.5, 2.4)
-  scene.add(ambient, blueLight, violetLight)
+    const ambient = new THREE.AmbientLight(0xb8d8ff, 0.4)
+    const blueLight = new THREE.PointLight(0x78bfff, 2.2, 12)
+    blueLight.position.set(-2.8, 2.2, 3)
+    const violetLight = new THREE.PointLight(0x9bbff0, 1.6, 10)
+    violetLight.position.set(3.2, -1.5, 2.4)
+    scene.add(ambient, blueLight, violetLight)
 
-  resizeObserver = new ResizeObserver(resize)
-  resizeObserver.observe(container)
-  container.addEventListener('pointermove', handlePointerMove)
-  container.addEventListener('pointerleave', handlePointerLeave)
+    resizeObserver = new ResizeObserver(resize)
+    resizeObserver.observe(container)
+    container.addEventListener('pointermove', handlePointerMove)
+    container.addEventListener('pointerleave', handlePointerLeave)
 
-  animate()
+    animate()
+  } catch (err) {
+    console.warn('AgentGeometryScene: WebGL initialization failed, using fallback', err)
+    if (renderer) {
+      try { renderer.dispose() } catch {}
+      renderer = null
+    }
+  }
 }
 
 function cleanup() {
@@ -477,18 +488,18 @@ onBeforeUnmount(cleanup)
 
 .agent-scene::before {
   background:
-    radial-gradient(circle at 48% 46%, rgba(34, 211, 238, 0.12), transparent 25%),
-    radial-gradient(circle at 62% 54%, rgba(139, 92, 246, 0.09), transparent 30%),
-    linear-gradient(90deg, rgba(2, 6, 23, 0.44), transparent 36%, rgba(2, 6, 23, 0.14));
+    radial-gradient(circle at 48% 46%, rgba(120, 184, 255, 0.12), transparent 30%),
+    radial-gradient(circle at 62% 54%, rgba(184, 216, 255, 0.09), transparent 35%),
+    linear-gradient(90deg, rgba(10, 26, 53, 0.25), transparent 40%, rgba(10, 26, 53, 0.08));
   mix-blend-mode: screen;
 }
 
 .agent-scene::after {
-  opacity: 0.13;
+  opacity: 0.12;
   background-image:
-    linear-gradient(rgba(125, 211, 252, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(125, 211, 252, 0.07) 1px, transparent 1px),
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 4px);
+    linear-gradient(rgba(150, 200, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(150, 200, 255, 0.06) 1px, transparent 1px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 4px);
   background-size: 74px 74px, 74px 74px, 100% 4px;
   mask-image: radial-gradient(circle at 52% 48%, #000 0 56%, transparent 78%);
 }

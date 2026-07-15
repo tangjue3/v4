@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 const emit = defineEmits<{ 'select-node': [nodeId: string] }>()
 
@@ -49,6 +49,8 @@ const matrixCells = DOMAIN_ORDER.flatMap(domain =>
   }),
 )
 
+const selectedCell = ref(matrixCells.find(cell => cell.isRecommended) ?? matrixCells[0])
+
 const cellsByDomain = computed(() =>
   DOMAIN_ORDER.map(domain => ({
     domain,
@@ -76,6 +78,15 @@ function statusLabel(m: number): string {
   if (m < 0.6) return '需巩固'
   if (m < 0.85) return '较稳定'
   return '熟练'
+}
+
+function selectCell(cell: typeof matrixCells[number]) {
+  selectedCell.value = cell
+  emit('select-node', DOMAIN_META[cell.domain].topicId)
+}
+
+function selectRecommendedCell() {
+  selectCell(selectedCell.value)
 }
 
 // Inject keyframes
@@ -141,6 +152,7 @@ onUnmounted(() => { styleEl?.remove() })
           <div v-for="row in cellsByDomain" :key="row.domain" class="cell-row">
             <div v-for="(cell, ci) in row.cells" :key="cell.level"
               :class="['cell', {
+                active: selectedCell?.domain === cell.domain && selectedCell?.level === cell.level,
                 rec: cell.isRecommended,
                 weak: cell.isWeak,
               }]"
@@ -151,7 +163,7 @@ onUnmounted(() => { styleEl?.remove() })
                   : 'rgba(255,255,255,0.04)',
               }"
               :title="`${cell.domainLabel} × ${cell.levelLabel}：${cell.lastScore}% | 证据 ${cell.evidenceCount} 条`"
-              @click="emit('select-node', DOMAIN_META[cell.domain].topicId)">
+              @click="selectCell(cell)">
               <!-- High mastery gradient -->
               <div v-if="cell.value > 0.6" class="cell-glow" :style="{ background: `radial-gradient(circle at 30% 0%, ${row.meta.color}33, transparent 70%)` }"></div>
 
@@ -187,22 +199,22 @@ onUnmounted(() => { styleEl?.remove() })
           <span class="detail-chip" style="background:rgba(244,63,94,0.12);border-color:#f43f5e33;color:#f43f5e">跳跃式提升点</span>
         </div>
         <div class="detail-title">
-          <span style="color:#06d6a0">函数传参</span>
+          <span style="color:#06d6a0">{{ selectedCell.domainLabel }}</span>
           <span style="color:#8892b0; margin: 0 12px">×</span>
-          <span style="color:#f59e0b">改写</span>
+          <span style="color:#f59e0b">{{ selectedCell.levelLabel }}</span>
         </div>
-        <div class="detail-desc">这里看的不是图谱关系，而是“能说清指针”到“能改写带二级指针的函数”之间的断层：概念知道，但参数修改是否影响调用方还不稳定。</div>
+        <div class="detail-desc">这里看的不是图谱关系，而是“能说清概念”到“能在题目里稳定使用”之间的断层：当前格 {{ selectedCell.lastScore }} 分，建议优先补 {{ selectedCell.domainLabel }} 的 {{ selectedCell.levelLabel }} 层级。</div>
         <div class="detail-metrics">
           <div class="metric-card">
             <div class="metric-label">当前差距</div>
-            <div class="metric-value" style="color:#f59e0b">−13 个百分点</div>
+            <div class="metric-value" style="color:#f59e0b">−{{ Math.max(0, 75 - selectedCell.lastScore) }} 个百分点</div>
           </div>
           <div class="metric-card">
             <div class="metric-label">推荐资源</div>
-            <div class="metric-value" style="color:#06d6a0">4 个 · 含逐行 Trace 2</div>
+            <div class="metric-value" style="color:#06d6a0">{{ selectedCell.evidenceCount }} 个 · 含逐行 Trace</div>
           </div>
         </div>
-        <button class="detail-btn" style="background:linear-gradient(135deg,#f59e0b,#f43f5e);box-shadow:0 4px 20px #f59e0b55">看看具体怎么补 →</button>
+        <button class="detail-btn" style="background:linear-gradient(135deg,#f59e0b,#f43f5e);box-shadow:0 4px 20px #f59e0b55" @click="selectRecommendedCell">看看具体怎么补 →</button>
       </div>
 
       <!-- Diagnostic panel -->
@@ -236,7 +248,7 @@ onUnmounted(() => { styleEl?.remove() })
 <style scoped>
 @keyframes mx-float-up { 0% { transform: translateY(10px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
 
-.matrix-view { padding: 0 40px 40px; animation: mx-float-up 0.5s ease both; }
+.matrix-view { padding: 0 0 40px; animation: mx-float-up 0.5s ease both; }
 .matrix-banner {
   display: flex; align-items: center; gap: 10px;
   padding: 14px 20px; border-radius: 14px;
@@ -269,7 +281,7 @@ onUnmounted(() => { styleEl?.remove() })
   display: flex; gap: 8px; margin-bottom: 8px; padding-left: 220px;
 }
 .col-header {
-  width: 156px; padding: 10px 14px; border-radius: 10px;
+  flex: 1; min-width: 120px; padding: 10px 14px; border-radius: 10px;
   border: 1px solid transparent;
 }
 .col-header.rec {
@@ -299,14 +311,21 @@ onUnmounted(() => { styleEl?.remove() })
 .domain-avg-track { width: 50px; height: 2px; background: rgba(255,255,255,0.08); border-radius: 1px; overflow: hidden; }
 .domain-avg-fill { height: 100%; }
 
-.cells-col { display: flex; flex-direction: column; gap: 8px; }
+.cells-col { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; }
 .cell-row { display: flex; gap: 8px; }
 .cell {
-  position: relative; width: 156px; height: 90px;
+  position: relative; flex: 1; min-width: 120px; height: 90px;
   border: 1px solid; border-radius: 8px; padding: 10px 14px;
   display: flex; flex-direction: column; justify-content: space-between;
   overflow: hidden; cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
+.cell:hover,
+.cell.active {
+  transform: translateY(-2px);
+  box-shadow: 0 0 22px rgba(0, 212, 255, 0.28), 0 10px 24px rgba(0, 0, 0, 0.28);
+}
+.cell.active { border-color: #00d4ff !important; }
 .cell.rec { box-shadow: 0 0 24px #f59e0b66; }
 .cell-glow { position: absolute; inset: 0; pointer-events: none; }
 .cell-top { display: flex; align-items: center; justify-content: space-between; position: relative; }

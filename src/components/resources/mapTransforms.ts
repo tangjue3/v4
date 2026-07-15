@@ -7,6 +7,9 @@ import type {
   ConcentricRing,
   OrbitTrack,
   NodeDetail,
+  StageResource,
+  LearningStage,
+  StageContentMap,
 } from './mapTypes'
 
 export const BASE_KNOWLEDGE_ITEMS: BaseKnowledgeItem[] = [
@@ -403,4 +406,216 @@ export function buildNodeDetail(
       }
     }
   }
+}
+
+// ============================================================
+//  学习路径阶段（5 个阶段 + 元数据）
+//  阶段: 课前预习 → 课中答疑 → 课后巩固 → 阶段测评 → 期末辅导
+// ============================================================
+
+export const LEARNING_STAGES: LearningStage[] = [
+  { id: 'pre',   label: '课前预习',   icon: 'BookOpen',       color: '#7c3aed' },
+  { id: 'in',    label: '课中答疑',   icon: 'MessageCircle',  color: '#00d4ff' },
+  { id: 'post',  label: '课后巩固',   icon: 'RefreshCw',      color: '#06d6a0' },
+  { id: 'eval',  label: '阶段测评',   icon: 'ClipboardCheck', color: '#f59e0b' },
+  { id: 'final', label: '期末辅导',   icon: 'GraduationCap',  color: '#f43f5e' },
+]
+
+// ============================================================
+//  每个知识点（key = 星座节点 ID）的 5 阶段学习内容
+// ============================================================
+
+export const NODE_CONTENT: StageContentMap = {
+  m1: [
+    [{ title: '矩阵加减乘与转置概念', type: 'doc' }, { title: 'NumPy 矩阵创建与基本操作', type: 'video' }, { title: '线性方程组与矩阵关系', type: 'doc' }],
+    [{ title: '矩阵乘法结合律常见疑问', type: 'video' }, { title: '逆矩阵与行列式的直觉理解', type: 'doc' }, { title: '分块矩阵运算技巧', type: 'video' }],
+    [{ title: '矩阵乘法手算练习', type: 'exercise' }, { title: 'NumPy 矩阵运算编程题', type: 'code' }, { title: '特殊矩阵（对角/对称/稀疏）辨识', type: 'exercise' }],
+    [{ title: '矩阵运算综合测试', type: 'exercise' }, { title: '矩阵在图像变换中的应用', type: 'exercise' }],
+    [{ title: 'SVD 分解原理与应用', type: 'doc' }, { title: 'PCA 降维中的矩阵运算', type: 'video' }, { title: '矩阵分解在推荐系统中的角色', type: 'doc' }],
+  ],
+  m2: [
+    [{ title: '特征值与特征向量的几何含义', type: 'doc' }, { title: '特征方程求解方法', type: 'video' }, { title: '对角化条件与步骤', type: 'doc' }],
+    [{ title: '特征值在 PCA 中的作用', type: 'video' }, { title: '实对称矩阵的谱定理', type: 'doc' }, { title: '特征值与矩阵稳定性的关系', type: 'video' }],
+    [{ title: '手动计算 2x2 矩阵特征值', type: 'exercise' }, { title: '用 sklearn 求协方差矩阵特征值', type: 'code' }, { title: '特征值分解验证练习', type: 'exercise' }],
+    [{ title: '特征值综合测验', type: 'exercise' }, { title: '特征值在 PageRank 中的应用', type: 'exercise' }],
+    [{ title: '特征值在动力系统中的意义', type: 'doc' }, { title: '谱聚类算法原理', type: 'video' }, { title: '特征值在量子计算中的角色', type: 'doc' }],
+  ],
+  m3: [
+    [{ title: '随机变量与概率分布基础', type: 'doc' }, { title: '条件概率与贝叶斯公式', type: 'video' }, { title: '常见分布（正态/泊松/二项）概览', type: 'doc' }],
+    [{ title: '贝叶斯推理在垃圾邮件过滤中的应用', type: 'video' }, { title: '联合分布与边缘分布的关系', type: 'doc' }, { title: '大数定律直觉理解', type: 'video' }],
+    [{ title: '概率计算综合练习', type: 'exercise' }, { title: '用 Python 模拟概率实验', type: 'code' }, { title: '贝叶斯公式应用题', type: 'exercise' }],
+    [{ title: '概率论阶段测评', type: 'exercise' }, { title: '概率在 ML 损失函数中的角色', type: 'exercise' }],
+    [{ title: '概率图模型入门', type: 'doc' }, { title: '蒙特卡洛方法原理', type: 'video' }, { title: '概率论在自然语言处理中的应用', type: 'doc' }],
+  ],
+  m4: [
+    [{ title: '导数的定义与几何意义', type: 'doc' }, { title: '常见函数求导公式速查', type: 'video' }, { title: '偏导数与梯度概念', type: 'doc' }],
+    [{ title: '链式法则在反向传播中的应用', type: 'video' }, { title: '梯度下降法的数学推导', type: 'doc' }, { title: '多元函数极值条件', type: 'video' }],
+    [{ title: '手算导数练习题', type: 'exercise' }, { title: '梯度下降手动模拟', type: 'exercise' }, { title: 'PyTorch 自动求导体验', type: 'code' }],
+    [{ title: '微积分基础测验', type: 'exercise' }, { title: '导数在优化算法中的核心角色', type: 'exercise' }],
+    [{ title: '积分在概率密度中的应用', type: 'doc' }, { title: '变分法入门', type: 'video' }, { title: '微积分在深度学习优化中的前沿', type: 'doc' }],
+  ],
+  m5: [
+    [{ title: '凸集与凸函数定义', type: 'doc' }, { title: '优化问题分类（无约束/有约束）', type: 'video' }, { title: '局部最优与全局最优的区别', type: 'doc' }],
+    [{ title: '拉格朗日乘子法原理', type: 'video' }, { title: 'SVM 中的凸优化应用', type: 'doc' }, { title: 'KKT 条件直觉理解', type: 'video' }],
+    [{ title: '凸函数判定练习', type: 'exercise' }, { title: '用 cvxpy 解简单优化问题', type: 'code' }, { title: '约束优化手算题', type: 'exercise' }],
+    [{ title: '凸优化综合测评', type: 'exercise' }, { title: '优化在模型训练中的实际意义', type: 'exercise' }],
+    [{ title: '非凸优化与鞍点问题', type: 'doc' }, { title: '学习率调度策略', type: 'video' }, { title: '二阶优化方法（牛顿法）简介', type: 'doc' }],
+  ],
+  ml1: [
+    [{ title: '监督学习基本框架（输入→标签）', type: 'doc' }, { title: '线性回归原理与公式推导', type: 'video' }, { title: '逻辑回归与 sigmoid 函数', type: 'doc' }],
+    [{ title: '损失函数（MSE/CrossEntropy）详解', type: 'video' }, { title: '正则化（L1/L2）防止过拟合', type: 'doc' }, { title: '偏差-方差权衡', type: 'video' }],
+    [{ title: '线性回归手写实现', type: 'code' }, { title: '逻辑回归分类练习', type: 'exercise' }, { title: '正则化效果对比实验', type: 'exercise' }],
+    [{ title: '监督学习综合测评', type: 'exercise' }, { title: '模型评估指标（Precision/Recall/F1）', type: 'exercise' }],
+    [{ title: '核方法与非线性扩展', type: 'doc' }, { title: '半监督学习入门', type: 'video' }, { title: '主动学习策略', type: 'doc' }],
+  ],
+  ml2: [
+    [{ title: '无监督学习应用场景概述', type: 'doc' }, { title: 'K-Means 聚类算法原理', type: 'video' }, { title: '降维的意义与方法概览', type: 'doc' }],
+    [{ title: 'DBSCAN 与密度聚类', type: 'video' }, { title: 'PCA 降维数学原理', type: 'doc' }, { title: 't-SNE 可视化直觉', type: 'video' }],
+    [{ title: 'K-Means 手写实现', type: 'code' }, { title: '聚类效果评估（轮廓系数）', type: 'exercise' }, { title: 'PCA 降维实战', type: 'exercise' }],
+    [{ title: '无监督学习综合测评', type: 'exercise' }, { title: '聚类在客户分群中的应用', type: 'exercise' }],
+    [{ title: '自编码器与表示学习', type: 'doc' }, { title: '对比学习入门', type: 'video' }, { title: '无监督特征学习前沿', type: 'doc' }],
+  ],
+  ml3: [
+    [{ title: '决策树分裂原理（信息增益）', type: 'doc' }, { title: 'ID3/C4.5/CART 算法对比', type: 'video' }, { title: '随机森林的 Bagging 思想', type: 'doc' }],
+    [{ title: '特征重要性排序机制', type: 'video' }, { title: 'OOB 评估与交叉验证', type: 'doc' }, { title: '树模型的过拟合与剪枝', type: 'video' }],
+    [{ title: '决策树手写（贪心分裂）', type: 'code' }, { title: 'sklearn 随机森林调参练习', type: 'exercise' }, { title: '特征重要性可视化', type: 'exercise' }],
+    [{ title: '树模型综合测评', type: 'exercise' }, { title: '随机森林在表格数据中的优势', type: 'exercise' }],
+    [{ title: '梯度提升树（GBDT）原理', type: 'doc' }, { title: 'XGBoost/LightGBM 对比', type: 'video' }, { title: '树模型在竞赛中的应用', type: 'doc' }],
+  ],
+  ml4: [
+    [{ title: '最大间隔分类器直觉', type: 'doc' }, { title: '支持向量的定义与作用', type: 'video' }, { title: '软间隔与松弛变量', type: 'doc' }],
+    [{ title: '核技巧（RBF/多项式核）', type: 'video' }, { title: 'SVM 对偶问题推导', type: 'doc' }, { title: 'SVM 与逻辑回归的对比', type: 'video' }],
+    [{ title: 'sklearn SVM 分类实战', type: 'code' }, { title: '核函数选择实验', type: 'exercise' }, { title: 'SVM 调参（C/gamma）练习', type: 'exercise' }],
+    [{ title: 'SVM 综合测评', type: 'exercise' }, { title: 'SVM 在文本分类中的应用', type: 'exercise' }],
+    [{ title: 'SVM 回归（SVR）', type: 'doc' }, { title: '大规模 SVM 的近似方法', type: 'video' }, { title: 'SVM 在小样本场景的优势', type: 'doc' }],
+  ],
+  ml5: [
+    [{ title: '集成学习核心思想（三个臭皮匠）', type: 'doc' }, { title: 'Bagging vs Boosting 对比', type: 'video' }, { title: '偏差-方差分解与集成的关系', type: 'doc' }],
+    [{ title: 'AdaBoost 算法详解', type: 'video' }, { title: 'Stacking 混合策略', type: 'doc' }, { title: 'Blending 与多层集成', type: 'video' }],
+    [{ title: '实现简单 Bagging 分类器', type: 'code' }, { title: '集成策略对比实验', type: 'exercise' }, { title: 'Kaggle 竞赛中的集成技巧', type: 'exercise' }],
+    [{ title: '集成学习综合测评', type: 'exercise' }, { title: '模型融合对精度的提升量化', type: 'exercise' }],
+    [{ title: '深度集成（Snapshot Ensemble）', type: 'doc' }, { title: '多模态集成学习', type: 'video' }, { title: '集成在生产环境中的部署', type: 'doc' }],
+  ],
+  dl1: [
+    [{ title: '感知机模型与激活函数', type: 'doc' }, { title: '多层网络结构与前向传播', type: 'video' }, { title: '万能近似定理', type: 'doc' }],
+    [{ title: '反向传播算法推导', type: 'video' }, { title: '梯度消失/爆炸问题', type: 'doc' }, { title: '权重初始化策略', type: 'video' }],
+    [{ title: '用 NumPy 手写两层网络', type: 'code' }, { title: '激活函数对比实验', type: 'exercise' }, { title: 'MNIST 手写数字识别', type: 'code' }],
+    [{ title: '神经网络基础测评', type: 'exercise' }, { title: '网络深度vs宽度对性能的影响', type: 'exercise' }],
+    [{ title: '残差连接与深层网络', type: 'doc' }, { title: '网络架构搜索（NAS）入门', type: 'video' }, { title: '神经网络可解释性', type: 'doc' }],
+  ],
+  dl2: [
+    [{ title: '卷积操作的直觉理解', type: 'doc' }, { title: '卷积核/滤波器的工作原理', type: 'video' }, { title: '池化层的作用', type: 'doc' }],
+    [{ title: '经典架构 LeNet→AlexNet→VGG', type: 'video' }, { title: 'ResNet 残差学习原理', type: 'doc' }, { title: '感受野计算方法', type: 'video' }],
+    [{ title: '用 PyTorch 搭建 CNN', type: 'code' }, { title: 'CIFAR-10 图像分类实战', type: 'code' }, { title: '卷积核可视化实验', type: 'exercise' }],
+    [{ title: 'CNN 综合测评', type: 'exercise' }, { title: '数据增强对分类精度的影响', type: 'exercise' }],
+    [{ title: '目标检测（YOLO/Faster RCNN）', type: 'doc' }, { title: '语义分割入门', type: 'video' }, { title: 'Vision Transformer（ViT）', type: 'doc' }],
+  ],
+  dl3: [
+    [{ title: '序列数据与时间步概念', type: 'doc' }, { title: 'RNN 基本结构与隐藏状态', type: 'video' }, { title: '梯度截断解决长期依赖', type: 'doc' }],
+    [{ title: 'LSTM 门控机制详解', type: 'video' }, { title: 'GRU 简化门控设计', type: 'doc' }, { title: '双向 RNN 与深层 RNN', type: 'video' }],
+    [{ title: '用 LSTM 做文本生成', type: 'code' }, { title: '时间序列预测练习', type: 'exercise' }, { title: 'RNN vs 全连接网络对比', type: 'exercise' }],
+    [{ title: '序列模型综合测评', type: 'exercise' }, { title: 'Seq2Seq 在机器翻译中的应用', type: 'exercise' }],
+    [{ title: 'Transformer 为何取代 RNN', type: 'doc' }, { title: 'State Space Models 入门', type: 'video' }, { title: '序列建模的未来方向', type: 'doc' }],
+  ],
+  dl4: [
+    [{ title: 'Attention Is All You Need 论文精读', type: 'doc' }, { title: '自注意力机制计算过程', type: 'video' }, { title: 'Multi-Head Attention 原理', type: 'doc' }],
+    [{ title: '位置编码（正弦/旋转）详解', type: 'video' }, { title: 'Encoder-Decoder 架构设计', type: 'doc' }, { title: 'Layer Norm 与残差连接', type: 'video' }],
+    [{ title: '从零手写 Self-Attention', type: 'code' }, { title: 'Transformer 分类任务实战', type: 'code' }, { title: '注意力权重可视化', type: 'exercise' }],
+    [{ title: 'Transformer 架构综合测评', type: 'exercise' }, { title: 'Transformer 复杂度分析', type: 'exercise' }],
+    [{ title: 'GPT 系列架构演进', type: 'doc' }, { title: 'Flash Attention 加速原理', type: 'video' }, { title: 'Mamba 与线性注意力', type: 'doc' }],
+  ],
+  dl5: [
+    [{ title: '注意力机制的历史演进', type: 'doc' }, { title: 'Bahdanau Attention 原理', type: 'video' }, { title: 'Self-Attention vs Cross-Attention', type: 'doc' }],
+    [{ title: '注意力分数计算（点积/加性）', type: 'video' }, { title: '注意力权重的可解释性', type: 'doc' }, { title: '稀疏注意力与高效注意力', type: 'video' }],
+    [{ title: '注意力权重热力图绘制', type: 'code' }, { title: '注意力在不同任务中的表现', type: 'exercise' }, { title: '注意力机制变体对比', type: 'exercise' }],
+    [{ title: 'Attention 机制综合测评', type: 'exercise' }, { title: '注意力在 CV/NLP 中的跨领域应用', type: 'exercise' }],
+    [{ title: '线性注意力与高效 Transformer', type: 'doc' }, { title: '注意力蒸馏技术', type: 'video' }, { title: '可解释 AI 中的注意力分析', type: 'doc' }],
+  ],
+  a1: [
+    [{ title: '比较排序复杂度下界', type: 'doc' }, { title: '快速排序分治原理', type: 'video' }, { title: '归并排序稳定性分析', type: 'doc' }],
+    [{ title: '堆排序与优先队列', type: 'video' }, { title: '二分查找变体（左/右边界）', type: 'doc' }, { title: '排序算法选择决策树', type: 'video' }],
+    [{ title: '手写快排/归并/堆排', type: 'code' }, { title: '二分查找边界题练习', type: 'exercise' }, { title: '排序稳定性验证实验', type: 'exercise' }],
+    [{ title: '排序与查找综合测评', type: 'exercise' }, { title: 'O(nlogn) 在大数据中的意义', type: 'exercise' }],
+    [{ title: '非比较排序（计数/桶/基数）', type: 'doc' }, { title: '外部排序与磁盘排序', type: 'video' }, { title: '排序在数据库索引中的角色', type: 'doc' }],
+  ],
+  a2: [
+    [{ title: '数组vs链表内存模型对比', type: 'doc' }, { title: '栈的应用（括号匹配/表达式求值）', type: 'video' }, { title: '队列与滑动窗口', type: 'doc' }],
+    [{ title: '哈希表冲突解决（链地址/开放寻址）', type: 'video' }, { title: '红黑树/AVL 树平衡原理', type: 'doc' }, { title: 'B 树/B+ 树在数据库中的应用', type: 'video' }],
+    [{ title: '实现 LRU 缓存（哈希+双向链表）', type: 'code' }, { title: '二叉搜索树操作练习', type: 'exercise' }, { title: '堆的建堆与调整操作', type: 'exercise' }],
+    [{ title: '数据结构综合测评', type: 'exercise' }, { title: '不同场景下数据结构选型', type: 'exercise' }],
+    [{ title: '跳表与概率数据结构', type: 'doc' }, { title: '布隆过滤器原理与应用', type: 'video' }, { title: '一致性哈希在分布式系统中的角色', type: 'doc' }],
+  ],
+  a3: [
+    [{ title: '图的表示（邻接矩阵/邻接表）', type: 'doc' }, { title: 'BFS 广度优先遍历原理', type: 'video' }, { title: 'DFS 深度优先与回溯', type: 'doc' }],
+    [{ title: 'Dijkstra 最短路径算法', type: 'video' }, { title: '拓扑排序与任务调度', type: 'doc' }, { title: '最小生成树（Prim/Kruskal）', type: 'video' }],
+    [{ title: '用 BFS 求最短路径', type: 'code' }, { title: '拓扑排序应用题', type: 'exercise' }, { title: '图的连通性判断', type: 'exercise' }],
+    [{ title: '图算法综合测评', type: 'exercise' }, { title: '图在社交网络分析中的应用', type: 'exercise' }],
+    [{ title: 'A* 搜索与启发式算法', type: 'doc' }, { title: '网络流与匹配问题', type: 'video' }, { title: '图神经网络（GNN）入门', type: 'doc' }],
+  ],
+  a4: [
+    [{ title: '动态规划核心思想（最优子结构）', type: 'doc' }, { title: '重叠子问题与记忆化搜索', type: 'video' }, { title: '状态转移方程设计方法', type: 'doc' }],
+    [{ title: '背包问题详解（01/完全/多重）', type: 'video' }, { title: 'LCS/LIS 经典问题', type: 'doc' }, { title: '区间DP与状态压缩', type: 'video' }],
+    [{ title: '手写 01 背包 DP', type: 'code' }, { title: 'LIS 最长递增子序列练习', type: 'exercise' }, { title: '编辑距离问题', type: 'exercise' }],
+    [{ title: '动态规划综合测评', type: 'exercise' }, { title: 'DP 在序列比对中的应用', type: 'exercise' }],
+    [{ title: '概率DP与马尔可夫决策', type: 'doc' }, { title: '强化学习中的 DP 基础', type: 'video' }, { title: 'DP 优化技巧（单调队列/斜率优化）', type: 'doc' }],
+  ],
+  e1: [
+    [{ title: 'Python 虚拟环境（venv/conda）', type: 'doc' }, { title: 'pip/poetry 包管理最佳实践', type: 'video' }, { title: '项目目录结构规范', type: 'doc' }],
+    [{ title: '类型提示（Type Hints）详解', type: 'video' }, { title: '代码规范与 PEP8/linting', type: 'doc' }, { title: 'logging 与调试技巧', type: 'video' }],
+    [{ title: '搭建 Python 项目脚手架', type: 'code' }, { title: 'pytest 编写单元测试', type: 'code' }, { title: 'requirements.txt 管理练习', type: 'exercise' }],
+    [{ title: 'Python 工程能力测评', type: 'exercise' }, { title: '代码质量审查实践', type: 'exercise' }],
+    [{ title: 'Python 性能优化技巧', type: 'doc' }, { title: '异步编程（asyncio）入门', type: 'video' }, { title: 'Python 在 ML 工程中的生态', type: 'doc' }],
+  ],
+  e2: [
+    [{ title: 'Git 基本概念（仓库/分支/提交）', type: 'doc' }, { title: 'Git 工作流（commit/push/pull）', type: 'video' }, { title: '分支管理策略（Git Flow）', type: 'doc' }],
+    [{ title: 'merge vs rebase 的选择', type: 'video' }, { title: '冲突解决实操', type: 'doc' }, { title: 'Git bisect 与代码溯源', type: 'video' }],
+    [{ title: '创建分支并提交 PR', type: 'code' }, { title: '解决合并冲突练习', type: 'exercise' }, { title: '.gitignore 配置', type: 'exercise' }],
+    [{ title: '版本控制综合测评', type: 'exercise' }, { title: '团队协作 Git 工作流考核', type: 'exercise' }],
+    [{ title: 'Git Hooks 与 CI/CD 集成', type: 'doc' }, { title: '大型仓库管理策略', type: 'video' }, { title: 'Git 在 MLOps 中的角色', type: 'doc' }],
+  ],
+  e3: [
+    [{ title: '模型序列化（pickle/torchscript）', type: 'doc' }, { title: 'REST API 设计基础', type: 'video' }, { title: 'Flask/FastAPI 服务搭建', type: 'doc' }],
+    [{ title: 'Docker 容器化打包模型', type: 'video' }, { title: '模型量化与压缩', type: 'doc' }, { title: 'ONNX 格式转换与推理', type: 'video' }],
+    [{ title: '用 FastAPI 部署推理服务', type: 'code' }, { title: 'Dockerfile 编写练习', type: 'code' }, { title: '模型推理基准测试', type: 'exercise' }],
+    [{ title: '部署综合测评', type: 'exercise' }, { title: '端到端部署流程考核', type: 'exercise' }],
+    [{ title: 'Kubernetes 编排入门', type: 'doc' }, { title: 'A/B 测试与灰度发布', type: 'video' }, { title: 'MLOps 全流程概览', type: 'doc' }],
+  ],
+  n1: [
+    [{ title: '分布式假设（Harris 假说）', type: 'doc' }, { title: 'Word2Vec（CBOW/Skip-gram）原理', type: 'video' }, { title: '词向量的数学表示', type: 'doc' }],
+    [{ title: '词向量相似度计算与类比', type: 'video' }, { title: 'GloVe 全局向量方法', type: 'doc' }, { title: 'FastText 子词嵌入', type: 'video' }],
+    [{ title: '用 Gensim 训练词向量', type: 'code' }, { title: '词向量可视化（t-SNE）', type: 'exercise' }, { title: '词类比任务练习', type: 'exercise' }],
+    [{ title: '词向量综合测评', type: 'exercise' }, { title: '词向量在下游任务中的迁移', type: 'exercise' }],
+    [{ title: '上下文化词向量（ELMo）', type: 'doc' }, { title: '从词向量到句子嵌入', type: 'video' }, { title: '多语言词向量', type: 'doc' }],
+  ],
+  n2: [
+    [{ title: '语言模型基本概念（困惑度）', type: 'doc' }, { title: 'GPT 系列架构演进', type: 'video' }, { title: 'BERT 预训练与微调', type: 'doc' }],
+    [{ title: 'In-Context Learning 原理', type: 'video' }, { title: 'Chain-of-Thought 推理', type: 'doc' }, { title: 'LLM 的涌现能力', type: 'video' }],
+    [{ title: 'Prompt Engineering 实战', type: 'exercise' }, { title: '用 HuggingFace 调用 LLM', type: 'code' }, { title: 'Few-shot vs Zero-shot 对比实验', type: 'exercise' }],
+    [{ title: 'LLM 综合测评', type: 'exercise' }, { title: 'LLM 在不同任务中的表现分析', type: 'exercise' }],
+    [{ title: 'MoE（混合专家）架构', type: 'doc' }, { title: '长上下文技术（RoPE/ALiBi）', type: 'video' }, { title: 'LLM 推理加速（KV Cache/投机解码）', type: 'doc' }],
+  ],
+  n3: [
+    [{ title: '全参数微调 vs LoRA 微调', type: 'doc' }, { title: '指令微调（Instruction Tuning）', type: 'video' }, { title: '数据准备与格式规范', type: 'doc' }],
+    [{ title: 'RLHF 奖励模型原理', type: 'video' }, { title: 'DPO 直接偏好优化', type: 'doc' }, { title: '对齐税与安全性的权衡', type: 'video' }],
+    [{ title: '用 LoRA 微调小模型', type: 'code' }, { title: '构建微调数据集', type: 'exercise' }, { title: '微调效果评估', type: 'exercise' }],
+    [{ title: '微调与对齐综合测评', type: 'exercise' }, { title: '微调在垂直领域的应用', type: 'exercise' }],
+    [{ title: '宪法 AI（Constitutional AI）', type: 'doc' }, { title: 'RLAIF 替代人类标注', type: 'video' }, { title: '对齐技术前沿综述', type: 'doc' }],
+  ],
+  n4: [
+    [{ title: 'RAG 基本架构（检索+生成）', type: 'doc' }, { title: '向量数据库原理（FAISS/Milvus）', type: 'video' }, { title: '文档分块与嵌入策略', type: 'doc' }],
+    [{ title: '混合检索（BM25+向量）', type: 'video' }, { title: '重排序（Reranking）优化', type: 'doc' }, { title: '检索质量评估指标', type: 'video' }],
+    [{ title: '用 LangChain 搭建 RAG', type: 'code' }, { title: '文档嵌入与检索实验', type: 'code' }, { title: 'RAG vs 长上下文对比', type: 'exercise' }],
+    [{ title: 'RAG 综合测评', type: 'exercise' }, { title: 'RAG 在企业知识库中的应用', type: 'exercise' }],
+    [{ title: 'GraphRAG 图增强检索', type: 'doc' }, { title: 'Self-RAG 自检索机制', type: 'video' }, { title: '多模态 RAG 入门', type: 'doc' }],
+  ],
+}
+
+/** 取某个知识点在某个阶段的资源 */
+export function getStageContent(topicId: string, stageIdx: number): StageResource[] {
+  return NODE_CONTENT[topicId]?.[stageIdx] ?? []
+}
+
+/** 取某个知识点的所有阶段资源（5 个数组） */
+export function getAllStageContent(topicId: string): StageResource[][] {
+  return NODE_CONTENT[topicId] ?? [[], [], [], [], []]
 }

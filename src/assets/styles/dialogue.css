@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 .dialogue-root {
-  --bg-deep: #07060a;
-  --bg-surface: #0e0c15;
-  --bg-elevated: #161220;
-  --bg-card: #110e1a;
-  --bg-hover: #1a1628;
+  --bg-deep: transparent;
+  --bg-surface: rgba(59, 130, 246, 0.06);
+  --bg-elevated: rgba(59, 130, 246, 0.08);
+  --bg-card: rgba(59, 130, 246, 0.06);
+  --bg-hover: rgba(59, 130, 246, 0.12);
 
   --gold-300: #93c5fd;
   --gold-400: #60a5fa;
@@ -28,9 +28,14 @@
   --text-muted: #6b7fa8;
   --text-dim: #3d4f78;
 
-  --border-subtle: rgba(59, 130, 246, 0.1);
-  --border-medium: rgba(59, 130, 246, 0.2);
-  --border-strong: rgba(59, 130, 246, 0.35);
+  /* 分隔线 / 装饰用：略高于氛围线，兼顾区隔与透气感 */
+  --border-subtle: rgba(59, 130, 246, 0.08);
+  --border-medium: rgba(59, 130, 246, 0.15);
+  --border-strong: rgba(59, 130, 246, 0.25);
+
+  /* 块级容器专用：让消息气泡 / 输入框 / 面板 / 按钮边界清晰 */
+  --border-card:  rgba(59, 130, 246, 0.12);
+  --border-input: rgba(59, 130, 246, 0.2);
 }
 
 .dialogue-root h1,
@@ -49,7 +54,7 @@
 }
 
 .dialogue-root .glass-surface {
-  background: rgba(14, 12, 21, 0.6);
+  background: rgba(59, 130, 246, 0.06);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
@@ -57,8 +62,8 @@
 .dialogue-root .glass-card {
   background: linear-gradient(
     135deg,
-    rgba(22, 18, 32, 0.7) 0%,
-    rgba(17, 14, 26, 0.5) 100%
+    rgba(59, 130, 246, 0.08) 0%,
+    rgba(37, 99, 235, 0.04) 100%
   );
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -66,7 +71,7 @@
 }
 
 .dialogue-root .cosmic-card {
-  background: linear-gradient(135deg, rgba(22, 18, 32, 0.7) 0%, rgba(17, 14, 26, 0.5) 100%);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.04) 100%);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-color: var(--border-subtle) !important;

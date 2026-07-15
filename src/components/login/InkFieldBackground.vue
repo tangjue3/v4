@@ -52,17 +52,19 @@ float fbm(vec2 p) {
 }
 
 vec3 palette(float t) {
-  vec3 deepBlue = vec3(0.004, 0.020, 0.060);
-  vec3 cobalt = vec3(0.030, 0.220, 0.700);
-  vec3 cyan = vec3(0.000, 0.780, 0.940);
-  vec3 teal = vec3(0.000, 0.820, 0.600);
-  vec3 violet = vec3(0.430, 0.220, 0.950);
-  vec3 ember = vec3(1.000, 0.480, 0.260);
-  vec3 band = mix(cobalt, cyan, smoothstep(0.15, 0.72, t));
-  band = mix(band, teal, smoothstep(0.38, 0.92, sin(t * 3.14159)));
-  band = mix(band, violet, 0.18 + 0.18 * sin(t * 6.28318 + 1.2));
-  band += ember * pow(max(0.0, sin(t * 8.0 - 1.0)), 8.0) * 0.18;
-  return mix(deepBlue, band, 0.86);
+  vec3 deepNavy = vec3(0.04, 0.08, 0.16);
+  vec3 royalBlue = vec3(0.08, 0.22, 0.45);
+  vec3 steelBlue = vec3(0.22, 0.40, 0.65);
+  vec3 skyBlue = vec3(0.45, 0.65, 0.85);
+  vec3 paleBlue = vec3(0.65, 0.78, 0.92);
+  vec3 cloudWhite = vec3(0.88, 0.92, 0.98);
+  vec3 band = mix(deepNavy, royalBlue, smoothstep(0.0, 0.25, t));
+  band = mix(band, steelBlue, smoothstep(0.2, 0.5, t));
+  band = mix(band, skyBlue, smoothstep(0.45, 0.7, t));
+  band = mix(band, paleBlue, smoothstep(0.65, 0.85, t));
+  band = mix(band, cloudWhite, smoothstep(0.8, 1.0, t));
+  band += vec3(0.75, 0.85, 1.0) * pow(max(0.0, sin(t * 6.0)), 12.0) * 0.08;
+  return band;
 }
 
 void main() {
@@ -87,13 +89,20 @@ void main() {
 
   vec3 color = palette(field + length(r) * 0.62 + time * 0.75);
   color *= 0.42 + 0.72 * ribbon;
-  color += vec3(0.10, 0.78, 1.00) * filament * 0.16;
-  color += vec3(0.28, 0.08, 0.95) * pow(max(0.0, 1.0 - md), 3.2) * 0.34;
+  color += vec3(0.75, 0.88, 1.00) * filament * 0.18;
+  color += vec3(0.55, 0.75, 1.00) * pow(max(0.0, 1.0 - md), 3.2) * 0.28;
+
+  float verticalGrad = smoothstep(-1.2, 1.0, uv.y);
+  vec3 topColor = vec3(0.05, 0.09, 0.18);
+  vec3 midColor = vec3(0.15, 0.30, 0.55);
+  vec3 bottomColor = vec3(0.70, 0.82, 0.95);
+  vec3 gradColor = mix(topColor, midColor, smoothstep(-0.8, 0.0, uv.y));
+  gradColor = mix(gradColor, bottomColor, smoothstep(0.0, 1.0, uv.y));
+  color = mix(gradColor, color, 0.55);
 
   float vignette = smoothstep(1.82, 0.18, length(uv * vec2(0.82, 1.0)));
   float scan = 0.965 + 0.035 * sin(gl_FragCoord.y * 1.45 + u_time * 1.7);
   color *= vignette * scan;
-  color += vec3(0.004, 0.018, 0.055);
 
   gl_FragColor = vec4(color, 1.0);
 }
@@ -256,19 +265,33 @@ onBeforeUnmount(cleanup)
 </script>
 
 <template>
-  <canvas ref="canvasRef" class="ink-field" aria-hidden="true" />
+  <div class="ink-field-wrapper" aria-hidden="true">
+    <div class="ink-field-bg" />
+    <canvas ref="canvasRef" class="ink-field-canvas" />
+  </div>
 </template>
 
 <style scoped>
-.ink-field {
+.ink-field-wrapper {
   position: fixed;
   inset: 0;
   z-index: 0;
+  pointer-events: none;
+}
+
+.ink-field-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 800px 500px at 30% 30%, rgba(80, 150, 220, 0.15), transparent 60%),
+    linear-gradient(180deg, #0a1020 0%, #122848 30%, #2a5080 55%, #5a85b8 75%, #90b5dd 90%, #c8dcf0 100%);
+}
+
+.ink-field-canvas {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
-  background:
-    radial-gradient(circle at 50% 44%, rgba(8, 47, 73, 0.86), transparent 42%),
-    #02040f;
 }
 </style>

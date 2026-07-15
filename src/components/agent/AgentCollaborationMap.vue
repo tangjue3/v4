@@ -327,8 +327,8 @@ const agentColors = ['#00d4ff', '#3b82f6', '#7c3aed', '#f59e0b', '#06d6a0', '#f4
 }
 
 @keyframes glow-breathe {
-  0%, 100% { opacity: 0.08; }
-  50% { opacity: 0.18; }
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.17; }
 }
 
 @media (max-width: 1100px) {

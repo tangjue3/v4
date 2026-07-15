@@ -36,7 +36,8 @@ const router = createRouter({
     },
     {
       path: '/profile',
-      redirect: '/dialogue',
+      name: 'profile',
+      component: () => import('@/views/Profile.vue'),
     },
     {
       path: '/learning-path',
@@ -51,7 +52,7 @@ const router = createRouter({
     {
       path: '/reverse-evaluation',
       name: 'reverse-evaluation',
-      component: () => import('@/views/KnowledgeBase.vue'),
+      component: () => import('@/views/ReverseEvaluation.vue'),
     },
     {
       path: '/knowledge-base',

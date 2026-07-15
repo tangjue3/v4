@@ -70,6 +70,120 @@
   to { transform: rotate(360deg); }
 }
 
+/* === User-side breathing motion === */
+@keyframes ui-breathe-soft {
+  0%,
+  100% {
+    filter: brightness(1) saturate(1);
+  }
+  50% {
+    filter: brightness(1.045) saturate(1.04);
+  }
+}
+
+@keyframes breathe-subtle {
+  0%,
+  100% {
+    border-color: rgba(100, 180, 255, 0.10);
+    box-shadow:
+      inset 0 1px 0 rgba(140, 220, 255, 0.04),
+      0 0 0 rgba(80, 190, 255, 0);
+    filter: brightness(1);
+  }
+  50% {
+    border-color: rgba(100, 190, 255, 0.20);
+    box-shadow:
+      inset 0 1px 0 rgba(170, 230, 255, 0.075),
+      0 0 18px rgba(80, 190, 255, 0.055);
+    filter: brightness(1.035);
+  }
+}
+
+@keyframes breathe-glow {
+  0%,
+  100% {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.055),
+      0 16px 48px rgba(0, 0, 0, 0.30),
+      0 0 0 rgba(0, 212, 255, 0);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.085),
+      0 18px 54px rgba(0, 0, 0, 0.32),
+      0 0 26px rgba(0, 212, 255, 0.09);
+    filter: brightness(1.04);
+  }
+}
+
+@keyframes breathe-pulse {
+  0%,
+  100% {
+    opacity: 0.72;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.12);
+  }
+}
+
+.breathe {
+  animation: ui-breathe-soft 7.2s ease-in-out infinite;
+}
+
+.breathe-subtle {
+  animation: breathe-subtle var(--breathe-duration, 6.8s) ease-in-out var(--breathe-delay, 0s) infinite;
+}
+
+.breathe-glow {
+  animation: breathe-glow var(--breathe-duration, 7.4s) ease-in-out var(--breathe-delay, 0s) infinite;
+}
+
+.breathe-pulse {
+  animation: breathe-pulse var(--breathe-duration, 3.8s) ease-in-out var(--breathe-delay, 0s) infinite;
+}
+
+.breathe-delay-1 { animation-delay: 0.8s; }
+.breathe-delay-2 { animation-delay: 1.6s; }
+.breathe-delay-3 { animation-delay: 2.4s; }
+.breathe-delay-4 { animation-delay: 3.2s; }
+
+/* === Global Glass/Card/Panel Breathing - Very Subtle === */
+.glass:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]):not(.login-panel):not(.tree-panel),
+.glass-strong:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]):not(.login-panel):not(.tree-panel),
+.glass-panel:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]):not(.login-panel):not(.tree-panel),
+.glass-panel-strong:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]):not(.login-panel):not(.tree-panel),
+.glass-panel-light:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]):not(.login-panel):not(.tree-panel),
+.glass-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]):not(.login-panel):not(.tree-panel),
+.glass-hud:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]):not(.login-panel):not(.tree-panel),
+.card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]):not(.hub-card),
+.group-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.bs-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.agent-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.feature-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.resource-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.course-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.stage-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.stat-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.detail-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.legend-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.hub-context-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.pet-chat-panel:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.live2d-debug-panel:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.kpi-chip:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.sky-score:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.graph-panel:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.summary-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.metric-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.kpi-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.dashboard-metric-card:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.detail-modal:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]),
+.panel:not(.breathe):not([class*="panel-breathe"]):not([class*="card-breathe"]):not([class*="border-breathe"]):not([class*="welcome-"]):not(.login-panel):not(.tree-panel) {
+  animation: ui-breathe-soft 7.2s ease-in-out infinite;
+}
+
 /* === Reduced Motion === */
 @media (prefers-reduced-motion: reduce) {
   .fade-enter-active,
@@ -89,7 +203,41 @@
   .stat-fill,
   .mastery-fill,
   .skill-bar-fill,
-  .scan-effect::after {
+  .scan-effect::after,
+  .breathe,
+  .breathe-subtle,
+  .breathe-glow,
+  .breathe-pulse,
+  .glass,
+  .glass-strong,
+  .glass-panel,
+  .glass-panel-strong,
+  .glass-panel-light,
+  .glass-card,
+  .glass-hud,
+  .card,
+  .group-card,
+  .bs-card,
+  .agent-card,
+  .feature-card,
+  .resource-card,
+  .course-card,
+  .stage-card,
+  .stat-card,
+  .detail-card,
+  .legend-card,
+  .hub-context-card,
+  .pet-chat-panel,
+  .live2d-debug-panel,
+  .kpi-chip,
+  .sky-score,
+  .graph-panel,
+  .summary-card,
+  .metric-card,
+  .kpi-card,
+  .dashboard-metric-card,
+  .detail-modal,
+  .panel {
     animation: none !important;
     transition: none !important;
   }

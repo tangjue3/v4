@@ -1,8 +1,9 @@
 import {
   chats, dimensions, inputText, isAiLoading, report, showReport, activeMenu, canUnlockReport,
   recommendQaInput, recommendQaMessages, isRecommendQaLoading,
-  isXunfeiConnecting, isXunfeiListening, isXunfeiSpeaking,
-  xunfeiSubtitle, isVirtualMuted, xunfeiLanguage, xunfeiVolume, syncToMainChat,
+  isAiConnecting, isAiListening, isAiSpeaking,
+  aiSubtitle, isVirtualMuted, aiLanguage, aiVolume, syncToMainChat,
+  hasGeneratedReport, saveProfileToHistory, matchRecommendedCourses,
 } from './useAppState'
 import { avatarStatus, avatarWriteText, setAvatarNlpHandler, setAvatarAsrHandler, getAvatarInstance } from './useAvatarSdk'
 import type { ChatMessage, StudyReport, DimensionMap } from '@/types/dialogue'
@@ -10,7 +11,7 @@ import type { ChatMessage, StudyReport, DimensionMap } from '@/types/dialogue'
 /* ───────── DeepSeek API 配置 ───────── */
 const DEEPSEEK_API_URL = '/deepseek-api/chat/completions'
 const DEEPSEEK_API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY || ''
-const DEEPSEEK_MODEL = 'deepseek-chat'
+const DEEPSEEK_MODEL = 'deepseek-v4-flash'
 
 const SYSTEM_PROMPT = `你是 EduMind 智能学习助手，专注于帮助学生进行学习规划和课程咨询。你必须通过对话主动收集以下 9 个画像维度。
 
@@ -32,9 +33,6 @@ const SYSTEM_PROMPT = `你是 EduMind 智能学习助手，专注于帮助学生
 3. 用户说的每句话都可能包含维度信息，仔细分析
 4. 如果本轮没有新维度，也要追问缺失的维度
 5. 每次回复末尾给出 2-3 个建议追问短句（每条 10 字以内）
-
-## 你当前已知的画像信息
-{currentDimensions}
 
 ## 维度标签输出要求（非常重要！）
 **必须在回复的最后一行输出所有识别到的维度标签**，格式：
@@ -223,16 +221,16 @@ setAvatarNlpHandler((data: any) => {
   if (!syncToMainChat.value) return
   const text = data?.payload?.choices?.text?.[0]?.content || data?.text || ''
   if (!text) return
-  isXunfeiSpeaking.value = true
+  isAiSpeaking.value = true
 
   const last = chats.value[chats.value.length - 1]
   if (last?.sender === 'ai' && last?.source === 'chat' && last.text === text) return
-  if (last?.source === 'xunfei' && last?.sender === 'ai') {
+  if (last?.source === 'ai' && last?.sender === 'ai') {
     chats.value = [...chats.value.slice(0, -1), { ...last, text }]
   } else {
     chats.value = [
       ...chats.value,
-      { id: `xf-ai-${Date.now()}`, sender: 'ai', text, time: getTime(), source: 'xunfei' },
+      { id: `ai-${Date.now()}`, sender: 'ai', text, time: getTime(), source: 'ai' },
     ]
   }
 })
@@ -255,17 +253,10 @@ setAvatarAsrHandler((data: any) => {
 
 /** 将聊天记录转为 DeepSeek messages 格式 */
 function buildApiMessages(): { role: string; content: string }[] {
-  // 把当前已收集的维度注入系统提示
-  const dimEntries = Object.entries(dimensions.value)
-  const collected = dimEntries.filter(([, v]) => v !== null)
-  const missing = dimEntries.filter(([, v]) => v === null)
-  const dimSummary = collected.length > 0
-    ? `已收集：${collected.map(([k, v]) => `${k}=${v}`).join(' | ')}\n待收集：${missing.map(([k]) => k).join('、')}`
-    : '尚未收集任何维度，请从用户第一句话就开始提取。'
-
-  const systemContent = SYSTEM_PROMPT.replace('{currentDimensions}', dimSummary)
-
-  const msgs: { role: string; content: string }[] = [{ role: 'system', content: systemContent }]
+  // 纯静态 system prompt — 不动态注入维度，确保前缀缓存稳定
+  const msgs: { role: string; content: string; cache_control?: { type: string } }[] = [
+    { role: 'system', content: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }
+  ]
   // 只取最近 20 条避免 token 过多
   const recent = chats.value.slice(-20)
   for (const c of recent) {
@@ -320,7 +311,7 @@ export async function sendMessage() {
 
     if (syncToMainChat.value && avatarStatus.value === 'connected') {
       avatarWriteText(cleanText, false)
-      isXunfeiSpeaking.value = true
+      isAiSpeaking.value = true
     }
   } catch (err) {
     console.error('DeepSeek API error:', err)
@@ -328,6 +319,18 @@ export async function sendMessage() {
   } finally {
     isAiLoading.value = false
   }
+}
+
+function appendRecommendCoursesMsg(parsed: StudyReport) {
+  const recommended = matchRecommendedCourses(parsed)
+  const completionMsg: ChatMessage = {
+    id: `msg-${Date.now()}-report-done`, sender: 'ai',
+    text: `🎉 画像生成完成！综合评分 ${parsed.score} 分 — ${parsed.evaluation}\n\n根据你的学情画像，我为你精选了以下 3 门推荐课程，点击卡片即可跳转到学习资源页面开始学习：`,
+    time: getTime(),
+    source: 'chat',
+    recommendedCourses: recommended,
+  }
+  chats.value = [...chats.value, completionMsg]
 }
 
 export async function triggerReport() {
@@ -346,15 +349,16 @@ export async function triggerReport() {
     ]
 
     const replyText = await callDeepSeek(apiMessages)
-    // 提取 JSON
     const jsonMatch = replyText.match(/\{[\s\S]*\}/)
     if (jsonMatch) {
       const parsed = JSON.parse(jsonMatch[0]) as StudyReport
       report.value = parsed
       showReport.value = true
-      activeMenu.value = 'portrait-report'
+      hasGeneratedReport.value = true
+      saveProfileToHistory(parsed)
 
-      // 将画像数据保存到后端，并触发AI生成个性化知识路径
+      appendRecommendCoursesMsg(parsed)
+
       try {
         const { saveProfile, triggerKnowledgePath } = await import('@/lib/api')
         await saveProfile({
@@ -363,7 +367,6 @@ export async function triggerReport() {
           weaknesses: parsed.weaknesses,
           suggestions: parsed.suggestions,
         })
-        // 异步触发AI生成知识路径（不阻塞UI）
         triggerKnowledgePath().catch(() => {})
       } catch (e) {
         console.warn('Failed to save profile to backend:', e)
@@ -373,27 +376,27 @@ export async function triggerReport() {
     }
   } catch (err) {
     console.error('Report generation error:', err)
-    // fallback
     const fallback: StudyReport = {
-      score: 87, evaluation: '优秀',
+      score: 75, evaluation: '良好',
       radarPoints: [
-        { dimension: '知识基础', score: 85 }, { dimension: '学习速度', score: 90 },
-        { dimension: '逻辑思维', score: 88 }, { dimension: '创造力', score: 82 },
-        { dimension: '专注力', score: 80 }, { dimension: '自律力', score: 86 },
+        { dimension: '知识基础', score: 72 }, { dimension: '学习速度', score: 80 },
+        { dimension: '逻辑思维', score: 78 }, { dimension: '创造力', score: 75 },
+        { dimension: '专注力', score: 70 }, { dimension: '自律力', score: 73 },
       ],
-      weaknesses: ['数学基础需要加强', '项目实战经验较少', '学习时长可以适当增加'],
-      suggestions: ['从小项目入手，边学边做', '系统补充数学基础', '保持当前学习节奏，逐步提升深度'],
-      skills: { core: ['Python', '机器学习', '深度学习', '数据分析'], foundation: ['算法基础', '数学基础', '项目实战'], additional: ['工程化部署', '强化学习', '计算机视觉'] },
+      weaknesses: ['基础知识需要系统梳理', '实战经验有待积累', '建议制定规律的学习计划'],
+      suggestions: ['从基础课程开始循序渐进', '配合小项目巩固所学', '保持每日固定学习时间'],
+      skills: { core: ['Python', '数据结构', '人工智能导论'], foundation: ['编程基础', '数学基础'], additional: ['机器学习入门'] },
       recommendedPath: [
-        { step: 1, title: '巩固优势', description: '夯实基础知识' }, { step: 2, title: '补齐短板', description: '强化薄弱环节' },
-        { step: 3, title: '实战跃迁', description: '完成项目实践' }, { step: 4, title: '周期校准', description: '定期复盘优化' },
+        { step: 1, title: '基础入门', description: '掌握编程基础' }, { step: 2, title: '知识体系', description: '建立系统认知' },
+        { step: 3, title: '实战练习', description: '动手做项目' }, { step: 4, title: '持续提升', description: '定期复盘优化' },
       ],
     }
     report.value = fallback
     showReport.value = true
-    activeMenu.value = 'portrait-report'
+    hasGeneratedReport.value = true
+    saveProfileToHistory(fallback)
+    appendRecommendCoursesMsg(fallback)
 
-    // fallback 也保存到后端并触发AI生成
     try {
       const { saveProfile, triggerKnowledgePath } = await import('@/lib/api')
       await saveProfile({
@@ -405,6 +408,7 @@ export async function triggerReport() {
       triggerKnowledgePath().catch(() => {})
     } catch { /* ignore */ }
   }
+  activeMenu.value = 'portrait-report'
 }
 
 export function handleSendRecommendQa(customText?: string) {
@@ -417,14 +421,14 @@ export function handleSendRecommendQa(customText?: string) {
 
   if (avatarStatus.value === 'connected') {
     avatarWriteText(textToSend, true)
-    isXunfeiSpeaking.value = true
+    isAiSpeaking.value = true
 
     const nlpHandler = (data: any) => {
       const response = data?.payload?.choices?.text?.[0]?.content || data?.text || ''
       if (response) {
         recommendQaMessages.value = [...recommendQaMessages.value, { sender: 'ai', text: response }]
         isRecommendQaLoading.value = false
-        isXunfeiSpeaking.value = false
+        isAiSpeaking.value = false
       }
       const instance = getAvatarInstance()
       if (instance) instance.off('nlp', nlpHandler)
@@ -451,27 +455,27 @@ export function handleSendRecommendQa(customText?: string) {
   }
 }
 
-export function runXunfeiSimulation(customQuestion?: string) {
-  if (isXunfeiConnecting.value || isXunfeiListening.value) return
-  if (isXunfeiSpeaking.value) {
+export function runAiSimulation(customQuestion?: string) {
+  if (isAiConnecting.value || isAiListening.value) return
+  if (isAiSpeaking.value) {
     try { if ('speechSynthesis' in window) window.speechSynthesis.cancel() } catch { /* ignore */ }
-    isXunfeiSpeaking.value = false
-    xunfeiSubtitle.value = '你好！已为您停止播报。点击下方问题，随时开启新轮次的高阶对讲！'
+    isAiSpeaking.value = false
+    aiSubtitle.value = '你好！已为您停止播报。点击下方问题，随时开启新轮次的高阶对讲！'
     return
   }
 
   const targetQuestion = customQuestion || '我该如何科学地规划自己的日常AI学习道路呢？'
-  isXunfeiListening.value = true
-  xunfeiSubtitle.value = `🎙️ [实时收音中...] \n"${targetQuestion}"`
+  isAiListening.value = true
+  aiSubtitle.value = `🎙️ [实时收音中...] \n"${targetQuestion}"`
 
   setTimeout(() => {
-    isXunfeiListening.value = false
-    isXunfeiConnecting.value = true
-    xunfeiSubtitle.value = '⚡「科大讯飞星火模型」深度大语言引擎多维语义分析中...'
+    isAiListening.value = false
+    isAiConnecting.value = true
+    aiSubtitle.value = '⚡「多智能体大语言模型」深度语义分析中...'
 
     setTimeout(() => {
-      isXunfeiConnecting.value = false
-      isXunfeiSpeaking.value = true
+      isAiConnecting.value = false
+      isAiSpeaking.value = true
 
       let responseText = ''
       if (targetQuestion.includes('Python程序设计') || targetQuestion.includes('C语言') || targetQuestion.includes('数据结构') || (targetQuestion.includes('介绍') && (targetQuestion.includes('课程') || targetQuestion.includes('门')))) {
@@ -486,35 +490,35 @@ export function runXunfeiSimulation(customQuestion?: string) {
         responseText = '收到您对课程的咨询！EduMind 课程体系涵盖 5 大方向共 24 门课程，从编程基础到人工智能前沿均有覆盖。您可以在课程页面浏览所有课程，点击课程卡片展开查看核心知识点、代码示例和预设问答。如需深入了解某门具体课程，我也很乐意为您详细讲解！'
       }
 
-      xunfeiSubtitle.value = `"${responseText}"`
+      aiSubtitle.value = `"${responseText}"`
 
       if (!isVirtualMuted.value) {
         try {
           if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel()
             const utterance = new SpeechSynthesisUtterance(responseText)
-            utterance.lang = xunfeiLanguage.value
-            utterance.volume = xunfeiVolume.value / 100
+            utterance.lang = aiLanguage.value
+            utterance.volume = aiVolume.value / 100
             utterance.rate = 1.05
-            utterance.onend = () => { isXunfeiSpeaking.value = false }
-            utterance.onerror = () => { isXunfeiSpeaking.value = false }
+            utterance.onend = () => { isAiSpeaking.value = false }
+            utterance.onerror = () => { isAiSpeaking.value = false }
             window.speechSynthesis.speak(utterance)
           } else {
-            setTimeout(() => { isXunfeiSpeaking.value = false }, 8000)
+            setTimeout(() => { isAiSpeaking.value = false }, 8000)
           }
         } catch {
-          setTimeout(() => { isXunfeiSpeaking.value = false }, 8000)
+          setTimeout(() => { isAiSpeaking.value = false }, 8000)
         }
       } else {
-        setTimeout(() => { isXunfeiSpeaking.value = false }, 8000)
+        setTimeout(() => { isAiSpeaking.value = false }, 8000)
       }
 
       if (syncToMainChat.value) {
         const currentTime = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false })
         chats.value = [
           ...chats.value,
-          { id: `xf-user-${Date.now()}`, sender: 'user', text: targetQuestion, time: currentTime, source: 'xunfei' },
-          { id: `xf-ai-${Date.now()}`, sender: 'ai', text: responseText, time: currentTime, source: 'xunfei' },
+          { id: `ai-user-${Date.now()}`, sender: 'user', text: targetQuestion, time: currentTime, source: 'ai' },
+          { id: `ai-ai-${Date.now()}`, sender: 'ai', text: responseText, time: currentTime, source: 'ai' },
         ]
       }
     }, 1200)

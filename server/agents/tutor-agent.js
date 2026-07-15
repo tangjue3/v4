@@ -1,10 +1,12 @@
 import { callLlm } from '../llm/provider.js'
 import { createAgentResult, AGENT_NAMES } from '../schemas.js'
+import { retrieveKnowledgeContext, buildKnowledgeEvidence, summarizeKnowledgeForPrompt } from '../knowledge-base/retrieval.js'
+import { detectDomain } from '../knowledge-base/detect-domain.js'
 
 const SYSTEM_PROMPT = `你是一个智能学习辅导老师。根据学生的问题、学习画像和辅导模式，给出详细、有针对性的回答。
 回答应包含：1) 问题分析 2) 核心讲解 3) 举例说明 4) 学习建议 5) 相关资源推荐。`
 
-export async function runTutorAgent({ question, mode, profile, resources }) {
+export async function runTutorAgent({ question, mode, profile, resources, knowledgeContext }) {
   const start = Date.now()
   const input = { question, mode }
 
@@ -15,12 +17,22 @@ export async function runTutorAgent({ question, mode, profile, resources }) {
   }
   const modeLabel = modeLabels[mode] || '自由问答'
 
+  const resolvedKb = knowledgeContext || retrieveKnowledgeContext({
+    agentName: AGENT_NAMES.TUTOR,
+    query: question,
+    profile,
+    domain: detectDomain(question),
+    limit: 3,
+  })
+
   const userPrompt = `辅导模式: ${modeLabel}
 学生问题: ${question}
 学生画像: ${JSON.stringify(profile?.dimensions || [])}
 可用资源: ${JSON.stringify(resources?.slice(0, 3) || [])}
+知识参考:
+${summarizeKnowledgeForPrompt(resolvedKb.matches)}
 
-请给出个性化辅导回答。`
+请给出个性化辅导回答。如果知识参考里有相关策略（如苏格拉底式提问、错因诊断），请主动应用。`
 
   const llmResult = await callLlm(SYSTEM_PROMPT, userPrompt)
   let answer
@@ -39,11 +51,26 @@ export async function runTutorAgent({ question, mode, profile, resources }) {
     evidence.push('本地规则 fallback 生成辅导回答')
   }
 
+  evidence.push(...buildKnowledgeEvidence(resolvedKb, { summary: '辅导知识库' }))
+
   const durationMs = Date.now() - start
   return createAgentResult({
     agentName: AGENT_NAMES.TUTOR,
     input,
-    output: { answer, mode: modeLabel },
+    output: {
+      answer,
+      mode: modeLabel,
+      knowledgeContext: {
+        detectedDomain: resolvedKb.detectedDomain,
+        matches: resolvedKb.matches.map(m => ({
+          id: m.id,
+          title: m.title,
+          score: m.score,
+          snippet: m.snippet,
+          agentHint: m.agentHint,
+        })),
+      },
+    },
     confidence: fallbackUsed ? 0.6 : 0.9,
     evidence,
     durationMs,

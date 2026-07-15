@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
 
 /* ── Tokens ── */
 const T = {
@@ -168,10 +165,7 @@ const hotLoopIdx = computed(() => loopOrder.indexOf(hotAgentId.value))
 
 /* ── Chip side helper ── */
 function chipSide(x: number, y: number): 'left' | 'right' | 'top' | 'bottom' {
-  const dx = x - CX
-  const dy = y - CY
-  if (Math.abs(dx) > Math.abs(dy) * 0.8) return dx > 0 ? 'right' : 'left'
-  return dy > 0 ? 'bottom' : 'top'
+  return 'right'
 }
 
 /* ── Wireframe latitude/longitude data ── */
@@ -179,26 +173,14 @@ const latitudes = [0.95, 0.78, 0.55, 0.25, 0, -0.3, -0.6, -0.82, -0.95]
 const longitudes = [0, 30, 60, 90, 120, 150]
 
 /* ── Stats ── */
-const heroStats = [
-  { l: '活跃智能体', v: '12', sub: '协同中', c: T.cyan },
-  { l: '协同模块', v: '6', sub: '个', c: T.purple },
-  { l: '正确率', v: '82', sub: '%', c: T.emerald },
-  { l: '知识掌握度', v: '68', sub: '%', c: T.amber },
-]
 
 /* ── Chip positioning style ── */
 function chipStyle(x: number, y: number, isHot: boolean, side: string): string {
-  const offset = isHot ? 56 : 48
-  let dx = 0, dy = 0
-  if (side === 'right') dx = offset
-  else if (side === 'left') dx = -offset
-  else if (side === 'top') dy = -offset
-  else dy = offset
-
+  const offset = isHot ? 60 : 52
+  const dx = offset
   const px = x + dx
-  const py = y + dy
-  const transform = side === 'left' ? 'translate(-100%, -50%)' : 'translate(0, -50%)'
-
+  const py = y
+  const transform = 'translate(0, -50%)'
   return `left:${px}px;top:${py}px;transform:${transform};z-index:${isHot ? 20 : 10};min-width:${isHot ? '240px' : 'auto'}`
 }
 
@@ -271,37 +253,40 @@ function initStarfield() {
     <div class="hero-layout">
       <!-- LEFT: copy -->
       <div class="hero-copy">
-        <h1 class="hero-title-hp">
-          <span>EduMind</span>
-          <span>
-            <em class="gradient-text">知识转译</em>
-            智能体系统
-          </span>
-        </h1>
+        <h1 class="hero-main-title">智学星枢</h1>
+        <p class="hero-subtitle">多智能体协同的个性化学习平台</p>
 
         <p class="hero-desc">
-          像老师参考图那样，把课程教材、代码样例和练习题转成可交互的 AI 学习界面 —
-          6 个协同模块调度 12 个专业智能体，
-          从知识源解析、画像诊断到资源生成、路径编排和评估回写全程接力，
-          <span style="color: #00d4ff;">每一次互动都反向更新画像</span>，让系统更懂你。
+          围绕学习画像、路径规划、学习资源生成、智能评估与反向更新，平台通过多智能体协同，为学生提供动态、个性化、可持续优化的学习支持。
         </p>
 
-        <div class="hero-ctas">
-          <button class="btn-hp-primary" @click="router.push({ name: 'edu-mind', query: { source: 'home', focus: 'today' } })">
-            开始今日学习 <span class="btn-arrow">→</span>
-          </button>
-          <button class="btn-hp-ghost" @click="router.push({ name: 'learning-path' })">
-            查看协同实况 <span class="btn-arrow-sm">↗</span>
-          </button>
+        <div class="hero-capabilities">
+          <span class="cap-tag">画像生成</span>
+          <span class="cap-tag">学习路径</span>
+          <span class="cap-tag">学习资源</span>
+          <span class="cap-tag">智能评估</span>
+          <span class="cap-tag">反向更新</span>
         </div>
 
-        <div class="hero-stats-row">
-          <div v-for="s in heroStats" :key="s.l" class="stat-item">
-            <div class="stat-label">{{ s.l }}</div>
-            <div class="stat-value">
-              <span class="stat-num" :style="{ color: s.c }">{{ s.v }}</span>
-              <span class="stat-sub">{{ s.sub }}</span>
-            </div>
+        <div class="hero-metrics">
+          <div class="metric-item">
+            <span class="metric-num">12</span>
+            <span class="metric-label">个学习智能体</span>
+          </div>
+          <div class="metric-sep" />
+          <div class="metric-item">
+            <span class="metric-num">6</span>
+            <span class="metric-label">个核心模块</span>
+          </div>
+          <div class="metric-sep" />
+          <div class="metric-item">
+            <span class="metric-num">5</span>
+            <span class="metric-label">类学习数据</span>
+          </div>
+          <div class="metric-sep" />
+          <div class="metric-item">
+            <span class="metric-num">1</span>
+            <span class="metric-label">条反馈闭环</span>
           </div>
         </div>
       </div>
@@ -480,12 +465,9 @@ function initStarfield() {
         <div v-for="(a, i) in agents" :key="`chip-${a.id}`"
           v-show="activeIdx === i"
           class="activity-chip"
-          :class="{
-            'chip-hot': activeIdx === i,
-            [`chip-${chipSide(positions[i].x, positions[i].y)}`]: true,
-          }"
-          :style="chipStyle(positions[i].x, positions[i].y, activeIdx === i, chipSide(positions[i].x, positions[i].y))">
-          <div class="chip-connector" :class="{ 'chip-connector-right': chipSide(positions[i].x, positions[i].y) === 'right', 'chip-connector-left': chipSide(positions[i].x, positions[i].y) === 'left' }" :style="`background: linear-gradient(${chipSide(positions[i].x, positions[i].y) === 'right' ? '90deg' : '-90deg'}, ${hexAlpha(a.color, 0.6)}, transparent)`" />
+          :class="{ 'chip-hot': activeIdx === i }"
+          :style="chipStyle(positions[i].x, positions[i].y, activeIdx === i, 'right')">
+          <div class="chip-connector chip-connector-right" :style="`background: linear-gradient(90deg, ${hexAlpha(a.color, 0.6)}, transparent)`" />
           <div class="chip-card" :class="{ 'chip-card-hot': activeIdx === i }" :style="`border-color: ${hexAlpha(a.color, activeIdx === i ? 0.5 : 0.25)}`">
             <div class="chip-header">
               <span class="chip-dot" :style="`background: ${a.color}; box-shadow: 0 0 6px ${a.color}`" />
@@ -525,20 +507,14 @@ function initStarfield() {
   min-height: 100vh;
   padding: 32px 56px 60px;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse 900px 500px at 75% 50%, rgba(0, 212, 255, 0.08), transparent 60%),
-    radial-gradient(ellipse 700px 500px at 80% 35%, rgba(124, 58, 237, 0.07), transparent 65%),
-    radial-gradient(ellipse 600px 400px at 90% 90%, rgba(245, 158, 11, 0.04), transparent 70%),
-    radial-gradient(ellipse 800px 600px at 20% 60%, rgba(0, 212, 255, 0.05), transparent 70%),
-    radial-gradient(ellipse 600px 400px at 10% 30%, rgba(124, 58, 237, 0.04), transparent 70%),
-    linear-gradient(160deg, #0a0e24 0%, #070b1a 40%, #050610 100%);
+  background: transparent;
   z-index: 1;
 }
 
 .hero-grid {
   position: absolute;
   inset: 0;
-  opacity: 0.4;
+  opacity: 0.15;
   pointer-events: none;
   background-image:
     linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
@@ -553,6 +529,7 @@ function initStarfield() {
   inset: 0;
   pointer-events: none;
   z-index: 0;
+  opacity: 0.4;
 }
 
 .hero-layout {
@@ -570,130 +547,127 @@ function initStarfield() {
 /* ── Left copy ── */
 .hero-copy {
   padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
-.hero-title-hp {
-  margin: 0;
-  font-family: 'Instrument Serif', serif;
-  font-weight: 500;
-  font-size: clamp(48px, 5vw, 76px);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  color: #fff;
-  margin-bottom: 24px;
-  text-wrap: balance;
-}
-
-.hero-title-hp span {
-  display: block;
-}
-
-.gradient-text {
-  font-style: italic;
-  background: linear-gradient(135deg, #00d4ff, #7c3aed 60%, #f43f5e);
+.hero-main-title {
+  margin: 0 0 12px;
+  font-family: var(--font-display, Georgia, 'Noto Serif SC', serif);
+  font-weight: 700;
+  font-size: clamp(48px, 5vw, 72px);
+  line-height: 1.08;
+  letter-spacing: 0.04em;
+  color: transparent;
+  background: linear-gradient(
+    160deg,
+    rgba(230, 245, 255, 0.96) 0%,
+    rgba(170, 215, 255, 0.90) 30%,
+    rgba(110, 190, 255, 0.84) 55%,
+    rgba(160, 215, 255, 0.90) 80%,
+    rgba(230, 245, 255, 0.96) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
-  background-size: 200% 200%;
-  animation: gradient-shift 8s ease-in-out infinite;
+  position: relative;
+  text-shadow: none;
+  filter:
+    drop-shadow(0 0 24px rgba(80, 170, 255, 0.3))
+    drop-shadow(0 1px 3px rgba(0, 0, 0, 0.25));
+}
+
+.hero-main-title::after {
+  display: none;
+}
+
+.hero-subtitle {
+  margin: 0 0 20px;
+  font-size: clamp(15px, 1.2vw, 18px);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  color: rgba(160, 200, 245, 0.75);
 }
 
 .hero-desc {
-  margin: 0 0 36px;
-  font-size: 16px;
-  line-height: 1.75;
-  color: rgba(255,255,255,0.72);
-  max-width: 520px;
-  font-weight: 300;
-  font-family: 'Outfit', sans-serif;
+  margin: 0 0 24px;
+  font-size: 14px;
+  line-height: 1.85;
+  color: rgba(180, 200, 230, 0.62);
+  max-width: 460px;
+  font-weight: 400;
 }
 
-.hero-ctas {
+.hero-capabilities {
   display: flex;
-  gap: 14px;
-  margin-bottom: 44px;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
 }
 
-.btn-hp-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 28px;
-  border-radius: 12px;
+.cap-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: rgba(175, 210, 245, 0.78);
+  background: rgba(60, 140, 255, 0.08);
   border: none;
-  background: linear-gradient(135deg, #00d4ff, #7c3aed);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 6px 24px rgba(124, 58, 237, 0.4);
-  font-family: 'Outfit', sans-serif;
-  letter-spacing: 0.02em;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-.btn-hp-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 36px rgba(124, 58, 237, 0.5);
+  transition: all 0.2s ease;
 }
 
-.btn-hp-ghost {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 24px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.85);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  font-family: 'Outfit', sans-serif;
-  backdrop-filter: blur(8px);
-  transition: border-color 0.2s ease, color 0.2s ease;
-}
-.btn-hp-ghost:hover {
-  border-color: rgba(0, 212, 255, 0.4);
-  color: #00d4ff;
+.cap-tag:hover {
+  background: rgba(60, 140, 255, 0.14);
+  color: rgba(200, 225, 255, 0.92);
 }
 
-.btn-arrow { font-size: 14px; }
-.btn-arrow-sm { font-size: 12px; }
-
-.hero-stats-row {
+.hero-metrics {
   display: flex;
-  gap: 28px;
   align-items: center;
-  padding-top: 28px;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  gap: 0;
+  padding-top: 20px;
+  border-top: none;
 }
 
-.stat-label {
-  font-size: 9px;
-  color: #8892b0;
-  letter-spacing: 0.18em;
-  font-family: 'JetBrains Mono', monospace;
-  margin-bottom: 4px;
-}
-
-.stat-value {
+.metric-item {
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 5px;
+  padding: 0 18px;
+  white-space: nowrap;
 }
 
-.stat-num {
-  font-family: 'Instrument Serif', serif;
-  font-size: 28px;
+.metric-item:first-child {
+  padding-left: 0;
+}
+
+.metric-item:last-child {
+  padding-right: 0;
+}
+
+.metric-num {
+  font-size: 20px;
+  font-weight: 700;
   line-height: 1;
-  font-weight: 500;
+  color: rgba(120, 200, 255, 0.88);
   font-variant-numeric: tabular-nums;
 }
 
-.stat-sub {
-  font-size: 10px;
-  color: #8892b0;
-  font-family: 'JetBrains Mono', monospace;
+.metric-label {
+  font-size: 11px;
+  color: rgba(140, 170, 210, 0.5);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.metric-sep {
+  width: 1px;
+  height: 16px;
+  background: rgba(120, 180, 255, 0.1);
+  flex-shrink: 0;
 }
 
 /* ── Right viz ── */
@@ -721,6 +695,8 @@ function initStarfield() {
   pointer-events: none;
   text-align: center;
   z-index: 4;
+  border: none;
+  background: transparent;
 }
 
 .sphere-eyebrow {
@@ -1008,11 +984,6 @@ function initStarfield() {
   to { transform: rotate(-360deg); }
 }
 
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   .star-twinkle,
@@ -1037,12 +1008,6 @@ function initStarfield() {
   .loop-edge {
     transition: none !important;
   }
-
-  .gradient-text {
-    animation: none !important;
-    background-position: 0% 50%;
-  }
-
 }
 
 /* ── Responsive ── */
@@ -1065,15 +1030,21 @@ function initStarfield() {
 }
 
 @media (max-width: 600px) {
-  .hero-stats-row {
+  .hero-metrics {
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 8px;
   }
-  .hero-ctas {
-    flex-direction: column;
-  }
-  .hero-title-hp {
+  .metric-sep { display: none; }
+  .metric-item { padding: 0; }
+  .hero-main-title {
     font-size: 36px;
+  }
+  .hero-capabilities {
+    gap: 6px;
+  }
+  .cap-tag {
+    font-size: 11px;
+    padding: 4px 10px;
   }
 }
 </style>

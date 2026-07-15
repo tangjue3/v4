@@ -1,5 +1,8 @@
 import { ref, computed } from 'vue'
-import type { DimensionMap, ChatMessage, StudyReport, ThemeAccent, VirtualStyle, RecommendCategory } from '@/types/dialogue'
+import type { DimensionMap, ChatMessage, StudyReport, ThemeAccent, VirtualStyle, RecommendCategory, RecommendedCourse, HistoryPreset } from '@/types/dialogue'
+import { courses } from '@/data/dialogue/courseData'
+
+const HISTORY_KEY = 'edumind_portrait_history'
 
 export const activeMenu = ref<'chat' | 'portrait-report' | 'history' | 'recommend'>('chat')
 export const isSidebarCollapsed = ref(false)
@@ -34,27 +37,28 @@ export const selectedDimensionInfo = ref<string | null>(null)
 export const report = ref<StudyReport | null>(null)
 export const showReport = ref(false)
 export const exportNotification = ref<string | null>(null)
+export const hasGeneratedReport = ref(false)
 
 export const recommendCategory = ref<RecommendCategory>('all')
 export const recommendQaInput = ref('')
 export const recommendQaMessages = ref<Array<{ sender: 'user' | 'ai'; text: string }>>([
   {
     sender: 'ai',
-    text: '👋 您好！我是您的自适应学情推荐专属答疑助理。在此您可以获得由科大讯飞星火大模型为您提供的自学规划及推荐资源解惑。\n\n您可以选择下方的快速预置问题，或者手动输入您想了解的疑虑（例如："这三个推荐我应该按什么顺序学？"、"Gradio项目零基础可以自学吗？"），我会根据您在在校生/程序员学业画像为您量身解答！',
+    text: '👋 您好！我是您的自适应学情推荐专属答疑助理。在此您可以获得由多智能体大语言模型为您提供的自学规划及推荐资源解惑。\n\n您可以选择下方的快速预置问题，或者手动输入您想了解的疑虑（例如："这三个推荐我应该按什么顺序学？"、"Gradio项目零基础可以自学吗？"），我会根据您的学业画像为您量身解答！',
   },
 ])
 export const isRecommendQaLoading = ref(false)
 
-export const isXunfeiSidebarOpen = ref(true)
+export const isAiSidebarOpen = ref(true)
 export const isVirtualMuted = ref(false)
 export const virtualStyle = ref<VirtualStyle>('hologram')
-export const isXunfeiConnecting = ref(false)
-export const isXunfeiSpeaking = ref(false)
-export const isXunfeiListening = ref(false)
-export const showXunfeiHint = ref(false)
-export const xunfeiSubtitle = ref('你好！我是科大讯飞智能虚拟导师。点击下方连麦，开启高阶语音会话。')
-export const xunfeiVolume = ref(80)
-export const xunfeiLanguage = ref('zh-CN')
+export const isAiConnecting = ref(false)
+export const isAiSpeaking = ref(false)
+export const isAiListening = ref(false)
+export const showAiHint = ref(false)
+export const aiSubtitle = ref('你好！我是 EduMind 智能虚拟导师。点击下方连麦，开启高阶语音会话。')
+export const aiVolume = ref(80)
+export const aiLanguage = ref('zh-CN')
 export const syncToMainChat = ref(true)
 export const textInput = ref('')
 export const useNlp = ref(true)
@@ -80,44 +84,128 @@ export const colors = computed(() => ({
   glow: 'shadow-cyan-950/50',
 }))
 
-export const historyPresets = [
-  {
-    id: 'hist-1', title: '零基础 Python 与网页入门星图', score: 83, date: '2026-05-20', evaluation: '良好 (Good)',
-    dimensions: { identity: '零基础兴趣', domain: '计算机 / AI', level: '零基础', experience: '无实际经验', goal: '做项目', motivation: '兴趣驱动', period: '1个月快速突破', weeklyHours: '5-10小时', method: '在线网课' },
-    report: {
-      score: 83, evaluation: '良好 (Good)',
-      radarPoints: [
-        { dimension: '知识基础', score: 72 }, { dimension: '学习速度', score: 85 }, { dimension: '逻辑思维', score: 80 },
-        { dimension: '创造力', score: 92 }, { dimension: '专注力', score: 78 }, { dimension: '自律力', score: 82 },
-      ],
-      weaknesses: ['基本的网络编程 concept 需要时间消化', '自律专注偶有偏差，请确立分段打卡计划'],
-      suggestions: ['使用 Vercel 一键部署你的第一个 Web Demo 树立信心', '跟随 Github 开源简单计算器项目进行代码临摹'],
-      skills: { core: ['HTML/CSS', 'JavaScript', 'Python 基础', 'Gradio'], foundation: ['Web 运作原理', 'Git 版本管理', '页面排版'], additional: ['TailwindCSS', '数据库基础'] },
-      recommendedPath: [
-        { step: 1, title: '语法筑基', description: '搞定 Python 核心' }, { step: 2, title: '前端探秘', description: '掌握 HTML/CSS 书写' },
-        { step: 3, title: '工程拼装', description: '对接 AI 简易接口' }, { step: 4, title: '云端直升', description: '部署应用线上可见' },
-      ],
-    },
-  },
-  {
-    id: 'hist-2', title: '计算机视觉跨向智能控制规划', score: 91, date: '2026-05-18', evaluation: '极优 (Outstanding)',
-    dimensions: { identity: '科研人员', domain: '机器人工程', level: '有一定基础', experience: '1-2 年', goal: '论文科研', motivation: '学业要求', period: '6+个月深度沉淀', weeklyHours: '大于20小时', method: '实战项目' },
-    report: {
-      score: 91, evaluation: '极优 (Outstanding)',
-      radarPoints: [
-        { dimension: '知识基础', score: 94 }, { dimension: '学习速度', score: 88 }, { dimension: '逻辑思维', score: 95 },
-        { dimension: '创造力', score: 86 }, { dimension: '专注力', score: 91 }, { dimension: '自律力', score: 93 },
-      ],
-      weaknesses: ['物理硬件对接（ROS/ROS2）工程调试经验欠缺', '主流仿真平台 Web 性能瓶颈尚待突破'],
-      suggestions: ['精学 PyTorch 对应卷积和注意力算子优化', '结合 Gazebo 虚拟环境实现小车路径模拟闭环'],
-      skills: { core: ['PyTorch', 'OpenCV', 'ROS2', '强化学习'], foundation: ['三维重构', '矩阵论', 'Kalman 滤波'], additional: ['模型剪枝与量化部署', 'C++ 性能编程'] },
-      recommendedPath: [
-        { step: 1, title: '图像算法机制', description: '吃透 OpenCV 空间算子' }, { step: 2, title: '网络模型修改', description: '优化 Vision Transformer' },
-        { step: 3, title: '仿真控制打通', description: '连通 ROS 与 Gazebo 状态' }, { step: 4, title: '实验指标收割', description: '输出仿真性能对比表格' },
-      ],
-    },
-  },
-] as const
+function loadHistoryFromStorage(): HistoryPreset[] {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
+
+function saveHistoryToStorage(items: HistoryPreset[]) {
+  try {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(items))
+  } catch { /* ignore quota errors */ }
+}
+
+const storedHistory = ref<HistoryPreset[]>(loadHistoryFromStorage())
+
+export const historyPresets = computed<HistoryPreset[]>(() => {
+  return [...storedHistory.value].sort((a, b) => b.date.localeCompare(a.date))
+})
+
+export function saveProfileToHistory(profileReport: StudyReport) {
+  const dims = dimensions.value
+  const title = generateTitle(dims)
+  const entry: HistoryPreset = {
+    id: `hist-${Date.now()}`,
+    title,
+    score: profileReport.score,
+    date: new Date().toISOString().slice(0, 10),
+    evaluation: profileReport.evaluation,
+    dimensions: { ...dims },
+    report: JSON.parse(JSON.stringify(profileReport)),
+  }
+  const existing = loadHistoryFromStorage()
+  existing.unshift(entry)
+  const trimmed = existing.slice(0, 20)
+  saveHistoryToStorage(trimmed)
+  storedHistory.value = trimmed
+}
+
+function generateTitle(dims: DimensionMap): string {
+  const parts: string[] = []
+  if (dims.level) parts.push(dims.level)
+  if (dims.domain) parts.push(dims.domain)
+  if (dims.goal) parts.push(`→${dims.goal}`)
+  return parts.length > 0 ? parts.join(' ') : '学习画像'
+}
+
+export function matchRecommendedCourses(rep: StudyReport): RecommendedCourse[] {
+  const skillNames = [
+    ...(rep.skills?.core || []),
+    ...(rep.skills?.foundation || []),
+  ].map(s => s.toLowerCase())
+
+  const scored = courses.map(c => {
+    let score = 0
+    const nameLower = c.name.toLowerCase()
+    for (const sk of skillNames) {
+      if (nameLower.includes(sk.slice(0, 3)) || sk.includes(c.name.slice(0, 2))) score += 2
+    }
+    for (const w of rep.weaknesses || []) {
+      if (w.includes('编程') || w.includes('代码') || w.includes('语法')) {
+        if (c.id === 'python' || c.id === 'c-lang') score += 3
+      }
+      if (w.includes('算法') || w.includes('数据结构')) {
+        if (c.id === 'data-structures' || c.id === 'algorithm-design') score += 3
+      }
+      if (w.includes('数学') || w.includes('统计') || w.includes('概率')) {
+        if (c.id === 'discrete-math' || c.id === 'probability') score += 3
+      }
+      if (w.includes('项目') || w.includes('实战') || w.includes('工程')) {
+        if (c.difficulty === '进阶' || c.difficulty === '高级') score += 2
+      }
+      if (w.includes('机器') || w.includes('深度学习') || w.includes('AI')) {
+        if (c.id === 'ml' || c.id === 'dl' || c.id === 'ai-intro') score += 3
+      }
+    }
+    const level = dimensions.value.level
+    if (level === '零基础' && c.difficulty === '入门') score += 2
+    if ((level === '初级' || level === '中级') && c.difficulty !== '高级') score += 1
+    if (level === '高级') score += c.difficulty === '高级' ? 2 : 0
+    return { course: c, score }
+  })
+
+  scored.sort((a, b) => b.score - a.score)
+  const top3 = scored.slice(0, 3).filter(s => s.score > 0)
+
+  const reasons = [
+    '根据你的画像，这门课是当前最佳起点',
+    '你的薄弱项可以通过这门课系统补强',
+    '结合你的学习目标，推荐先修这门课',
+  ]
+
+  if (top3.length < 3) {
+    const defaults = [
+      courses.find(c => c.id === 'python')!,
+      courses.find(c => c.id === 'data-structures')!,
+      courses.find(c => c.id === 'ai-intro')!,
+    ]
+    for (const dc of defaults) {
+      if (top3.length >= 3) break
+      if (!top3.find(t => t.course.id === dc.id)) {
+        top3.push({ course: dc, score: 0 })
+      }
+    }
+  }
+
+  return top3.slice(0, 3).map((s, i) => ({
+    id: s.course.id,
+    name: s.course.name,
+    difficulty: s.course.difficulty,
+    color: s.course.color,
+    reason: reasons[i] || '推荐课程',
+    icon: s.course.icon,
+  }))
+}
+
+export function navigateToCourse(courseId: string) {
+  window.open(`/resources?courseId=${courseId}&tab=课程`, '_blank')
+}
 
 export function showNotification(msg: string, duration = 2500) {
   exportNotification.value = msg
@@ -130,7 +218,7 @@ export function resetConversation() {
     goal: null, motivation: null, period: null, weeklyHours: null, method: null,
   }
   chats.value = [{
-    id: `reset-1`, sender: 'ai',
+    id: `reset-${Date.now()}`, sender: 'ai',
     text: '你好呀！我是你的 AI 学习导师\n关于您的专属 AI 学习星图，让我们重新梳理一下吧！\n能跟我透露一下，您当前的工作或学习背景吗？',
     time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
     source: 'chat',
@@ -138,6 +226,7 @@ export function resetConversation() {
   }]
   showReport.value = false
   report.value = null
+  hasGeneratedReport.value = false
   activeMenu.value = 'chat'
 }
 
@@ -145,44 +234,35 @@ export function handleChipClick(chipText: string) {
   inputText.value = chipText
 }
 
-export function restoreHistory(preset: { dimensions: Record<string, string | null>; report: Record<string, unknown>; date: string; title: string }) {
-  dimensions.value = { ...preset.dimensions } as unknown as DimensionMap
+export function handleQuickSandboxDeduce() {
+  activeMenu.value = 'chat'
+  const currentTime = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
+  chats.value = [
+    ...chats.value,
+    {
+      id: `quick-sandbox-${Date.now()}`,
+      sender: 'ai',
+      text: '画像报告还需要至少 4 个维度信息。你可以先告诉我身份、学习领域、当前基础和学习目标，我会继续补全画像后生成报告。',
+      time: currentTime,
+      source: 'chat',
+      suggestChips: ['我是学生，想学人工智能', '我有编程基础，想做项目', '我零基础，想系统入门'],
+    },
+  ]
+  showNotification('画像维度还不够，已回到对话区继续收集信息')
+}
+
+export function restoreHistory(preset: HistoryPreset) {
+  dimensions.value = { ...preset.dimensions }
   report.value = JSON.parse(JSON.stringify(preset.report)) as StudyReport
   const dateStr = preset.date
   chats.value = [
-    { id: `msg-hist-${Date.now()}-ai-1`, sender: 'ai', source: 'chat', text: `🕰️ [时空脉络复活成功] 正在载入您于 ${dateStr} 归档的「${preset.title}」画像底层特征。`, time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) },
-    { id: `msg-hist-${Date.now()}-ai-2`, sender: 'ai', source: 'chat', text: `✅ 属性特征已重组：\n• 身份: ${preset.dimensions.identity}\n• 领域: ${preset.dimensions.domain}\n• 阶段: ${preset.dimensions.level}\n• 目标: ${preset.dimensions.goal}\n\n您可点击侧边栏「报告」按钮详细参阅，或在此继续与导师进行日常交互学程！`, time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) },
+    { id: `msg-hist-${Date.now()}-ai-1`, sender: 'ai', source: 'chat', text: `🕰️ 正在载入您于 ${dateStr} 归档的「${preset.title}」画像。`, time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) },
+    { id: `msg-hist-${Date.now()}-ai-2`, sender: 'ai', source: 'chat', text: `✅ 属性特征已重组：\n• 身份: ${preset.dimensions.identity || '未知'}\n• 领域: ${preset.dimensions.domain || '未知'}\n• 阶段: ${preset.dimensions.level || '未知'}\n• 目标: ${preset.dimensions.goal || '未知'}\n\n您可点击「画像报告」查看详细内容，或继续与导师对话！`, time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) },
   ]
   showReport.value = true
+  hasGeneratedReport.value = true
   activeMenu.value = 'portrait-report'
   showNotification(`已加载历史存档: ${preset.title}`)
-}
-
-export function handleQuickSandboxDeduce() {
-  dimensions.value = {
-    identity: '程序员', domain: '计算机 / AI', level: '有一定基础', experience: '1-2 年',
-    goal: '做项目', motivation: '职业转型', period: '3个月系统掌握', weeklyHours: '10-20小时', method: '实战项目',
-  }
-  showNotification('⚡ 正在请求星核引擎执行维度评测拟合...')
-  setTimeout(() => {
-    report.value = {
-      score: 89, evaluation: '极优 (Outstanding)',
-      radarPoints: [
-        { dimension: '知识基础', score: 81 }, { dimension: '学习速度', score: 94 }, { dimension: '逻辑思维', score: 90 },
-        { dimension: '创造力', score: 92 }, { dimension: '专注力', score: 86 }, { dimension: '自律力', score: 88 },
-      ],
-      weaknesses: ['系统分布式与边缘端推理算力调优实践尚浅', '在复杂 Agent 路由架构与对抗微调层面稍有盲区'],
-      suggestions: ['推荐通过 Gradio/Streamlit 快速构造模型 Web 表单，建立最小闭环验证', '建议借助 LlamaIndex 补全向量存储与 RAG 双路召回机制'],
-      skills: { core: ['React SPA', 'Python 快速开发', '大模型API集成', 'Prompt Engineering'], foundation: ['提示词机制', '数据库框架', 'Git工作流', '多线程编程'], additional: ['Docker 容器服务', 'Agent 路由链', '模型冷启动调优'] },
-      recommendedPath: [
-        { step: 1, title: '技术环境跑通', description: '配置 Pyenv 虚拟栈与大模型直连端口' }, { step: 2, title: '全栈交互构造', description: '构造基于 Gradio 与 FastAPI 后端的交互端点' },
-        { step: 3, title: '召回通道拟合', description: '引入 Pinecone 向量并执行 RAG 双轨增效测评' }, { step: 4, title: '工程实战解禁', description: '上线容器云并收集线上日志进行微调迭代' },
-      ],
-    }
-    showReport.value = true
-    activeMenu.value = 'portrait-report'
-    showNotification('🎉 模拟画像及自适应评测报告生成成功！')
-  }, 1200)
 }
 
 export function handleExportPDF() {

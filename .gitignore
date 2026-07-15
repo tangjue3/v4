@@ -45,12 +45,23 @@ _tailwind.css
 ez-tree-1.1.0/
 
 # Local browser/test artifacts
+.playwright-mcp/
 .tmp-*/
+/temp-*/
+/screenshots/
+/*.zip
 eval*.png
 learning_path*.png
 test*.png
 homepage-*-preview.png
 homepage-*.png
+/*-check.png
+/current-*.png
+/current-page-*.png
+/merged-*.png
+/restored-*.png
+/telemetry-*.png
+/homepage-*.md
 tree_fixed.png
 apples_check.png
 modify-file.*
@@ -61,6 +72,8 @@ test-*.mjs
 __pycache__/
 *.pyc
 server/evidence-data/
+.mysql-test-data/
+.mysql-test.log
 *_extracted/
 /*-preview.png
 /*-render.png
@@ -70,3 +83,11 @@ server/evidence-data/
 
 # Windows 误生成的设备名文件
 nul
+
+# 大文件 / 二进制资源（超出 GitHub 限制，不纳入版本控制）
+output/
+tmp/
+vendor/
+*.pptx
+*.zip
+EduMind_设计与开发文档/assets/*.zip
